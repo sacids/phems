@@ -1,2 +1,2 @@
-# phems
-Public Health Events Management System (PHEMS)
+# boilerplate
+Django boilerplate
