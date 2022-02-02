@@ -1,0 +1,91 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!-- Our LogIn Register -->
+<section class="our-log bgc-fa">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 offset-lg-3">
+                <div class="login_form inner_page">
+                    <div class="heading">
+                        <h3 class="text-center">Login to your account</h3>
+                        <p class="text-center">Don't have an account? <a class="text-thm"
+                                href="{% url 'register' %}">Sign Up!</a></p>
+                    </div>
+
+                    <div class="details">
+                        {% if messages %}
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                {% for message in messages %}
+                                <div class="alert {{message.tags}}">
+                                    <span>{{ message }}</span>
+                                </div>
+                                <!--./alert-danger-->
+                                {% endfor %}
+                            </div>
+                            <!--./col-->
+                        </div>
+                        <!--./row-->
+                        {% endif %}
+                    </div>
+                    <!--./details-->
+
+                    <form method="post" class="form-horizontal" action="" autocomplete="off">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="text" name="username" class="form-control" id="username"
+                                        placeholder="Username..." required>
+                                </div>
+                            </div>
+                            <!--./col-md-12-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Password..." required>
+                                </div>
+                            </div>
+                            <!--./col-md-12-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group custom-control custom-checkbox">
+                                    <input type="checkbox" name="remember_me" class="custom-control-input"
+                                        id="remember_me">
+                                    <label class="custom-control-label" for="remember_me">Remember me</label>
+                                    <a class="tdu btn-fpswd float-right" href="#">Forgot Password?</a>
+                                </div>
+                            </div>
+                            <!--./col-md-12-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <span class="font-weight-700 text-uppercase text-medium">Login</span>
+                                </button>
+                            </div>
+                            <!--./col-md-12-->
+                        </div>
+                        <!--./row-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_field %}
+
+{% block content %}
+<!-- Our LogIn Register -->
+<section class="our-log-reg bgc-fa">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-6 offset-lg-3">
+                <div class="sign_up_form inner_page">
+                    <div class="heading">
+                        <h3 class="text-center">Register</h3>
+                        <p class="text-center">Have an account? <a class="text-thm" href="{% url 'login' %}">Login</a>
+                        </p>
+                    </div>
+
+                    <div class="details">
+                        {% if messages %}
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                {% for message in messages %}
+                                <div class="alert {{message.tags}}">
+                                    <span>{{ message }}</span>
+                                </div>
+                                <!--./alert-danger-->
+                                {% endfor %}
+                            </div>
+                            <!--./col-->
+                        </div>
+                        <!--./row-->
+                        {% endif %}
+                    </div><!--./details-->
+
+                    <form method="post" class="form-horizontal" action="" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.first_name|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!--./col-md-6-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.last_name|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!--./col-md-6-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ form.email|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!--./col-md-6-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ form.username|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!--./col-md-6-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.password1|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!--./col-md-6-->
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.password2|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!--./col-md-6-->
+                        </div>
+                        <!--./row-->
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <span class="font-weight-700 text-uppercase text-medium">Register</span>
+                                </button>
+                                
+                            </div>
+                            <!--./col-md-6-->
+                        </div>
+                        <!--./row-->
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}
