@@ -19,5 +19,3 @@ class Profile(models.Model):
         if created:
             Profile.objects.create(user=instance)
             instance.profile.save()
-
-# Create your models here.
