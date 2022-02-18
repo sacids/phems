@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # apps
-    'src.account.apps.AccountConfig',
+    'apps.account.apps.AccountConfig',
 
     # default
     'django.contrib.admin',
@@ -136,9 +136,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # send email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'renfrid.ngolongolo@gmail.com'
-EMAIL_HOST_PASSWORD = 'thxzwxglwhtufsbp'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'renfrid.ngolongolo@gmail.com'
+# EMAIL_HOST_PASSWORD = 'thxzwxglwhtufsbp'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
