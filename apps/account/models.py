@@ -19,3 +19,9 @@ class Profile(models.Model):
         if created:
             Profile.objects.create(user=instance)
             instance.profile.save()
+
+class activation_otp(models.Model):
+    user            = models.OneToOneField(User, on_delete=models.CASCADE)
+    otp             = models.CharField(max_length=6)
+    created_on      = models.DateField(auto_now=True, auto_now_add=False)
+    

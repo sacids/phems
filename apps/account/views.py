@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
 from .forms import RegistrationForm, LoginForm
 from django.contrib.auth.models import User
+from .models import Profile
 
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
@@ -121,3 +122,6 @@ class ActivateAccount(View):
             messages.warning(
                 request, ('The confirmation link was invalid, possibly because it has already been used.'))
             return redirect('login')
+
+
+
