@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/me/', api.getMeView.as_view(), name='getMe'),
     
     
-    path('webpush/', include('apps.webpush.urls')),
+    #path('webpush/', include('apps.webpush.urls')),
+    path('chatbot/', include('apps.chatbot.urls')),
 
 ]

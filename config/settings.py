@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-zvn6=*_ip*z-tly_%bz$mzfr-*_2ad%j@k_-f1q+&hz93k1!p$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # apps
     'apps.account.apps.AccountConfig',
+    'apps.chatbot.apps.ChatbotConfig',
 
     # default
     'django.contrib.admin',

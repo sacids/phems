@@ -13,18 +13,18 @@ BOT_TOKEN = "5210813918:AAEB0WKoRdQ8R3dMPVYXNmnS-4HwhtG8Ov4"
 
 
 @csrf_exempt
-def message(request):
+def whatsapp(request):
     user = request.POST.get('From')
     message = request.POST.get('Body')
     print(f'{user} says {message}')
 
     response = MessagingResponse()
-    response.message('Thank for your message! Sacids Team will be back to you shortly!')
+    response.message('Thank for your message! OH Team will be back to you shortly!')
     return HttpResponse(str(response))
 
 
 #telegram bot
-def telbot(self, request):
+def telegram(self, request):
     t_data = json.loads(request.body)
     t_message = t_data["message"]
     t_chat = t_message["chat"]
