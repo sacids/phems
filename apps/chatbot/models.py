@@ -16,9 +16,9 @@ class Menu(models.Model):
 
 
 class SubMenu(models.Model):
-    menu     =  models.ForeignKey(Menu, on_delete=models.CASCADE)
+    menu        =  models.ForeignKey(Menu, on_delete=models.CASCADE)
     title       =  models.TextField(blank=False, null=False)
-    sequence    =  models.IntegerField(blank=False, null=False)
+    sequence    =  models.CharField(max_length=10, blank=False, null=False)
 
     class Meta:
         db_table = 'cb_sub_menus'
@@ -36,3 +36,16 @@ class MenuLink(models.Model):
     class Meta:
         db_table = 'cb_menu_links'
         verbose_name_plural = 'Menu Links' 
+
+
+class MenuSession(models.Model):
+    phone       =  models.CharField(max_length=100, blank=True, null=True)
+    message_id  =  models.CharField(max_length=100, blank=True, null=True)
+    channel     =  models.CharField(max_length=100, blank=False, null=False, default='whatsapp')  
+    menu        =  models.ForeignKey(Menu, on_delete=models.CASCADE)
+    values      =  models.TextField(blank=True, null=True)
+    active      =  models.IntegerField(blank=False, null=False, default=0)
+
+    class Meta:
+        db_table = 'cb_menu_sessions'
+        verbose_name_plural = 'Menu Sessions' 
