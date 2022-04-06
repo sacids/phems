@@ -33,9 +33,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    # apps
-    'apps.account.apps.AccountConfig',
-    'apps.chatbot.apps.ChatbotConfig',
 
     # default
     'django.contrib.admin',
@@ -49,6 +46,13 @@ INSTALLED_APPS = [
     'crispy_forms',
     'rest_framework',
     'corsheaders',
+    
+    
+    # apps
+    'apps.account.apps.AccountConfig',
+    'apps.chatbot.apps.ChatbotConfig',
+    'apps.webpush',
+    'apps.ems.apps.EmsConfig',
 ]
 
 MIDDLEWARE = [
