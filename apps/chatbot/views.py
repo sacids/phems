@@ -63,13 +63,39 @@ def telegram(request):
     t_message = t_data["message"]
     t_chat = t_message["chat"]
 
-    
-
     print(f'telegram bot says {t_message}')
 
-    msg = "Thank for your message! Sacids Team will be back to you shortly!"
-    send_message(msg, t_chat["id"])
+    #todo: check menu session if active=0
+    menu_session = MenuSession.objects.filter(message_id=t_chat["id"], active=0)
 
+    if menu_session.count() > 0:
+        #get latest menu session
+        m_session = MenuSession.objects.filter(message_id=t_chat["id"], active=0).latest('id')
+
+        #check for menu flag
+        menu = Menu.objects.get(pk =m_session.menu_id)
+
+        if(menu.flag == 'Tukio_Ending'):
+            result = initMenu('telegram', t_chat["id"])
+            data = json.loads(result.content) 
+        else:    
+            if 'text' in t_message:
+                result = nextMenu('telegram', t_chat["id"] , m_session.menu_id, t_message['text'])
+            elif 'photo' in t_message: 
+                result = nextMenu('telegram', t_chat["id"] , m_session.menu_id, t_message['photo'])
+            data = json.loads(result.content)
+
+        #send sms
+        send_message(data['message'], t_chat["id"])
+
+    else:
+        result = initMenu('telegram', t_chat["id"])
+        data = json.loads(result.content)
+
+        #send sms
+        send_message(data['message'], t_chat["id"])
+
+    #response
     return JsonResponse({"ok": "POST request processed"})
 
 # @staticmethod
