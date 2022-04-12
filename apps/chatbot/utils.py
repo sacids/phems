@@ -110,4 +110,7 @@ def updateMenuSession(channel, user, menu_id, key):
         MenuSession.objects.filter(channel=channel, phone=user, menu_id = menu_id).update(active=1, values=key)
     elif(channel == 'telegram'):
         MenuSession.objects.filter(channel=channel, message_id=user, menu_id = menu_id).update(active=1, values=key) 
+
+
+#process data
     
