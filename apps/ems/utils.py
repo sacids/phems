@@ -15,7 +15,9 @@ def calc_relevance(sentence, key_map):
     token_metaphone = [metaphone(x) for x in token_sentence]
     
     ans = set(key_map) & set(token_soundex)
-    ss  = reduce(operator.add,map(lambda x: key_map[x],ans))  
+    ss = 0
+    if ans:
+        ss  = reduce(operator.add,map(lambda x: key_map[x],ans))
     return ss
         
     
