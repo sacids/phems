@@ -3,3 +3,7 @@
 */*/migrations/*
 gitignore
 !*/migrations/__init__.py
+.env
+keywords.json
+.env
+.gitignore
