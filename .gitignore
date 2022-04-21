@@ -1,2 +1,5 @@
 */migrations/*
+*/migrations/*.*
+*/*/migrations/*
+gitignore
 !*/migrations/__init__.py
