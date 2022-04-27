@@ -1,4 +1,4 @@
-# Django BoilerPlate
+# Phems
 
 Built using [Python](https://www.python.org/) and 
 [Django Framework](https://www.djangoproject.com/)
@@ -7,8 +7,8 @@ Built using [Python](https://www.python.org/) and
 Clone Repository
 
 ```bash
-https://github.com/sacids/django-boilerplate.git
-cd django-boilerplate
+https://github.com/sacids/phems.git
+cd phems
 ```
 
 To set up a development environment quickly, first install Python 3. It comes with virtualenv built-in. So create a virtual env by:
@@ -23,7 +23,7 @@ Install all dependencies:
 pip install -r requirements.txt
 ```
 
-Update database settings (poe/settings.py)
+Update database settings (config/settings.py)
 ```bash
 DATABASES = {
     'default': {
