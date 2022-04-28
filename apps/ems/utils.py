@@ -5,6 +5,8 @@ import string
 import re
 from functools import reduce
 import operator, json
+from .models import *
+from treebeard.mp_tree import MP_Node
 
 
 # to do - put in try box and catch errors
@@ -29,3 +31,6 @@ sample = "Moto mkubwa umewaka goba leo, ni hatari fire kama  mafua samaki"
 
 print(calc_relevance(sample,key_map))
 '''
+
+
+

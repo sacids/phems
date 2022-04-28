@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import json
 from .utils import *
+from treebeard.mp_tree import MP_Node
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -35,7 +36,7 @@ class Signal(models.Model):
     )
     
     channel         = models.CharField(max_length=15,choices=CHANNEL,default='WEB')
-    contact         = models.CharField(max_length=50)
+    contact         = models.CharField(max_length=50,blank=True, null=True)
     contents        = models.JSONField(null=False)
     relevance       = models.IntegerField(default=0)
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
@@ -64,7 +65,7 @@ class Sector(models.Model):
 
 
     def __str__(self):
-        pass
+        return self.title
 
     class Meta:
         db_table = 'ph_sector'
@@ -72,27 +73,82 @@ class Sector(models.Model):
         verbose_name = 'Sector'
         verbose_name_plural = 'Sectors'    
 
+class Contact(models.Model):
+
+
+    CONTACT_SOURCE  = (
+        ('ORIGINAL', 'Original'),
+        ('SECOND_HAND', 'Second-Hand')
+    )
+
+    CONTACT_TYPE = {
+        ('PHONE','Phone Number'),
+        ('ADDRESS','Address'),
+        ('EMAIL','E-mail'),
+    }
+
+    full_name       = models.CharField(max_length = 150)
+    contact_source  = models.CharField(max_length=15,choices=CONTACT_SOURCE,default='SECOND_HAND')
+    contact_type    = models.CharField(max_length=15,choices=CONTACT_TYPE,default='PHONE')
+    contact_data    = models.CharField(max_length = 150)
+    
+    def __str__(self):
+        return self.full_name
+
+    class Meta:
+        db_table = 'ph_contact'
+        managed = True
+        verbose_name = 'contact'
+        verbose_name_plural = 'contacts'
+
+class Stage(models.Model):
+    
+    title           = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = 'ph_stage'
+        verbose_name_plural = 'Stages'
+
+    pass
+
+
+class Location(MP_Node):
+
+    title           = models.CharField(max_length = 200)
+    code            = models.CharField(max_length=10, blank=True, null=True)
+    p_id            = models.CharField(max_length = 25)
+    
+    
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = 'ph_location'
+        managed = True
+        verbose_name = 'Location'
+        verbose_name_plural = 'Locations'
 
 
 class Event(models.Model):
   
     STATUS  = (
         ('NEW', 'New'),
-        ('CONFIRMED', 'Confirmed'),
-        ('ASSESSMENT', 'Risk Assessment'),
-        ('VERIFIED', 'Verified'),
-        ('DISCAREDED', 'Discarded'),
-        ('PROGRESS', 'Response in Progress'),
-        ('COMPLETED', 'Completed'),
+        ('CANCELLED', 'Cancelled'),
+        ('PROGRESS', 'On Progress'),
+        ('COMPLETE', 'Complete'),
     )
 
-
+    description     = models.TextField(blank=True, null=True)
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
-    location        = models.IntegerField(default=0)
+    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING) 
+    location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
     sector          = models.ManyToManyField(Sector)
-
-
+    contact         = models.ManyToManyField('contact')
+    created_on      = models.DateTimeField(auto_now=True)
 
     notes           = GenericRelation('note')    
     files           = GenericRelation('files')   
@@ -101,7 +157,7 @@ class Event(models.Model):
       
 
     def __str__(self):
-        pass
+        return str(self.pk)
 
     class Meta:
         db_table = 'ph_event'
@@ -118,9 +174,10 @@ class SignalKeys(models.Model):
     
     class Meta:
         db_table    = 'ph_signal_keys'
+        verbose_name_plural = 'SignalKeys'
         
     def __str__(self):
-        return self.keyword if self.keyword else self.pk
+        return self.keyword if self.keyword else str(self.pk)
     
     @receiver(post_save, sender='ems.SignalKeys')
     def update_keyword_json(sender, instance, created, **kwargs):

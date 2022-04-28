@@ -1,0 +1,1388 @@
+[
+  {
+    "id": 1,
+    "name": "Bagamoyo",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "bagamoyo"
+  },
+  {
+    "id": 3,
+    "name": "Kibaha",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "kibaha"
+  },
+  {
+    "id": 5,
+    "name": "Kibiti",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "kibiti"
+  },
+  {
+    "id": 6,
+    "name": "Kilwa",
+    "code": null,
+    "region_id": 2,
+    "dictionary": "kilwa"
+  },
+  {
+    "id": 7,
+    "name": "Kisarawe",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "kisarawe"
+  },
+  {
+    "id": 8,
+    "name": "Korogwe DC",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "korogwe dc"
+  },
+  {
+    "id": 12,
+    "name": "Liwale",
+    "code": null,
+    "region_id": 2,
+    "dictionary": "liwale"
+  },
+  {
+    "id": 16,
+    "name": "Mbinga",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "mbinga"
+  },
+  {
+    "id": 17,
+    "name": "Mkinga",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "mkinga"
+  },
+  {
+    "id": 18,
+    "name": "Mkuranga",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "mkuranga"
+  },
+  {
+    "id": 19,
+    "name": "Mtwara (DC)",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "mtwara (dc)"
+  },
+  {
+    "id": 21,
+    "name": "Muheza",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "muheza"
+  },
+  {
+    "id": 22,
+    "name": "Nachingwea",
+    "code": null,
+    "region_id": 2,
+    "dictionary": "nachingwea"
+  },
+  {
+    "id": 23,
+    "name": "Namtumbo",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "namtumbo"
+  },
+  {
+    "id": 25,
+    "name": "Nanyumbu",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "nanyumbu"
+  },
+  {
+    "id": 26,
+    "name": "Newala dc",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "newala dc"
+  },
+  {
+    "id": 27,
+    "name": "Nyasa",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "nyasa"
+  },
+  {
+    "id": 28,
+    "name": "Pangani",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "pangani"
+  },
+  {
+    "id": 29,
+    "name": "Ruangwa",
+    "code": null,
+    "region_id": 2,
+    "dictionary": "ruangwa"
+  },
+  {
+    "id": 30,
+    "name": "Rufiji",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "rufiji"
+  },
+  {
+    "id": 32,
+    "name": "Tandahimba",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "tandahimba"
+  },
+  {
+    "id": 33,
+    "name": "Tanga Jiji",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "tanga jiji"
+  },
+  {
+    "id": 34,
+    "name": "Tunduru",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "tunduru"
+  },
+  {
+    "id": 36,
+    "name": "Handeni",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "handeni"
+  },
+  {
+    "id": 37,
+    "name": "Mafia",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "mafia"
+  },
+  {
+    "id": 39,
+    "name": "Kilindi",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "kilindi"
+  },
+  {
+    "id": 40,
+    "name": "Morogoro (v)",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "morogoro (v)"
+  },
+  {
+    "id": 41,
+    "name": "Malinyi",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "malinyi"
+  },
+  {
+    "id": 42,
+    "name": "Kilosa",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "kilosa"
+  },
+  {
+    "id": 43,
+    "name": "Ulanga",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "ulanga"
+  },
+  {
+    "id": 44,
+    "name": "Mvomero",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "mvomero"
+  },
+  {
+    "id": 45,
+    "name": "Gairo",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "gairo"
+  },
+  {
+    "id": 47,
+    "name": "Kyela dc",
+    "code": null,
+    "region_id": 12,
+    "dictionary": "kyela dc "
+  },
+  {
+    "id": 48,
+    "name": "Chunya dc",
+    "code": null,
+    "region_id": 12,
+    "dictionary": "chunya dc"
+  },
+  {
+    "id": 49,
+    "name": "Mbarali dc",
+    "code": null,
+    "region_id": 12,
+    "dictionary": "mbarali dc"
+  },
+  {
+    "id": 50,
+    "name": "Iringa (m)",
+    "code": null,
+    "region_id": 11,
+    "dictionary": "iringa dc,iringa mjini,iringa m"
+  },
+  {
+    "id": 52,
+    "name": "Mpwapwa",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "mpwapwa"
+  },
+  {
+    "id": 53,
+    "name": "Kongwa",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "kongwa"
+  },
+  {
+    "id": 54,
+    "name": "Bahi",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "bahi"
+  },
+  {
+    "id": 55,
+    "name": "Kondoa",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "kondoa"
+  },
+  {
+    "id": 57,
+    "name": "Chamwino",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "chamwino"
+  },
+  {
+    "id": 58,
+    "name": "Dodoma",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "dodoma"
+  },
+  {
+    "id": 59,
+    "name": "Chemba",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "chemba"
+  },
+  {
+    "id": 60,
+    "name": "Mkalama",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "mkalama"
+  },
+  {
+    "id": 61,
+    "name": "Itigi",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "itigi"
+  },
+  {
+    "id": 62,
+    "name": "Manyoni",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "manyoni"
+  },
+  {
+    "id": 63,
+    "name": "Singida (m)",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "singida (m)"
+  },
+  {
+    "id": 64,
+    "name": "Ikungi",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "ikungi"
+  },
+  {
+    "id": 65,
+    "name": "Singida (v)",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "singida (v)"
+  },
+  {
+    "id": 66,
+    "name": "Iramba",
+    "code": null,
+    "region_id": 6,
+    "dictionary": "iramba"
+  },
+  {
+    "id": 67,
+    "name": "Ludewa",
+    "code": null,
+    "region_id": 13,
+    "dictionary": "ludewa"
+  },
+  {
+    "id": 68,
+    "name": "Makete",
+    "code": null,
+    "region_id": 13,
+    "dictionary": "makete"
+  },
+  {
+    "id": 69,
+    "name": "Igunga",
+    "code": null,
+    "region_id": 8,
+    "dictionary": "igunga"
+  },
+  {
+    "id": 70,
+    "name": "Kaliua",
+    "code": null,
+    "region_id": 8,
+    "dictionary": "kaliua"
+  },
+  {
+    "id": 71,
+    "name": "Nzega",
+    "code": null,
+    "region_id": 8,
+    "dictionary": "nzega"
+  },
+  {
+    "id": 73,
+    "name": "Sikonge",
+    "code": null,
+    "region_id": 8,
+    "dictionary": "sikonge"
+  },
+  {
+    "id": 74,
+    "name": "Tabora (m)",
+    "code": "TBR",
+    "region_id": 8,
+    "dictionary": "tabora (m)"
+  },
+  {
+    "id": 75,
+    "name": "Urambo",
+    "code": "URM",
+    "region_id": 8,
+    "dictionary": "urambo"
+  },
+  {
+    "id": 76,
+    "name": "Uyui",
+    "code": "UYI",
+    "region_id": 8,
+    "dictionary": "uyui"
+  },
+  {
+    "id": 77,
+    "name": "Hai",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "hai"
+  },
+  {
+    "id": 79,
+    "name": "Mwanga",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "mwanga"
+  },
+  {
+    "id": 80,
+    "name": "Rombo",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "rombo"
+  },
+  {
+    "id": 81,
+    "name": "Siha",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "siha"
+  },
+  {
+    "id": 82,
+    "name": "Same",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "vuje"
+  },
+  {
+    "id": 85,
+    "name": "Tanganyika",
+    "code": null,
+    "region_id": 16,
+    "dictionary": "tanganyika"
+  },
+  {
+    "id": 90,
+    "name": "Uvinza",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "uvinza"
+  },
+  {
+    "id": 91,
+    "name": "Rungwe",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "rungwe"
+  },
+  {
+    "id": 97,
+    "name": "Meru",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "meru"
+  },
+  {
+    "id": 98,
+    "name": "Arusha (m)",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "arusha mjini,arusha m,arachuga,arusha,arusha"
+  },
+  {
+    "id": 99,
+    "name": "Monduli",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "monduli"
+  },
+  {
+    "id": 100,
+    "name": "Lushoto",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "lushoto"
+  },
+  {
+    "id": 126,
+    "name": "Moshi (v)",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "moshi (v)"
+  },
+  {
+    "id": 127,
+    "name": "Mbozi DC",
+    "code": null,
+    "region_id": 15,
+    "dictionary": "mbozi dc"
+  },
+  {
+    "id": 128,
+    "name": "Ngara",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "ngara"
+  },
+  {
+    "id": 130,
+    "name": "Bukoba (m)",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "bukoba (m)"
+  },
+  {
+    "id": 131,
+    "name": "Muleba",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "muleba"
+  },
+  {
+    "id": 132,
+    "name": "Missenyi",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "missenyi"
+  },
+  {
+    "id": 133,
+    "name": "Karagwe",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "karagwe"
+  },
+  {
+    "id": 135,
+    "name": "Biharamulo",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "biharamulo"
+  },
+  {
+    "id": 141,
+    "name": "Ileje",
+    "code": null,
+    "region_id": 15,
+    "dictionary": "ileje"
+  },
+  {
+    "id": 144,
+    "name": "Geita DC",
+    "code": null,
+    "region_id": 24,
+    "dictionary": "geita dc"
+  },
+  {
+    "id": 145,
+    "name": "Bukombe",
+    "code": null,
+    "region_id": 24,
+    "dictionary": "bukombe"
+  },
+  {
+    "id": 146,
+    "name": "Mbogwe",
+    "code": null,
+    "region_id": 24,
+    "dictionary": "mbogwe"
+  },
+  {
+    "id": 148,
+    "name": "Chato",
+    "code": null,
+    "region_id": 24,
+    "dictionary": "chato"
+  },
+  {
+    "id": 149,
+    "name": "Nyang'hwale",
+    "code": null,
+    "region_id": 24,
+    "dictionary": "nyang'hwale"
+  },
+  {
+    "id": 150,
+    "name": "Butiama",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "butiama"
+  },
+  {
+    "id": 151,
+    "name": "Bunda DC",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "bunda dc"
+  },
+  {
+    "id": 153,
+    "name": "Sengerema",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "sengerema"
+  },
+  {
+    "id": 154,
+    "name": "Magu",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "magu"
+  },
+  {
+    "id": 158,
+    "name": "Kwimba",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "kwimba"
+  },
+  {
+    "id": 159,
+    "name": "Misungwi",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "misungwi"
+  },
+  {
+    "id": 180,
+    "name": "Shinyanga (m)",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "shinyanga (m)"
+  },
+  {
+    "id": 187,
+    "name": "Meatu",
+    "code": null,
+    "region_id": 31,
+    "dictionary": "meatu"
+  },
+  {
+    "id": 188,
+    "name": "Shinyanga (v)",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "shinyanga (v)"
+  },
+  {
+    "id": 191,
+    "name": "Kishapu",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "kishapu"
+  },
+  {
+    "id": 193,
+    "name": "Maswa",
+    "code": null,
+    "region_id": 31,
+    "dictionary": "maswa"
+  },
+  {
+    "id": 195,
+    "name": "Njombe (v)",
+    "code": null,
+    "region_id": 13,
+    "dictionary": "njombe (v)"
+  },
+  {
+    "id": 197,
+    "name": "Wanging'ombe",
+    "code": null,
+    "region_id": 13,
+    "dictionary": "wanging'ombe"
+  },
+  {
+    "id": 199,
+    "name": "Mufindi",
+    "code": null,
+    "region_id": 11,
+    "dictionary": "mufindi,mfnd,muf,mufid,mfindi,mfidi,mfd"
+  },
+  {
+    "id": 200,
+    "name": "Iringa (v)",
+    "code": null,
+    "region_id": 11,
+    "dictionary": "iringa vijijini,iringa v,iringa (v)"
+  },
+  {
+    "id": 202,
+    "name": "Hanang",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "hanang"
+  },
+  {
+    "id": 204,
+    "name": "Ngorongoro",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "ngorongoro,ngolongolo,ngolongoro,ngorongolo"
+  },
+  {
+    "id": 208,
+    "name": "Ifakara TC",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "ifakara tc"
+  },
+  {
+    "id": 222,
+    "name": "Nsimbo DC",
+    "code": null,
+    "region_id": 16,
+    "dictionary": "nsimbo dc"
+  },
+  {
+    "id": 223,
+    "name": "Mlele DC",
+    "code": null,
+    "region_id": 16,
+    "dictionary": "mlele dc"
+  },
+  {
+    "id": 224,
+    "name": "Chunya",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "chunya"
+  },
+  {
+    "id": 225,
+    "name": "Mbeya (v)",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "mbeya (v)"
+  },
+  {
+    "id": 229,
+    "name": "Farmers district",
+    "code": null,
+    "region_id": 27,
+    "dictionary": "farmers district"
+  },
+  {
+    "id": 231,
+    "name": "Buhigwe",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "buhigwe"
+  },
+  {
+    "id": 232,
+    "name": "Kibondo",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "kibondo"
+  },
+  {
+    "id": 234,
+    "name": "Tarime (v)",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "tarime"
+  },
+  {
+    "id": 235,
+    "name": "Kigoma dc",
+    "code": null,
+    "region_id": 28,
+    "dictionary": "kigoma dc"
+  },
+  {
+    "id": 239,
+    "name": "Mbeya dc",
+    "code": null,
+    "region_id": 29,
+    "dictionary": "mbeya dc"
+  },
+  {
+    "id": 242,
+    "name": "Bukoba (v)",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "bukoba (v)"
+  },
+  {
+    "id": 249,
+    "name": "Mbeya (m)",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "mbeya (m)"
+  },
+  {
+    "id": 250,
+    "name": "Arusha (v)",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "arusha vijijini,arusha v,arusha kijijni,arusha v"
+  },
+  {
+    "id": 251,
+    "name": "Karatu",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "karatu"
+  },
+  {
+    "id": 252,
+    "name": "Kigoma (m)",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "kigoma (m)"
+  },
+  {
+    "id": 253,
+    "name": "Kasulu (v)",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "kasulu (v)"
+  },
+  {
+    "id": 255,
+    "name": "Moshi (m)",
+    "code": null,
+    "region_id": 14,
+    "dictionary": "moshi (m)"
+  },
+  {
+    "id": 259,
+    "name": "Njombe (m)",
+    "code": null,
+    "region_id": 13,
+    "dictionary": "njombe (m)"
+  },
+  {
+    "id": 260,
+    "name": "Songea DC",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "songea dc"
+  },
+  {
+    "id": 261,
+    "name": "Songea (m)",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "songea (m)"
+  },
+  {
+    "id": 263,
+    "name": "Ilemela",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "ilemela"
+  },
+  {
+    "id": 264,
+    "name": "Ukerewe",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "ukerewe"
+  },
+  {
+    "id": 265,
+    "name": "Busokelo",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "busokelo"
+  },
+  {
+    "id": 266,
+    "name": "Mbarali",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "mbarali"
+  },
+  {
+    "id": 267,
+    "name": "Longido",
+    "code": null,
+    "region_id": 21,
+    "dictionary": "longido"
+  },
+  {
+    "id": 268,
+    "name": "Kigoma (v)",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "kigoma (v)"
+  },
+  {
+    "id": 269,
+    "name": "Kakonko",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "kakonko"
+  },
+  {
+    "id": 271,
+    "name": "Makambako",
+    "code": null,
+    "region_id": 13,
+    "dictionary": "makambako"
+  },
+  {
+    "id": 274,
+    "name": "Rorya",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "rorya"
+  },
+  {
+    "id": 275,
+    "name": "Serengeti",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "serengeti"
+  },
+  {
+    "id": 277,
+    "name": "Kiteto",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "kiteto"
+  },
+  {
+    "id": 278,
+    "name": "Simanjiro",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "simanjiro"
+  },
+  {
+    "id": 279,
+    "name": "Mafinga",
+    "code": null,
+    "region_id": 11,
+    "dictionary": "mafinga,mafing,maf,mfinga,mfing"
+  },
+  {
+    "id": 281,
+    "name": "Ilala",
+    "code": null,
+    "region_id": 30,
+    "dictionary": "ilala,jiji la dar es salaam"
+  },
+  {
+    "id": 282,
+    "name": "Kinondoni",
+    "code": null,
+    "region_id": 30,
+    "dictionary": "kinondoni"
+  },
+  {
+    "id": 283,
+    "name": "Temeke",
+    "code": null,
+    "region_id": 30,
+    "dictionary": "temeke"
+  },
+  {
+    "id": 284,
+    "name": "Ubungo",
+    "code": null,
+    "region_id": 30,
+    "dictionary": "ubungo"
+  },
+  {
+    "id": 285,
+    "name": "Kigamboni",
+    "code": null,
+    "region_id": 30,
+    "dictionary": "kigamboni"
+  },
+  {
+    "id": 286,
+    "name": "Bariadi",
+    "code": null,
+    "region_id": 31,
+    "dictionary": "bariadi"
+  },
+  {
+    "id": 287,
+    "name": "Busega",
+    "code": null,
+    "region_id": 31,
+    "dictionary": "busega"
+  },
+  {
+    "id": 288,
+    "name": "Itilima",
+    "code": null,
+    "region_id": 31,
+    "dictionary": "itilima"
+  },
+  {
+    "id": 291,
+    "name": "Kalambo",
+    "code": null,
+    "region_id": 32,
+    "dictionary": "kalambo"
+  },
+  {
+    "id": 292,
+    "name": "Sumbawanga MC",
+    "code": null,
+    "region_id": 32,
+    "dictionary": "sumbawanga mc"
+  },
+  {
+    "id": 293,
+    "name": "Nkasi",
+    "code": null,
+    "region_id": 32,
+    "dictionary": "nkasi"
+  },
+  {
+    "id": 294,
+    "name": "Sumbawanga DC",
+    "code": null,
+    "region_id": 32,
+    "dictionary": "sumbawanga dc"
+  },
+  {
+    "id": 295,
+    "name": "Kahama (m)",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "kahama (m)"
+  },
+  {
+    "id": 297,
+    "name": "Morogoro (m)",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "morogoro dc,morogoro,morogoro mjini,morogoro m"
+  },
+  {
+    "id": 302,
+    "name": "Ushetu",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "ushetu"
+  },
+  {
+    "id": 303,
+    "name": "Buchosa",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "buchosa"
+  },
+  {
+    "id": 304,
+    "name": "Chalinze",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "chalinze"
+  },
+  {
+    "id": 305,
+    "name": "Kyela",
+    "code": null,
+    "region_id": 5,
+    "dictionary": "kyela"
+  },
+  {
+    "id": 306,
+    "name": "Mtwara (MC)",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "mtwara (mc)"
+  },
+  {
+    "id": 307,
+    "name": "BABATI DC",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "babati dc"
+  },
+  {
+    "id": 308,
+    "name": "BABATI TC",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "babati tc"
+  },
+  {
+    "id": 310,
+    "name": "MBULU DC",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "mbulu dc"
+  },
+  {
+    "id": 311,
+    "name": "MBULU TC",
+    "code": null,
+    "region_id": 20,
+    "dictionary": "mbulu tc"
+  },
+  {
+    "id": 313,
+    "name": "Nanyamba TC",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "nanyamba tc"
+  },
+  {
+    "id": 315,
+    "name": "Kyerwa",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "Kyerwa,KYERWA"
+  },
+  {
+    "id": 318,
+    "name": "Bumbuli",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "bumbuli"
+  },
+  {
+    "id": 319,
+    "name": "Madaba",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "Madaba,mdaba"
+  },
+  {
+    "id": 321,
+    "name": "Msalala",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "Msalala,Msala"
+  },
+  {
+    "id": 324,
+    "name": "Kilolo",
+    "code": null,
+    "region_id": 11,
+    "dictionary": "kilolo,kililo,klolo,kioo,"
+  },
+  {
+    "id": 330,
+    "name": "Korogwe TC",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "korogwe tc"
+  },
+  {
+    "id": 337,
+    "name": "Mji wa Nzega",
+    "code": null,
+    "region_id": 8,
+    "dictionary": "mji wa nzega"
+  },
+  {
+    "id": 338,
+    "name": "Kasulu TC",
+    "code": null,
+    "region_id": 18,
+    "dictionary": "kasulu tc"
+  },
+  {
+    "id": 339,
+    "name": "LINDI (V)",
+    "code": null,
+    "region_id": 2,
+    "dictionary": "lindi (v)"
+  },
+  {
+    "id": 340,
+    "name": "LINDI (M)",
+    "code": null,
+    "region_id": 2,
+    "dictionary": "lindi (m)"
+  },
+  {
+    "id": 341,
+    "name": "Musoma (V)",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "musoma (v)"
+  },
+  {
+    "id": 343,
+    "name": "Musoma (M)",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "musoma (m)"
+  },
+  {
+    "id": 344,
+    "name": "Mwanza Jiji",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "jiji la mwanza"
+  },
+  {
+    "id": 345,
+    "name": "Mbinga TC",
+    "code": null,
+    "region_id": 4,
+    "dictionary": "mbinga tc"
+  },
+  {
+    "id": 346,
+    "name": "Bunda (M)",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "bunda (m)"
+  },
+  {
+    "id": 348,
+    "name": "Masasi TC",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "masasi tc"
+  },
+  {
+    "id": 349,
+    "name": "Masasi DC",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "masasi dc"
+  },
+  {
+    "id": 350,
+    "name": "Newala TC",
+    "code": null,
+    "region_id": 1,
+    "dictionary": "newala tc"
+  },
+  {
+    "id": 351,
+    "name": "Handeni Mji",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "handeni mji"
+  },
+  {
+    "id": 352,
+    "name": "Bariadi TC",
+    "code": null,
+    "region_id": 31,
+    "dictionary": "bariadi tc"
+  },
+  {
+    "id": 353,
+    "name": "Tanganyika",
+    "code": null,
+    "region_id": 16,
+    "dictionary": "tanganyika"
+  },
+  {
+    "id": 354,
+    "name": "Mpanda MC",
+    "code": null,
+    "region_id": 16,
+    "dictionary": "mpanda mc"
+  },
+  {
+    "id": 355,
+    "name": "KONDOA TC",
+    "code": null,
+    "region_id": 7,
+    "dictionary": "kondoa tc"
+  },
+  {
+    "id": 356,
+    "name": "Mpimbwe DC",
+    "code": null,
+    "region_id": 16,
+    "dictionary": "mpimbwe dc"
+  },
+  {
+    "id": 358,
+    "name": "Tarime Mji",
+    "code": null,
+    "region_id": 25,
+    "dictionary": "tarime mji"
+  },
+  {
+    "id": 360,
+    "name": "Geita mji",
+    "code": null,
+    "region_id": 24,
+    "dictionary": "geita mji"
+  },
+  {
+    "id": 361,
+    "name": "Mlimba DC",
+    "code": null,
+    "region_id": 10,
+    "dictionary": "mlimba district council"
+  },
+  {
+    "id": 363,
+    "name": "Tunduma (M)",
+    "code": null,
+    "region_id": 15,
+    "dictionary": "tunduma mji"
+  },
+  {
+    "id": 367,
+    "name": "Songwe DC",
+    "code": null,
+    "region_id": 15,
+    "dictionary": "songwe dc"
+  },
+  {
+    "id": 368,
+    "name": "Momba DC",
+    "code": null,
+    "region_id": 15,
+    "dictionary": "momba dc"
+  },
+  {
+    "id": 383,
+    "name": "MULEBA",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "in comma-separated"
+  },
+  {
+    "id": 411,
+    "name": "X-None",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "x-none"
+  },
+  {
+    "id": 412,
+    "name": "X-None 1",
+    "code": null,
+    "region_id": 26,
+    "dictionary": "x-none 1"
+  },
+  {
+    "id": 439,
+    "name": "Mufindi A",
+    "code": null,
+    "region_id": 11,
+    "dictionary": "mufindi,mfnd,muf,mufid,mfindi,mfidi,mfd"
+  },
+  {
+    "id": 440,
+    "name": "MULEBA",
+    "code": null,
+    "region_id": 23,
+    "dictionary": "-"
+  },
+  {
+    "id": 441,
+    "name": "KIBAHA MJI",
+    "code": null,
+    "region_id": 9,
+    "dictionary": "kibaha mji,kibaha tc"
+  },
+  {
+    "id": 443,
+    "name": "0",
+    "code": null,
+    "region_id": 17,
+    "dictionary": "0,0"
+  },
+  {
+    "id": 444,
+    "name": "Tanga Jiji X",
+    "code": null,
+    "region_id": 3,
+    "dictionary": "tanga jiji"
+  }
+]
