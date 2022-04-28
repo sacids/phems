@@ -1,0 +1,66 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block contents %}
+
+<div class="sig_hd_title border-bottom p-2">
+    Title Bar
+</div>
+<div class="signals_wrp p-2 m-2">
+    <div class="row" style="width: 2500px;">
+    {% for keyword in keywords %}
+        <div class="keyword_wrp p-2 mx-1">
+            <div class="keyword_title">
+                {{keyword}}
+            </div>
+            <div class="sig_wrp">
+                {% for c in 1|range:12 %}
+                    <div class="border rounded-3 p-2 my-2">
+                        <span> {{keyword}} signal text </span>
+                        <br>
+                        <br>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block custom_css %}
+
+<link href="{% static 'libs/dropzone/min/dropzone.min.css' %}" rel="stylesheet" type="text/css" />
+<style>
+    .keyword_title{
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+
+    
+    .sig_hd_title{
+        height: 45px;
+    }
+
+    .keyword_wrp{
+        border: 0px dashed #dcdcdc;
+        width: 310px;
+    }
+    .sig_wrp{
+        height: calc(100vh - 185px);
+        overflow-y:scroll;
+    }
+
+    .signals_wrp{
+        overflow-x: scroll;
+        overflow-y:hidden;
+        width: 100vw; 
+        height: 100%
+    }
+    
+</style>
+{% endblock %}
