@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import json
-from .utils import *
+from .utils import calc_relevance
 from treebeard.mp_tree import MP_Node
 
 from django.conf import settings
@@ -24,7 +24,9 @@ class Signal(models.Model):
     
     CHANNEL = (
         ('SMS', 'SMS'),
-        ('CHATBOT', 'ChatBot'),
+        ('WHATSAPP', 'WhatsApp'),
+        ('TELEGRAM', 'Telegram'),
+        ('TWITTER', 'Twitter'),
         ('WEB', 'Web'),
         ('APP', 'App'),
     )
@@ -47,6 +49,21 @@ class Signal(models.Model):
         
     def __str__(self):
         return self.channel if self.channel else self.pk
+
+    @property
+    def css_icon(self):
+        if self.channel == 'SMS':
+            return 'bx bx-message-alt-dots text-primary '
+        if self.channel == 'WHATSAPP':
+            return 'bx bxl-whatsapp text-success '
+        if self.channel == 'TELEGRAM':
+            return 'bx bxl-telegram text-info '
+        if self.channel == 'TWITTER':
+            return 'bx bxl-twitter text-info '
+        if self.channel == 'WEB':
+            return 'bx bxl-html5 text-warning '
+        if self.channel == 'APP':
+            return 'bx bxl-android text-danger '
      
      
     def save(self, *args, **kwargs):
@@ -157,7 +174,7 @@ class Event(models.Model):
       
 
     def __str__(self):
-        return str(self.pk)
+        return self.description
 
     class Meta:
         db_table = 'ph_event'
@@ -165,7 +182,11 @@ class Event(models.Model):
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
     
-                   
+
+
+
+
+             
 class SignalKeys(models.Model):
 
     keyword         = models.CharField(max_length=50)

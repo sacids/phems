@@ -5,13 +5,15 @@ from .serializers import *
 from .models import *
 from django.views import generic
 from django.http import HttpResponse, JsonResponse
+from django.template.response import TemplateResponse
 
 # Create your views here.
 
 
 class EventListView(generic.ListView):
-    model = Event
-    template_name = "events/list.html"
+    model               = Event
+    context_object_name = 'events'
+    template_name       = "events/list.html"
 
 
 class SignalListView(generic.ListView):
@@ -28,6 +30,39 @@ class SignalListView(generic.ListView):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+def delete_signal(request):
+    sig_id              = request.GET.get('sid',0)
+    sig_obj             = Signal.objects.get(pk=sig_id)
+    sig_obj.status      = 'DISCARDED'
+    sig_obj.save()
+    return JsonResponse(1,safe=False)
+    
+
+
+def promote_signal(request):
+    
+    sig_id              = request.GET.get('sid',0) 
+    
+    context             = {}
+    context['signal']   = Signal.objects.get(pk=sig_id)
+    context['events']   = Event.objects.all()
+
+    template            = 'events/async/promote_signal.html'
+    
+    return TemplateResponse(request,template,context)
 
 
 

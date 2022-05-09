@@ -13,14 +13,14 @@
             </div>
             <div class="d-flex hd_links">
                 {% with request.resolver_match.url_name as url_name %}
-                <div class="p-1 mr-2 {% if url_name == 'overview' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'overview' %}">Overview</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'signals' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'signals' %}">Signals</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'events' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'events' %}">Events</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'timeline' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'timeline' %}">Timeline</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'calendar' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'calendar' %}">Calendar</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'dashboard' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'dashboard' %}">Dashboard</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'messages' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'messages' %}">Messages</a></div>
-                <div class="p-1 mx-2 {% if url_name == 'files' %}border-bottom border-3 border-primary{% endif %}"><a href="{% url 'files' %}">Files</a></div>
+                <div class="p-1 mr-2 {% if url_name == 'overview' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'overview' %}">Overview</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'signals' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'signals' %}">Signals</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'events' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'events' %}">Events</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'timeline' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'timeline' %}">Timeline</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'calendar' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'calendar' %}">Calendar</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'dashboard' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'dashboard' %}">Dashboard</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'messages' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'messages' %}">Messages</a></div>
+                <div class="p-1 mx-2 {% if url_name == 'files' %}border-bottom border-2 border-primary{% endif %}"><a href="{% url 'files' %}">Files</a></div>
                 {% endwith %}
             </div>
         </div>
@@ -28,7 +28,7 @@
             
             <form class="app-search d-none d-lg-block">
                 <div class="position-relative">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <input id="app-search" type="text" class="form-control" placeholder="Search...">
                     <span class="bx bx-search-alt"></span>
                 </div>
             </form>

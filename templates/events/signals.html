@@ -8,7 +8,7 @@
 <div class="sig_hd_title border-bottom p-2">
     Title Bar
 </div>
-<div class="signals_wrp p-2 m-2">
+<div class="signals_wrp p-2">
     <div class="row" style="width: 2500px;">
     {% for keyword in keywords %}
         <div class="keyword_wrp p-2 mx-1">
@@ -16,11 +16,21 @@
                 {{keyword}}
             </div>
             <div class="sig_wrp">
-                {% for c in 1|range:12 %}
-                    <div class="border rounded-3 p-2 my-2">
-                        <span> {{keyword}} signal text </span>
-                        <br>
-                        <br>
+                {% for signal in object_list %}
+                    <div class="sig_item border rounded-3 my-2 d-flex flex-column" sid="{{signal.id}}">
+                        <div class="sig_item_content p-2">
+                            <span class="{{signal.css_icon}}"></span>
+                            <span> {{signal.contents.text}} signal text </span>
+                            <h5>{{signal.relevance}}</h5>
+                            <span> {{signal.contact}} </span>
+                            <span> {{signal.status}} </span>
+                        </div>
+                        <div class="sig_item_footer mt-auto p-2 ">
+                            <div class="sig_item_footer_opt p-1">
+                                <i class="bx bx-trash mr-auto ds"></i>
+                                <i class="bx bx-right-top-arrow-circle wos""></i>
+                            </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
@@ -39,8 +49,6 @@
         font-size: 1.3em;
         font-weight: bold;
     }
-
-
     
     .sig_hd_title{
         height: 45px;
@@ -53,14 +61,135 @@
     .sig_wrp{
         height: calc(100vh - 185px);
         overflow-y:scroll;
+        font-size: 0.9em;
+    }
+
+    .sig_item{
+        background-color: white;
+    }
+
+    .sig_item:hover{
+        border: 1px solid #424242;
+        //background-color: rgb(240, 244, 248);
+    }
+
+    .sig_item:hover .sig_item_footer_opt{
+        display: block;
     }
 
     .signals_wrp{
         overflow-x: scroll;
         overflow-y:hidden;
         width: 100vw; 
-        height: 100%
+        height: 100%;
+        background-color: #f1f1f1;
     }
     
+    
+    .sig_item_footer {
+        height: 40px;
+        font-size: 1.5em;
+        font-weight: lighter;
+        //background-color: antiquewhite;
+    }
+
+    .sig_item_footer i{
+        cursor: pointer;
+    }
+
+    .sig_item_footer_opt {
+        display: none;
+    }
+    .sig_item_content{
+        min-height: 60px;
+    }
+
 </style>
+{% endblock %}
+
+
+
+{% block offcanvas %}
+
+<div id="offcanvas-wrp">
+    <div id="offconvas-header" class="border-bottom d-flex">
+        <div class="mr-auto">Moja</div>
+        <div class=""><i class="bx bx-chevrons-right" id="close-offcanvas"></i></div>
+    </div>
+    <div id="offcanvas-content">
+
+    </div>
+    
+</div>
+
+
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    
+    $(document).ready(function() {
+    
+        $('#offcanvas-wrp').hide();
+    
+        $(document).on('click', '#close-offcanvas',function (event) {
+    
+            $('#offcanvas-wrp').animate({
+                width: "hide"
+            });
+        });
+    });
+
+    $(document).on('click', '.wos',function (event) {
+        event.preventDefault();
+
+        $(this).parent().addClass()
+        $('#offcanvas-wrp').animate({
+            width: "show"
+        });
+
+        var sid     = $(this).closest('.sig_item').attr('sid')
+        var url     = window.location.origin + '/ems/utils/ps?sid='+sid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            //alert(data)
+            $('#offcanvas-content').html(data);
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+
+    });
+
+    $(document).on('click', '.ds',function (event) {
+        event.preventDefault();
+
+        var sid     = $(this).closest('.sig_item').attr('sid')
+        var url     = window.location.origin + '/ems/utils/ds?sid='+sid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            //alert(data)
+            $(this).closest('.sig_item').remove()
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+
+
+
+</script>
+
 {% endblock %}

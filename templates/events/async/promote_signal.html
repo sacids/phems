@@ -1,0 +1,41 @@
+
+{% load static %}
+{% load humanize %}
+
+<div class="pb-3">
+    <h3>Description</h3>
+    <div>{{signal.contents}}</div>
+    <div>{{signal.created_on}}</div>
+</div>
+
+<div>
+Search
+</div>
+<div>
+    add
+</div>
+
+<div id="event_search">
+    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+        <thead>
+            <tr>
+                <th >Description</th>
+                <th style="width:120px;">Status</th>
+                <th style="width:200px;">Created on</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{event.description}}</td>
+                <td>{{event.status}}</td>
+                <td>{{event.created_on}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="event_add">
+
+</div>

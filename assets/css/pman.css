@@ -99,9 +99,9 @@ body[data-sidebar="dark"].vertical-collpsed {
 OFFCANVAS
 **/
 #offcanvas-wrp{
-    width: 65vw;
-    height: calc(100vh - 130px);
-    margin-top: 70px;
+    width: 55vw;
+    height: calc(100vh - 80px);
+    margin-top: 80px;
     background-color: #fafafa;
     background-color: #fff;
     position: fixed;
@@ -230,11 +230,18 @@ body, html, .page-content, .main-content, .layout-wrapper, .topnav{
 }
 
 
+
+
 .hd_links a{
     color: #424242;
     text-decoration: none;
     font-size: 0.9em;
 }
+
+.hd_links div:hover{
+    border-bottom: 2px solid blue;
+}
+
 .hd_links{
     height: 40px;
     padding-top: 3px;
@@ -255,63 +262,6 @@ body, html, .page-content, .main-content, .layout-wrapper, .topnav{
 
 
 
-.mrv-footer{
-    position: fixed;
-    z-index: 10;
-    bottom: 0;
-    height: 60px;
-    width: 100%;
-    background-color: #34c38f;
-}
-
-.mrv-content{
-    margin-bottom: 60px;
-}
-
-.mrv-content, .mrv-topnav, .mrv-footer{
-    padding: 0px 15px;
-}
-.mrv-topnav{
-    z-index: 10000;
-    border-bottom: 1px solid rgba(207, 209, 211, 0.6);
-    position: sticky;
-    position: -webkit-sticky;
-    top: 0; /* required */
-    background-color: #fff;
-      
-}
-
-.mrv-topnav ul{
-    padding: 0px;
-    margin: 0px;
-}
-
-.mrv-topnav .col-icon {
-    display: none;
-}
-
-.nav-item{
-    border-bottom: 2px solid #fff;
-    margin: 0px 10px;
-    font-size: 1.1em;
-    color: #4d4d4d;
-}
-.nav-item a{
-    color: #4d4d4d;
-}
-
-.mrv-nav div:first-child{
-    margin-left: 0px;
-}
-.active{
-    border-bottom: 2px solid #666;
-}
-.mrv-desc{
-    height: 40px;
-}
-.mrv-nav{
-    height: 30px;
-}
 
 @media screen and (max-width: 600px) {
     .mrv-nav{

@@ -5,7 +5,6 @@ import string
 import re
 from functools import reduce
 import operator, json
-from .models import *
 from treebeard.mp_tree import MP_Node
 
 
@@ -14,7 +13,6 @@ def calc_relevance(sentence, key_map):
     chars           = re.escape(string.punctuation) #get punctuation characters
     token_sentence  = (re.sub(r'['+chars+']', '',sentence)).split()
     token_soundex   = [soundex(x) for x in token_sentence]
-    token_metaphone = [metaphone(x) for x in token_sentence]
     
     ans = set(key_map) & set(token_soundex)
     ss = 0
@@ -31,6 +29,5 @@ sample = "Moto mkubwa umewaka goba leo, ni hatari fire kama  mafua samaki"
 
 print(calc_relevance(sample,key_map))
 '''
-
 
 

@@ -6,7 +6,8 @@ from . import api
 
 
 router = routers.DefaultRouter()
-router.register(r'signal', api.SignalViewSet)
+router.register(r'api/signal', api.SignalViewSet)
+router.register(r'api/keyword', api.KeywordViewSet)
 
 
 urlpatterns = [
@@ -20,6 +21,11 @@ urlpatterns = [
     path('messages', SignalListView.as_view(), name='messages'),
     path('timeline', SignalListView.as_view(), name='timeline'),
     path('calendar', SignalListView.as_view(), name='calendar'),
+    
+    
+    
+    path('utils/ps', promote_signal, name='promote_signal'),
+    path('utils/ds', delete_signal, name='delete_signal'),
 
     #path('build', build_location_db)
     

@@ -14,19 +14,18 @@
             <tr>
                 <th >Title</th>
                 <th style="width:120px;">Status</th>
-                <th style="width:200px;">Tags</th>
                 <th style="width:150px;">Created by</th>
                 <th style="width:180px;">Created on</th>
                 <th style="width:20px;"></th>
             </tr>
         </thead>
         <tbody>
-            {% for c in 1|range:300 %}
+            {% for event in events %}
                 <tr>
-                    <td> Some Title </td>
-                    <td> tag1, tag2 </td>
-                    <td> Created by</td>
-                    <td> 2008-09-01</td>
+                    <td>{{event.description}}</td>
+                    <td>{{event.status}}</td>
+                    <td>{{event.created_by}}</td>
+                    <td>{{event.created_on}}</td>
                     <td></td>
                 </tr>
             {% endfor %}
