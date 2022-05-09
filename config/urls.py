@@ -27,8 +27,6 @@ urlpatterns = [
     path('api/register/', api.registerUser, name='register'),
     path('api/activateOtp/', api.activateUser, name='activate'),
     path('api/me/', api.getMeView.as_view(), name='getMe'),
-    
-    
     path('webpush/', include('apps.webpush.urls')),
     path('chatbot/', include('apps.chatbot.urls')),
     path('ems/', include('apps.ems.urls')),

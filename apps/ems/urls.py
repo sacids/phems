@@ -6,13 +6,14 @@ from . import api
 
 
 router = routers.DefaultRouter()
-router.register(r'api/signal', api.SignalViewSet)
-router.register(r'api/keyword', api.KeywordViewSet)
+router.register(r'signal', api.SignalViewSet)
+router.register(r'keyword', api.KeywordViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
 
+    path('', EventListView.as_view(), name='events'),
     path('events', EventListView.as_view(), name='events'),
     path('signals', SignalListView.as_view(), name='signals'),
     path('overview', SignalListView.as_view(), name='overview'),

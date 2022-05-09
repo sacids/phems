@@ -17,8 +17,8 @@ class EventListView(generic.ListView):
 
 
 class SignalListView(generic.ListView):
-    model = Signal
-    template_name = "events/signals.html"
+    model               = Signal
+    template_name       = "events/signals.html"
 
     def get_context_data(self, **kwargs):
 

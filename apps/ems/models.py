@@ -191,7 +191,7 @@ class SignalKeys(models.Model):
 
     keyword         = models.CharField(max_length=50)
     weight          = models.SmallIntegerField(default=1)
-    sector          = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    sector          = models.ForeignKey(Sector, on_delete=models.CASCADE, blank=True, null=True)
     
     class Meta:
         db_table    = 'ph_signal_keys'
