@@ -15,6 +15,7 @@ from django.urls import reverse
 from django.utils.datetime_safe import date
 from django.contrib.auth.models import Group
 from django.contrib.contenttypes.fields import GenericRelation
+from jellyfish import soundex, metaphone
 import os
 
 
