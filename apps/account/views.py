@@ -68,27 +68,31 @@ class LoginView(View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-        if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+        
+        #if form.is_valid():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(password)
+        # authenticate user
+        user = authenticate(request, username=username, password=password)
+        
+        print('jembe')
+        print(user)
 
-            # authenticate user
-            user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
 
-            if user is not None:
-                login(request, user)
+            remember_me = request.POST.get("remember_me")
+            if remember_me is True:
+                ONE_MONTH = 30 * 24 * 60 * 60
+                expiry = getattr(
+                    settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
+                request.session.set_expiry(expiry)
 
-                remember_me = request.POST.get("remember_me")
-                if remember_me is True:
-                    ONE_MONTH = 30 * 24 * 60 * 60
-                    expiry = getattr(
-                        settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
-                    request.session.set_expiry(expiry)
-
-                # redirect
-                return redirect('admin/')
-            else:
-                messages.error(request, 'Username or password incorectly')
+            # redirect
+            return redirect('/ems/signals')
+        else:
+            messages.error(request, 'Username or password incorectly')
 
        # render
         return render(request, self.template_name, {'form': form})

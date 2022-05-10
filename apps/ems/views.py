@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import *
@@ -9,6 +9,16 @@ from django.template.response import TemplateResponse
 
 # Create your views here.
 
+def loginUser(request):
+    def post(self , request):
+        username    = request.POST['username']
+        password    = request.POST['password']
+        user        = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(SignalListView)
+        else:
+            return redirect('/auth/login/')
 
 class EventListView(generic.ListView):
     model               = Event
@@ -16,14 +26,18 @@ class EventListView(generic.ListView):
     template_name       = "events/list.html"
 
 
-class SignalListView(generic.ListView):
-    model               = Signal
+class SignalListView(generic.TemplateView):
     template_name       = "events/signals.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(SignalListView, self).dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
 
         context = super(SignalListView, self).get_context_data(**kwargs)
-        context['keywords']     = SignalKeys.objects.all()
+        context['signals']      = Signal.objects.all()
         return context
 
 

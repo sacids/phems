@@ -5,104 +5,138 @@
 
 {% block contents %}
 
-<div class="sig_hd_title border-bottom p-2">
-    Title Bar
-</div>
-<div class="signals_wrp p-2">
-    <div class="row" style="width: 2500px;">
-    {% for keyword in keywords %}
-        <div class="keyword_wrp p-2 mx-1">
-            <div class="keyword_title">
-                {{keyword}}
-            </div>
-            <div class="sig_wrp">
-                {% for signal in object_list %}
-                    <div class="sig_item border rounded-3 my-2 d-flex flex-column" sid="{{signal.id}}">
-                        <div class="sig_item_content p-2">
-                            <span class="{{signal.css_icon}}"></span>
-                            <span> {{signal.contents.text}}</span>
-                            <h5>{{signal.relevance}}</h5>
-                            <span> {{signal.contact}} </span>
-                            <span> {{signal.status}} </span>
-                        </div>
-                        <div class="sig_item_footer mt-auto p-2 ">
-                            <div class="sig_item_footer_opt p-1">
-                                <i class="bx bx-trash mr-auto ds"></i>
-                                <i class="bx bx-right-top-arrow-circle wos""></i>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+<div class="d-flex">
+    <div class="sig_filters_wrp p-1">
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>Today</h6>
+                <p class="card-text">332 signals.</p>
             </div>
         </div>
-    {% endfor %}
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>Last Week</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i> > 5</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i> > 1</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i> Relevance 0 </h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>All</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
     </div>
+
+    <div class="sig_list_wrp ">
+            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                <thead>
+                    <tr>
+                        <th >Content</th>
+                        <th style="width:50px;"><i class="bx bx-info-circle"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for signal in signals %}
+                    <tr>
+                        <td>
+                            <div class="d-flex sig_item_wrp" sid="{{signal.id}}">
+                                <div class="sig_item_content">
+                                    <div>{{signal.contents.text}}</div>
+                                    <div>
+                                        <span class="{{signal.css_icon}}"></span>
+                                        <small> {{signal.channel}} </small>
+                                        <small> {{signal.contact}} </small>
+                                        <small> {{signal.created_on}} </small>
+                                        <small> {{signal.status}} </small>
+                                    </div>
+                                </div>
+                                <div class="sig_item_options_wrp">
+                                    <div class="sig_item_options p-1">
+                                        <i class="bx bx-trash ds"></i>
+                                        <i class="bx bx-right-top-arrow-circle wos"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{signal.relevance}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+    <div class="evn_att_wrp">
+        <div id="event_content"></div>
+    </div>
+
 </div>
+
+
+
+
+
 
 {% endblock %}
 
 {% block custom_css %}
 
-<link href="{% static 'libs/dropzone/min/dropzone.min.css' %}" rel="stylesheet" type="text/css" />
 <style>
-    .keyword_title{
-        font-size: 1.3em;
-        font-weight: bold;
-    }
-    
-    .sig_hd_title{
-        height: 45px;
-    }
+.sig_filters_wrp{
+    width: 150px;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+}
 
-    .keyword_wrp{
-        border: 0px dashed #dcdcdc;
-        width: 310px;
-    }
-    .sig_wrp{
-        height: calc(100vh - 185px);
-        overflow-y:scroll;
-        font-size: 0.9em;
-    }
+.sig_list_wrp{
+    width: 50vw;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+}
 
-    .sig_item{
-        background-color: white;
-    }
+.evn_att_wrp{
+    width: calc(50vw - 150px);
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+}
 
-    .sig_item:hover{
-        border: 1px solid #424242;
-        //background-color: rgb(240, 244, 248);
-    }
 
-    .sig_item:hover .sig_item_footer_opt{
-        display: block;
-    }
+.sig_item_wrp{
+    min-height: 50px;
+}
+.sig_item_wrp:hover .sig_item_options{
+    display: block;
+}
 
-    .signals_wrp{
-        overflow-x: scroll;
-        overflow-y:hidden;
-        width: 100vw; 
-        height: 100%;
-        background-color: #f1f1f1;
-    }
-    
-    
-    .sig_item_footer {
-        height: 40px;
-        font-size: 1.5em;
-        font-weight: lighter;
-        //background-color: antiquewhite;
-    }
-
-    .sig_item_footer i{
-        cursor: pointer;
-    }
-
-    .sig_item_footer_opt {
-        display: none;
-    }
-    .sig_item_content{
-        min-height: 60px;
-    }
+.sig_item_content{
+    width: calc(100% - 70px);
+}
+.sig_item_options_wrp{
+    width: 70px;
+    font-size: 1.5em;
+    font-weight: 100;
+    color: #777;
+}
+.sig_item_options{
+    display: none;
+}
 
 </style>
 {% endblock %}
@@ -111,44 +145,18 @@
 
 {% block offcanvas %}
 
-<div id="offcanvas-wrp">
-    <div id="offconvas-header" class="border-bottom d-flex">
-        <div class="mr-auto">Moja</div>
-        <div class=""><i class="bx bx-chevrons-right" id="close-offcanvas"></i></div>
-    </div>
-    <div id="offcanvas-content">
-
-    </div>
-    
-</div>
-
 
 {% endblock %}
 
 {% block custom_js %}
 <script>
     
-    $(document).ready(function() {
+$(document).ready(function() {
     
-        $('#offcanvas-wrp').hide();
-    
-        $(document).on('click', '#close-offcanvas',function (event) {
-    
-            $('#offcanvas-wrp').animate({
-                width: "hide"
-            });
-        });
-    });
-
     $(document).on('click', '.wos',function (event) {
         event.preventDefault();
 
-        $(this).parent().addClass()
-        $('#offcanvas-wrp').animate({
-            width: "show"
-        });
-
-        var sid     = $(this).closest('.sig_item').attr('sid')
+        var sid     = $(this).closest('.sig_item_wrp').attr('sid')
         var url     = window.location.origin + '/ems/utils/ps?sid='+sid;
             
         var jqXHR = $.ajax({
@@ -156,7 +164,7 @@
             url: url,
         }).done(function (data) {
             //alert(data)
-            $('#offcanvas-content').html(data);
+            $('#event_content').html(data);
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             alert('Failed to update progress');
@@ -188,7 +196,7 @@
         });
     });
 
-
+});
 
 </script>
 

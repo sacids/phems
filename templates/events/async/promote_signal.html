@@ -2,11 +2,6 @@
 {% load static %}
 {% load humanize %}
 
-<div class="pb-3">
-    <h3>Description</h3>
-    <div>{{signal.contents}}</div>
-    <div>{{signal.created_on}}</div>
-</div>
 
 <div>
 Search
@@ -20,16 +15,17 @@ Search
         <thead>
             <tr>
                 <th >Description</th>
-                <th style="width:120px;">Status</th>
-                <th style="width:200px;">Created on</th>
+                <th style="width:60px;"></th>
             </tr>
         </thead>
         <tbody>
             {% for event in events %}
             <tr>
-                <td>{{event.description}}</td>
-                <td>{{event.status}}</td>
-                <td>{{event.created_on}}</td>
+                <td>
+                    <div><span>{{event.description}}</span></div>
+                    <div><small>{{event.status}} | {{event.created_on}}</small></div>
+                </td>
+                <td></td>
             </tr>
             {% endfor %}
         </tbody>
