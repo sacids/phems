@@ -6,6 +6,7 @@ from .models import *
 from django.views import generic
 from django.http import HttpResponse, JsonResponse
 from django.template.response import TemplateResponse
+from .forms import *
 
 # Create your views here.
 
@@ -63,12 +64,20 @@ def promote_signal(request):
     context['signal']   = Signal.objects.get(pk=sig_id)
     context['events']   = Event.objects.all()
     context['sectors']  = Sector.objects.all()
+    context['profession']   = Event.PROFESSION
+    
 
     template            = 'events/async/promote_signal.html'
     
     return TemplateResponse(request,template,context)
 
-
+def add_event(request):
+    
+    form                = EventForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        # save the form data to model
+        form.save()
+    return JsonResponse("Event Add success",safe=False)
 
 def manage_event(request):
     
