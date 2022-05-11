@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'apps.chatbot.apps.ChatbotConfig',
     'apps.webpush',
     'apps.ems.apps.EmsConfig',
+    'apps.verifier.apps.VerifierConfig'
 ]
 
 MIDDLEWARE = [
