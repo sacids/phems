@@ -9,17 +9,6 @@ from django.template.response import TemplateResponse
 
 # Create your views here.
 
-def loginUser(request):
-    def post(self , request):
-        username    = request.POST['username']
-        password    = request.POST['password']
-        user        = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect(SignalListView)
-        else:
-            return redirect('/auth/login/')
-
 class EventListView(generic.ListView):
     model               = Event
     context_object_name = 'events'

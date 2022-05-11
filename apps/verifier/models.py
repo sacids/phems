@@ -4,15 +4,10 @@ from apps.ems.models import *
 
 # Create your models here.
 class Verifier(models.Model):
-    full_name    =  models.CharField(max_length = 150)
-    location     =  models.ForeignKey(Location, on_delete=DO_NOTHING) 
-    sector       =  models.ManyToManyField(Sector)
-    credit_score =  models.FloatField(null=True, blank=True)
-    active       =  models.IntegerField(default=0)
+    user              = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
+    location          =  models.ForeignKey(Location, on_delete=DO_NOTHING) 
+    credibility_score =  models.FloatField(null=True, blank=True, default=0)
     created_on   = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.full_name
 
     class Meta:
         db_table = 'ph_verifiers'
