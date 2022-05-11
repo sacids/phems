@@ -1,0 +1,58 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block contents %}
+
+<div class="list_title p-2">
+    Title Bar
+</div>
+<div class="list contents p-2">
+    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+        <thead>
+            <tr>
+                <th >Title</th>
+                <th style="width:120px;">Status</th>
+                <th style="width:150px;">Created by</th>
+                <th style="width:180px;">Created on</th>
+                <th style="width:20px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{event.description}}</td>
+                    <td>{{event.status}}</td>
+                    <td>{{event.created_by}}</td>
+                    <td>{{event.created_on}}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock %}
+
+{% block custom_css %}
+
+<link href="{% static 'libs/dropzone/min/dropzone.min.css' %}" rel="stylesheet" type="text/css" />
+<style>
+    .table-bordered td, .table-bordered th {
+        border: 1px dashed #dcdcdc;
+        border-top: 1px solid #dcdcdc;
+        border-bottom: 1px solid #dcdcdc;
+    }
+    .table-bordered td:first-child, .table-bordered th:first-child {
+        border-left: 1px solid #fff;
+    }
+    .table-bordered td:last-child, .table-bordered th:last-child {
+        border-right: 1px solid #fff;
+    }
+    .table>:not(:last-child)>:last-child>* {
+        border-bottom-color: #dcdcdc;
+    }
+</style>
+{% endblock %}

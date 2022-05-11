@@ -1,0 +1,37 @@
+
+{% load static %}
+{% load humanize %}
+
+
+<div>
+Search
+</div>
+<div>
+    add
+</div>
+
+<div id="event_search">
+    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+        <thead>
+            <tr>
+                <th >Description</th>
+                <th style="width:60px;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>
+                    <div><span>{{event.description}}</span></div>
+                    <div><small>{{event.status}} | {{event.created_on}}</small></div>
+                </td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="event_add">
+
+</div>

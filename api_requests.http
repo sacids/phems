@@ -1,0 +1,17 @@
+###Facebook login
+
+
+###API registration
+#http://exts.
+# GET http://mkilimo.local/api/v2/ussd/menu/?msisdn=255717705746&sessionid=11&input=Mahindi
+# Cache-Control: no-cache
+# Content-Type: application/json; charset=UTF-8
+# Accept: application/json
+
+POST http://127.0.0.1:8001/chatbot/whatsapp/ HTTP/1.1
+content-type: application/json
+
+{
+    "From": "255717705746", 
+    "Body" : "Hallo"
+}
