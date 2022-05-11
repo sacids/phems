@@ -17,14 +17,5 @@ class Migration(migrations.Migration):
             model_name='profile',
             name='organization',
             field=models.CharField(blank=True, max_length=120, null=True),
-        ),
-        migrations.CreateModel(
-            name='activation_otp',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('otp', models.CharField(max_length=6)),
-                ('created_on', models.DateField(auto_now=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
+        )
     ]
