@@ -61,38 +61,36 @@ class RegistrationView(View):
 class LoginView(View):
     form_class = LoginForm
     template_name = 'login.html'
+    success_url = '/ems/signals'
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
+        form = LoginForm()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = LoginForm(data=request.POST)
         
-        #if form.is_valid():
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        print(password)
-        # authenticate user
-        user = authenticate(request, username=username, password=password)
-        
-        print('jembe')
-        print(user)
+        if form.is_valid():
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-        if user is not None:
-            login(request, user)
+            # authenticate user
+            user = authenticate(request, username=username, password=password)
 
-            remember_me = request.POST.get("remember_me")
-            if remember_me is True:
-                ONE_MONTH = 30 * 24 * 60 * 60
-                expiry = getattr(
-                    settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
-                request.session.set_expiry(expiry)
+            if user is not None:
+                login(request, user)
 
-            # redirect
-            return redirect('/ems/signals')
-        else:
-            messages.error(request, 'Username or password incorectly')
+                remember_me = request.POST.get("remember_me")
+                if remember_me is True:
+                    ONE_MONTH = 30 * 24 * 60 * 60
+                    expiry = getattr(
+                        settings, "KEEP_LOGGED_DURATION", ONE_MONTH)
+                    request.session.set_expiry(expiry)
+
+                # redirect
+                return redirect(self.success_url)
+            else:
+                messages.error(request, 'Wrong credentials, try again!')
 
        # render
         return render(request, self.template_name, {'form': form})
