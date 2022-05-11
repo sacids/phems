@@ -80,7 +80,7 @@ body[data-sidebar="dark"].vertical-collpsed {
 
 
 #datatable tbody tr{
-    cursor: pointer;
+    #cursor: pointer;
 }
 
 #datatable tbody tr:hover, .tr_active{

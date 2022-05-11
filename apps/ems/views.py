@@ -37,7 +37,7 @@ class SignalListView(generic.TemplateView):
     def get_context_data(self, **kwargs):
 
         context = super(SignalListView, self).get_context_data(**kwargs)
-        context['signals']      = Signal.objects.all()
+        context['signals']      = Signal.objects.filter(status='NEW')
         return context
 
 
@@ -73,10 +73,63 @@ def promote_signal(request):
     context             = {}
     context['signal']   = Signal.objects.get(pk=sig_id)
     context['events']   = Event.objects.all()
+    context['sectors']  = Sector.objects.all()
 
     template            = 'events/async/promote_signal.html'
     
     return TemplateResponse(request,template,context)
+
+
+
+def manage_event(request):
+    
+    eid                 = request.GET.get('eid',0) 
+    
+    context             = {}
+    context['event']   = Event.objects.get(pk=eid)
+
+    template            = 'events/async/manage_event.html'
+    
+    return TemplateResponse(request,template,context)
+
+def attach_sig2event(request):
+    
+    sig_id              = request.GET.get('sid',0) 
+    evt_id              = request.GET.get('eid',0)
+    
+    event   = Event.objects.get(pk=evt_id)
+    signal  = Signal.objects.get(pk=sig_id)
+    event.signal.add(signal)
+    
+    # if attache success
+    signal.status = 'ADDED'
+    signal.save()
+    
+    return JsonResponse("Attach success",safe=False)
+
+
+
+def search_location(request):
+    
+    term        = request.GET.get('term',0) 
+    node        = Location.objects.filter(title__icontains=term)
+    
+    data        = []
+    for item in node:
+        par     = item.get_parent()
+        
+        tmp     = {}
+        tmp['id']   = item.id
+        text        = par.title+' - '+item.title
+        tmp['text'] = (text.replace("'", "")).lower().title()
+        data.append(tmp)
+        
+    results    = {}
+    results['results']  = data
+    
+    return JsonResponse(results,safe=False)
+    
+    
 
 
 
@@ -93,7 +146,7 @@ def get_list(list_name):
     with open("assets/json/location/"+list_name+".json", 'r') as file:
         regions = json.loads(file.read().rstrip())
 
-    return regions
+    return JsonResponse(1,safe=False)
 
 
 

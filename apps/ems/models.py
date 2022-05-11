@@ -93,7 +93,6 @@ class Sector(models.Model):
 
 class Contact(models.Model):
 
-
     CONTACT_SOURCE  = (
         ('ORIGINAL', 'Original'),
         ('SECOND_HAND', 'Second-Hand')
@@ -158,6 +157,12 @@ class Event(models.Model):
         ('PROGRESS', 'On Progress'),
         ('COMPLETE', 'Complete'),
     )
+    
+    PROFESSION = (
+        ('CHW', 'Community Health Worker'),
+        ('LFO', 'Livestock Field Officer'),
+        ('HW', 'Health Worker'),
+    )
 
     description     = models.TextField(blank=True, null=True)
     signal          = models.ManyToManyField("Signal")
@@ -165,7 +170,12 @@ class Event(models.Model):
     stage           = models.ForeignKey('stage', on_delete=DO_NOTHING) 
     location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
     sector          = models.ManyToManyField(Sector)
-    contact         = models.ManyToManyField('contact')
+    
+    contact_name    = models.CharField(max_length=150)
+    contact_prof    = models.CharField(max_length=20,choices=PROFESSION,default='HW')
+    contact_phone   = models.CharField(max_length=20)
+    contact_email   = models.CharField(max_length=20,blank=True, null=True)
+    
     created_on      = models.DateTimeField(auto_now=True)
 
     notes           = GenericRelation('note')    

@@ -27,6 +27,9 @@ urlpatterns = [
     
     path('utils/ps', promote_signal, name='promote_signal'),
     path('utils/ds', delete_signal, name='delete_signal'),
+    path('utils/as', attach_sig2event, name='attach_sig2event'),
+    path('utils/me', manage_event, name='manage_event'),
+    path('utils/sl', search_location, name='search_location'),
 
     #path('build', build_location_db)
     

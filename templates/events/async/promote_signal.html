@@ -3,15 +3,16 @@
 {% load humanize %}
 
 
-<div>
-Search
-</div>
-<div>
-    add
-</div>
+<div class="border-bottom p-2 d-flex">
+    <div class="me-auto">
+        Search
+    </div>
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect me-1" id="create_event"><i class="bx bx-plus"></i> Create Event</button>
 
-<div id="event_search">
-    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+</div>
+<input type="hidden" id="sid" value="{{signal.id}}">
+<div id="event_search" class="p-2">
+    <table id="datatable2" class="table table-bordered dt-responsive  nowrap w-100">
         <thead>
             <tr>
                 <th >Description</th>
@@ -25,13 +26,71 @@ Search
                     <div><span>{{event.description}}</span></div>
                     <div><small>{{event.status}} | {{event.created_on}}</small></div>
                 </td>
-                <td></td>
+                <td>
+                    <i class="bx bx-paperclip attach_sig" eid="{{event.id}}"></i>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-<div id="event_add">
+<div id="event_add" class="p-4">
+    <form>
+        
+        <input type="hidden" name="signal_id" value="{{signal.id}}">
+        
+        <div class="mb-3">
+            <label class="mb-1">Description</label>
+            <p class="text-muted mb-2">
+                Bootstrap maxlength supports textarea as well as inputs. Even on old IE.
+            </p>
+            <textarea id="textarea" class="form-control" maxlength="225" rows="3" placeholder="This textarea has a limit of 225 chars."></textarea>
+        </div>
 
+        <div class="mb-3">
+            <label class="mb-1">Location</label>
+            <select class="get_location" id="location"  style="width:100%"></select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Sectors</label>
+            <select class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="Choose ..."  style="width:100%">
+                {% for sector in sectors %}
+                    <option value="{{sector.id}}">{{sector.title}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+
+    </form>
 </div>
+
+
+<script>
+
+    $(document).ready(function() {
+        $('#datatable2').DataTable();
+    });
+
+    $('#event_add').hide();
+
+    
+    $(".select2").select2();
+
+    $(document).on('click', '#create_event',function (event) {
+        $('#event_search').hide();
+        $('#event_add').show();
+    });
+
+    $('.get_location, .select2-ajax').select2({
+        minimumInputLength: 3,
+        ajax: {
+          url: window.location.origin + '/ems/utils/sl',
+          dataType: 'json',
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+        }
+    });
+
+</script>

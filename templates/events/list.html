@@ -3,35 +3,84 @@
 {% load humanize %}
 {% load filters %}
 
+
 {% block contents %}
 
-<div class="list_title p-2">
-    Title Bar
-</div>
-<div class="list contents p-2">
-    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
-        <thead>
-            <tr>
-                <th >Title</th>
-                <th style="width:120px;">Status</th>
-                <th style="width:150px;">Created by</th>
-                <th style="width:180px;">Created on</th>
-                <th style="width:20px;"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for event in events %}
-                <tr>
-                    <td>{{event.description}}</td>
-                    <td>{{event.status}}</td>
-                    <td>{{event.created_by}}</td>
-                    <td>{{event.created_on}}</td>
-                    <td></td>
-                </tr>
-            {% endfor %}
-        </tbody>
+<div class="d-flex">
+    <div class="event_filters_wrp p-1 border-end">
+        <div class="card bg-light text-black-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-black"><i class="mdi mdi-alert-outline me-3"></i>Today</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white">Last Week</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i> > 5</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i> > 1</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white">Relevance 0 </h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+        <div class="card bg-secondary text-white-50 m-1 my-2">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>All</h6>
+                <p class="card-text">332 signals.</p>
+            </div>
+        </div>
+    </div>
 
-    </table>
+    <div class="event_list_wrp border-end ">
+            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                <thead>
+                    <tr>
+                        <th >Content</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for event in events %}
+                    <tr eid="{{event.id}}">
+                        <td>
+                            <div class="sig_item_wrp">
+                                <div>{{event.description}}</div>
+                                <div>
+                                    <small> {{event.stage}} </small>
+                                    <small> {{event.status}} </small>
+                                    <small> {{event.location.title}} </small>
+                                </div>
+                                <div>
+                                    {% for sector in event.sector_set %}
+                                    <small><b> {{sector.title}} </b></small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+    <div class="event_detail_wrp">
+        <div id="event_content"></div>
+    </div>
+
 </div>
 
 {% endblock %}
@@ -54,5 +103,115 @@
     .table>:not(:last-child)>:last-child>* {
         border-bottom-color: #dcdcdc;
     }
+
+
+
+
+    .event_filters_wrp{
+        width: 150px;
+        height: calc(100vh - 80px);
+        overflow-y: scroll;
+    }
+    
+    .event_list_wrp{
+        width: 35vw;
+        height: calc(100vh - 80px);
+        overflow-y: scroll;
+    }
+    
+    .event_detail_wrp{
+        width: calc(65vw - 150px);
+        height: calc(100vh - 80px);
+        overflow-y: scroll;
+        #background-color: aliceblue;
+    }
+    
+    
 </style>
+{% endblock %}
+
+
+
+{% block custom_js %}
+<script>
+    
+$(document).ready(function() {
+    
+    $(document).on('click', '#datatable tbody tr',function (event) {
+        event.preventDefault();
+
+        $('#datatable tbody tr').removeClass('tr_active');
+        $(this).addClass('tr_active');
+
+        var eid     = $(this).attr('eid')
+        var url     = window.location.origin + '/ems/utils/me?eid='+eid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            //alert(data)
+            
+            $('#event_content').html(data);
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+
+    });
+
+    $(document).on('click', '.ds',function (event) {
+        event.preventDefault();
+
+        var sid     = $(this).closest('.sig_item').attr('sid')
+        var url     = window.location.origin + '/ems/utils/ds?sid='+sid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            //alert(data)
+            $(this).closest('.sig_item').remove()
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+
+
+
+    $(document).on('click', '.attach_sig', function (event) {
+        event.preventDefault();
+
+        var eid     = $(this).attr('eid')
+        var sid     = $("#sid").val()
+        var url     = window.location.origin + '/ems/utils/as?sid='+sid+'&eid='+eid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            alert(data)
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+
+
+    
+
+});
+
+</script>
+
 {% endblock %}

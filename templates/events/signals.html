@@ -7,15 +7,15 @@
 
 <div class="d-flex">
     <div class="sig_filters_wrp p-1">
-        <div class="card bg-secondary text-white-50 m-1 my-2">
+        <div class="card bg-success bg-soft text-black-50 m-1 my-2">
             <div class="card-body">
-                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>Today</h6>
+                <h6 class="mt-0 mb-1 text-black"><i class="mdi mdi-alert-outline me-3"></i>Today</h6>
                 <p class="card-text">332 signals.</p>
             </div>
         </div>
         <div class="card bg-secondary text-white-50 m-1 my-2">
             <div class="card-body">
-                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>Last Week</h6>
+                <h6 class="mt-0 mb-1 text-white">Last Week</h6>
                 <p class="card-text">332 signals.</p>
             </div>
         </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="card bg-secondary text-white-50 m-1 my-2">
             <div class="card-body">
-                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i> Relevance 0 </h6>
+                <h6 class="mt-0 mb-1 text-white">Relevance 0 </h6>
                 <p class="card-text">332 signals.</p>
             </div>
         </div>
@@ -45,20 +45,18 @@
         </div>
     </div>
 
-    <div class="sig_list_wrp ">
+    <div class="sig_list_wrp">
+        <div class="sig_search_wrp p-2">
+            Search bar 
+        </div>
+        <div class="signal_list_wrp">
             <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
-                <thead>
-                    <tr>
-                        <th >Content</th>
-                        <th style="width:50px;"><i class="bx bx-info-circle"></i></th>
-                    </tr>
-                </thead>
                 <tbody>
                 {% for signal in signals %}
                     <tr>
                         <td>
                             <div class="d-flex sig_item_wrp" sid="{{signal.id}}">
-                                <div class="sig_item_content">
+                                <div class="sig_item_content wos">
                                     <div>{{signal.contents.text}}</div>
                                     <div>
                                         <span class="{{signal.css_icon}}"></span>
@@ -71,7 +69,6 @@
                                 <div class="sig_item_options_wrp">
                                     <div class="sig_item_options p-1">
                                         <i class="bx bx-trash ds"></i>
-                                        <i class="bx bx-right-top-arrow-circle wos"></i>
                                     </div>
                                 </div>
                             </div>
@@ -81,6 +78,7 @@
                 {% endfor %}
                 </tbody>
             </table>
+        </div>
     </div>
 
     <div class="evn_att_wrp">
@@ -89,16 +87,23 @@
 
 </div>
 
-
-
-
-
-
 {% endblock %}
 
 {% block custom_css %}
 
+
+<link href="{% static 'libs/select2/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+
 <style>
+
+.sig_search_wrp{
+
+    position: relative;
+    width: 100%;
+    background: white;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
 .sig_filters_wrp{
     width: 150px;
     height: calc(100vh - 80px);
@@ -106,15 +111,16 @@
 }
 
 .sig_list_wrp{
-    width: 50vw;
+    width: 40vw;
     height: calc(100vh - 80px);
     overflow-y: scroll;
 }
 
 .evn_att_wrp{
-    width: calc(50vw - 150px);
+    width: calc(60vw - 150px);
     height: calc(100vh - 80px);
     overflow-y: scroll;
+    #background-color: aliceblue;
 }
 
 
@@ -126,10 +132,11 @@
 }
 
 .sig_item_content{
-    width: calc(100% - 70px);
+    width: calc(100% - 30px);
+    cursor:pointer;
 }
 .sig_item_options_wrp{
-    width: 70px;
+    width: 30px;
     font-size: 1.5em;
     font-weight: 100;
     color: #777;
@@ -149,12 +156,22 @@
 {% endblock %}
 
 {% block custom_js %}
+
+
+<script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'libs/select2/js/select2.min.js' %}"></script>
+
 <script>
     
 $(document).ready(function() {
     
+    //$(".select2").select2();
+
     $(document).on('click', '.wos',function (event) {
         event.preventDefault();
+
+        $('#datatable tbody tr').removeClass('tr_active');
+        $(this).closest('tr').addClass('tr_active');
 
         var sid     = $(this).closest('.sig_item_wrp').attr('sid')
         var url     = window.location.origin + '/ems/utils/ps?sid='+sid;
@@ -164,6 +181,7 @@ $(document).ready(function() {
             url: url,
         }).done(function (data) {
             //alert(data)
+            
             $('#event_content').html(data);
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -195,6 +213,32 @@ $(document).ready(function() {
             }
         });
     });
+
+
+
+    $(document).on('click', '.attach_sig', function (event) {
+        event.preventDefault();
+
+        var eid     = $(this).attr('eid')
+        var sid     = $("#sid").val()
+        var url     = window.location.origin + '/ems/utils/as?sid='+sid+'&eid='+eid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            alert(data)
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+
+
+    
 
 });
 
