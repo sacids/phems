@@ -1,0 +1,29 @@
+
+{% load static %}
+{% load humanize %}
+
+<div class="signal_list_wrp">
+    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+        <tbody>
+        {% for signal in signals %}
+            <tr>
+                <td>
+                    <div class="d-flex sig_item_wrp">
+                        <div class="sig_item_content">
+                            <div>{{signal.contents.text}}</div>
+                            <div>
+                                <span class="{{signal.css_icon}}"></span>
+                                <span class="badge bg-success">{{signal.relevance}}</span>
+                                <small> {{signal.channel}} </small>
+                                <small> {{signal.contact}} </small>
+                                <small> {{signal.created_on}} </small>
+                                <small> {{signal.status}} </small>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

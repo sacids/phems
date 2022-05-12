@@ -30,7 +30,8 @@ urlpatterns = [
     path('utils/as', attach_sig2event, name='attach_sig2event'),
     path('utils/me', manage_event, name='manage_event'),
     path('utils/sl', search_location, name='search_location'),
-    path('utils/ea', add_event, name='add_event'),
+    
+    path('utils/mea', manage_event_act, name='manage_event_act'),
 
     #path('build', build_location_db)
     

@@ -82,9 +82,11 @@ def add_event(request):
 def manage_event(request):
     
     eid                 = request.GET.get('eid',0) 
-    
+    Event_obj           = Event.objects.get(pk=eid)
     context             = {}
-    context['event']   = Event.objects.get(pk=eid)
+    
+    context['event']    = Event_obj
+    context['notes']    = Event_obj.notes.all()
 
     template            = 'events/async/manage_event.html'
     
@@ -155,7 +157,41 @@ def get_list(list_name):
 
 
 
-
+def manage_event_act(request):
+    
+    event_id            = request.GET.get('eid','')
+    event_act           = request.GET.get('act','')
+    Event_obj           = Event.objects.get(pk=event_id)
+    
+    context             = {}
+    
+    if      event_act == 'sa':
+        #ALL
+        context['event']    = Event_obj
+        context['notes']    = Event_obj.notes.all()
+        template            = 'events/async/e_all.html'
+        
+    elif    event_act == 'sn':
+        #NOTES
+        context['notes']    = Event_obj.notes.all()
+        template            = 'events/async/e_notes.html'
+        
+    elif    event_act == 'ss':
+        #SIGNALS
+        context['signals']  = Event_obj.signal.all()
+        template            = 'events/async/e_signals.html'
+        
+    elif    event_act == 'sf':
+        #FILES
+        context['files']    = Event_obj.files.all()
+        template            = 'events/async/e_files.html'
+        
+    else:
+        #FILES
+        context['files']    = Event_obj.files.all()
+        template            = 'events/async/e_files.html'
+        
+    return TemplateResponse(request,template,context)
 
 
 
