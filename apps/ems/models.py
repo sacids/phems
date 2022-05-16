@@ -171,9 +171,9 @@ class Event(models.Model):
     location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
     sector          = models.ManyToManyField(Sector)
     
-    contact_name    = models.CharField(max_length=150)
+    contact_name    = models.CharField(max_length=150, blank=True, null=True)
     contact_prof    = models.CharField(max_length=20,choices=PROFESSION,default='HW')
-    contact_phone   = models.CharField(max_length=20)
+    contact_phone   = models.CharField(max_length=20, blank=True, null=True)
     contact_email   = models.CharField(max_length=50,blank=True, null=True)
     
     created_on      = models.DateTimeField(auto_now=True)
