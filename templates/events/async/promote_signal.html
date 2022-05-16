@@ -3,15 +3,16 @@
 {% load humanize %}
 
 
-<div>
-Search
-</div>
-<div>
-    add
-</div>
+<div class="border-bottom p-2 d-flex">
+    <div class="me-auto flex-grow-1 ">
+        <input class="form-control-sm" type="text" id="search_event_input" placeholder="Search ..." style="width:100%;">
+    </div>
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect mx-1 ms-2" id="create_event"><i class="bx bx-plus"></i> Create Event</button>
 
-<div id="event_search">
-    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+</div>
+<input type="hidden" id="sid" value="{{signal.id}}">
+<div id="event_search" class="p-2">
+    <table id="datatable2" class="table table-bordered dt-responsive  nowrap w-100">
         <thead>
             <tr>
                 <th >Description</th>
@@ -25,13 +26,147 @@ Search
                     <div><span>{{event.description}}</span></div>
                     <div><small>{{event.status}} | {{event.created_on}}</small></div>
                 </td>
-                <td></td>
+                <td>
+                    <i class="bx bx-paperclip attach_sig" eid="{{event.id}}"></i>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
-<div id="event_add">
+<div id="event_add" class="p-2">
+    
+    <form id="event_add_form">
+        
+        {% csrf_token %}  
+        <input type="hidden" name="signal" value="{{signal.id}}">
+        <div class="mb-1 p-2">
+            <label class="mb-1">Description</label>
+            <textarea id="textarea" name="description" class="form-control" maxlength="225" rows="3" placeholder=""></textarea>
+        </div>
+
+        <div class="mb-1 p-2">
+            <label class="mb-1">Location</label>
+            <select class="get_location" id="location" name="location" style="width:100%"></select>
+        </div>
+
+        <div class="mb-1 p-2">
+            <label class="form-label">Sectors</label>
+            <select class="select2 form-control select2-multiple"  name="sector" multiple="multiple" data-placeholder="Choose ..."  style="width:100%">
+                {% for sector in sectors %}
+                    <option value="{{sector.id}}">{{sector.title}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-1">
+            <div class="bg-light p-2">
+                <label class="form-label">Contact Person</label>
+                <div class="form-floating mb-3">
+                    <input type="text" name="contact_name" class="form-control" id="contact_name" placeholder="Enter Name" value="Maria Laird">
+                    <label for="contact_name">Name</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="profession" name="contact_prof" aria-label="Profession">
+                                <option selected="">Open this select menu</option>
+                                {% for v, t in profession %}
+                                    <option value="{{v}}">{{t}}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="profession">Profession</label>
+                        </div>
+                    </div>
+                    <div class='col-md-4'>
+                        <div class="form-floating mb-3">
+                            <input id="contact_phone" name="contact_phone" class="form-control input-mask" data-inputmask="'mask': '+255-999-999-999'" im-insert="true">
+                            <label for="contact_phone">Phone Number</label>
+                        </div>
+                    </div>
+                    <div class='col-md-4'>
+                        <div class="form-floating mb-3">
+                            <input type="email" name="contact_email" class="form-control" id="contact_email" placeholder="Enter Email address" value="name@example.com">
+                            <label for="contact_email">Email address</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-1 p-2">
+            <button type="submit" class="btn btn-primary w-md">Create Event</button>
+        </div>
+
+
+
+    </form>
 
 </div>
+
+<script>
+
+    $(document).ready(function() {
+
+        var event_table = $('#datatable2').DataTable({
+            dom: 't',
+        });
+
+        $('#search_event_input').on( 'keyup', function () {
+            event_table.search( this.value ).draw();
+        } );
+
+        $('#event_add').hide();
+
+        
+        $(".select2").select2();
+        $(".input-mask").inputmask();
+
+        $(document).on('click', '#create_event',function (event) {
+            $('#event_search').hide();
+            $('#event_add').show();
+        });
+
+        $('.get_location, .select2-ajax').select2({
+            minimumInputLength: 3,
+            ajax: {
+            url: window.location.origin + '/ems/utils/sl',
+            dataType: 'json',
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        });
+
+        $(document).on('submit', '#event_add_form',function (event) {
+
+            event.preventDefault();
+            var form = $('#event_add_form')[0];
+            var data = new FormData(form);
+            data.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+
+            var url     = window.location.origin + '/ems/utils/ea'
+                
+            var jqXHR = $.ajax({
+                type: "POST",
+                url: url,
+                data:data,
+                cache: false,                                               //Upload files without caching
+                processData:false,                                          //Do not serialize data
+                contentType:false,
+            }).done(function (data) {
+                $('#event_add').html(data);
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert('Failed to upload file');
+                if (console && console.log) {
+                    console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+                }
+            });
+
+
+
+        });
+
+    });
+
+
+</script>

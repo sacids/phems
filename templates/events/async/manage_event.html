@@ -1,0 +1,18 @@
+
+{% load static %}
+{% load humanize %}
+
+
+<div class="d-flex border-bottom p-2">
+    <div class="me-auto"> Title </div>
+    <input type="hidden" name="eid" id="eid" value="{{event.id}}">
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect me-1 e_act" act="sa"><i class="bx bx-grid-alt"></i></button>
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect me-1 e_act" act="sn"><i class="bx bx-comment-dots"></i></button>
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect me-1 e_act" act="ss"><i class="bx bx-user-voice"></i></button>
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect me-1 e_act" act="ss"><i class="bx bx-station"></i></button>
+    <button type="button" class="btn btn-outline-dark btn-sm waves-effect me-1 e_act" act="sf"><i class="bx bx-paperclip"></i></button>
+</div>
+
+<div id="event_detail">
+    {% include 'events/async/e_all.html' %}
+</div>

@@ -6,6 +6,7 @@ from .models import *
 from django.views import generic
 from django.http import HttpResponse, JsonResponse
 from django.template.response import TemplateResponse
+from .forms import *
 
 # Create your views here.
 
@@ -26,7 +27,7 @@ class SignalListView(generic.TemplateView):
     def get_context_data(self, **kwargs):
 
         context = super(SignalListView, self).get_context_data(**kwargs)
-        context['signals']      = Signal.objects.all()
+        context['signals']      = Signal.objects.filter(status='NEW')
         return context
 
 
@@ -62,10 +63,73 @@ def promote_signal(request):
     context             = {}
     context['signal']   = Signal.objects.get(pk=sig_id)
     context['events']   = Event.objects.all()
+    context['sectors']  = Sector.objects.all()
+    context['profession']   = Event.PROFESSION
+    
 
     template            = 'events/async/promote_signal.html'
     
     return TemplateResponse(request,template,context)
+
+def add_event(request):
+    
+    form                = EventForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        # save the form data to model
+        form.save()
+    return JsonResponse("Event Add success",safe=False)
+
+def manage_event(request):
+    
+    eid                 = request.GET.get('eid',0) 
+    Event_obj           = Event.objects.get(pk=eid)
+    context             = {}
+    
+    context['event']    = Event_obj
+    context['notes']    = Event_obj.notes.all()
+
+    template            = 'events/async/manage_event.html'
+    
+    return TemplateResponse(request,template,context)
+
+def attach_sig2event(request):
+    
+    sig_id              = request.GET.get('sid',0) 
+    evt_id              = request.GET.get('eid',0)
+    
+    event   = Event.objects.get(pk=evt_id)
+    signal  = Signal.objects.get(pk=sig_id)
+    event.signal.add(signal)
+    
+    # if attache success
+    signal.status = 'ADDED'
+    signal.save()
+    
+    return JsonResponse("Attach success",safe=False)
+
+
+
+def search_location(request):
+    
+    term        = request.GET.get('term',0) 
+    node        = Location.objects.filter(title__icontains=term)
+    
+    data        = []
+    for item in node:
+        par     = item.get_parent()
+        
+        tmp     = {}
+        tmp['id']   = item.id
+        text        = par.title+' - '+item.title
+        tmp['text'] = (text.replace("'", "")).lower().title()
+        data.append(tmp)
+        
+    results    = {}
+    results['results']  = data
+    
+    return JsonResponse(results,safe=False)
+    
+    
 
 
 
@@ -82,7 +146,7 @@ def get_list(list_name):
     with open("assets/json/location/"+list_name+".json", 'r') as file:
         regions = json.loads(file.read().rstrip())
 
-    return regions
+    return JsonResponse(1,safe=False)
 
 
 
@@ -93,7 +157,41 @@ def get_list(list_name):
 
 
 
-
+def manage_event_act(request):
+    
+    event_id            = request.GET.get('eid','')
+    event_act           = request.GET.get('act','')
+    Event_obj           = Event.objects.get(pk=event_id)
+    
+    context             = {}
+    
+    if      event_act == 'sa':
+        #ALL
+        context['event']    = Event_obj
+        context['notes']    = Event_obj.notes.all()
+        template            = 'events/async/e_all.html'
+        
+    elif    event_act == 'sn':
+        #NOTES
+        context['notes']    = Event_obj.notes.all()
+        template            = 'events/async/e_notes.html'
+        
+    elif    event_act == 'ss':
+        #SIGNALS
+        context['signals']  = Event_obj.signal.all()
+        template            = 'events/async/e_signals.html'
+        
+    elif    event_act == 'sf':
+        #FILES
+        context['files']    = Event_obj.files.all()
+        template            = 'events/async/e_files.html'
+        
+    else:
+        #FILES
+        context['files']    = Event_obj.files.all()
+        template            = 'events/async/e_files.html'
+        
+    return TemplateResponse(request,template,context)
 
 
 
