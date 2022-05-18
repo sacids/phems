@@ -7,19 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>{{heading}} | SACIDS - Admin & Dashboard Template</title>
-    
+    <title>{{heading}} | One Health Detects</title>
+
     <!-- App favicon -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
-    {% include 'partials/css.html'%} 
+    {% include 'partials/css.html'%}
     {% block custom_css %}
     {% endblock %}
 </head>
-    <body>
 
-        <!-- Begin page -->
-    <div id="pg-wrapper">
-
+<body>
+    <!-- Begin page -->
+    <div id="pg-wrapper" >
         <div class="pg-header">
             {%include 'partials/header.html'%}
         </div>
@@ -27,12 +26,11 @@
             {% block contents %}{% endblock %}
         </div>
         {% include 'partials/rightsidebar.html' %}
-       
     </div>
 
- {% block offcanvas %}{% endblock %}
- {% include 'partials/javascript.html' %}
- {% block custom_js %}{% endblock %}
- {% block script %}{% endblock %}
- </body>
- </html>
+    {% block offcanvas %}{% endblock %}
+    {% include 'partials/javascript.html' %}
+    {% block custom_js %}{% endblock %}
+    {% block script %}{% endblock %}
+</body>
+</html>
