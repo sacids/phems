@@ -6,4 +6,4 @@ class DashboardView(View):
     template_name = 'dashboard.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
+        return render(request, self.template_name, {"heading": 'Dashboard', "pageview": 'Overview'})

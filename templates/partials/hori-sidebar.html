@@ -1,0 +1,53 @@
+
+{% load static %}
+{% block sidebar %}
+
+<div class="topnav">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+            <div class="collapse navbar-collapse" id="topnav-menu-content">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="{% url 'dashboard' %}" id="topnav-dashboard" role="button">
+                            <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="{% url 'signals' %}" id="topnav-dashboard" role="button">
+                            <i class="bx bx-station me-2"></i><span key="t-signals">Signals</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="{% url 'events' %}" id="topnav-dashboard" role="button">
+                            <i class="bx bx-calendar me-2"></i><span key="t-events">Events</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="topnav-dashboard" role="button">
+                            <i class="bx bx-task me-2"></i><span key="t-tasks">My Tasks</span>
+                        </a>
+                    </li>
+
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-more" role="button">
+                            <i class="bx bx-cog me-2"></i><span key="t-extra-pages">Settings</span>
+                            <div class="arrow-down"></div>
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="topnav-utility">
+                            <a href="#" class="dropdown-item" key="t-ministries">Ministries</a>
+                            <a href="#" class="dropdown-item" key="t-signals-keys">Signals Keys</a>                   
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+{%endblock%}

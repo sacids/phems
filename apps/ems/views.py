@@ -17,7 +17,7 @@ class EventListView(generic.ListView):
 
 
 class SignalListView(generic.TemplateView):
-    template_name       = "signals.html"
+    template_name  = "signals.html"
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -25,9 +25,10 @@ class SignalListView(generic.TemplateView):
         return super(SignalListView, self).dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
-
         context = super(SignalListView, self).get_context_data(**kwargs)
-        context['signals']      = Signal.objects.filter(status='NEW')
+        context['signals']  = Signal.objects.filter(status='NEW')
+        context['heading']  = "Signals"
+        context['pageview']  = "Dashboard"
         return context
 
 
