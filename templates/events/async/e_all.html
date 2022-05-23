@@ -59,8 +59,8 @@
         <button class="btn btn-sm btn-danger rounded-circle dropdown-toggle" type="button" id="btn-add-item" data-toggle="dropdown" aria-expanded="true">
             <i class="bx bx-plus"></i>
         </button>
-        <div class="mb-1 ms-3 flex-grow-1 rounded-border border bg-white p-1">
-            <textarea id="textarea" name="description" class="ev-textarea form-control1" maxlength="225" rows="3" style="width:100%" placeholder="Ask a question of post an update" oninput="auto_grow(this)" ></textarea>
+        <div class="mb-1 ms-3 flex-grow-1 rounded-border border bg-white p-1 ev-textarea_wrp">
+            <textarea id="textarea" name="description" class="ev-textarea form-control1" maxlength="225" rows="1" style="width:100%" placeholder="Ask a question of post an update" oninput="auto_grow(this)" ></textarea>
         </div>
     </section>
 
@@ -76,12 +76,14 @@
         min-height: 150px;
         width: 100%;
     }
+    .ev-textarea_wrp {
+        max-height: 150px;
+    }
     .ev-textarea {
         border: none;
         outline: none;
         resize: none;
         overflow: hidden;
-        min-height: 50px;
         max-height: 150px;
     }
     
