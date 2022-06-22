@@ -164,6 +164,7 @@ class Event(models.Model):
         ('HW', 'Health Worker'),
     )
 
+    title           = models.CharField(max_length=150,blank=True, null=True)
     description     = models.TextField(blank=True, null=True)
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')

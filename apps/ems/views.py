@@ -10,13 +10,50 @@ from .forms import *
 
 # Create your views here.
 
-class EventListView(generic.ListView):
+class EventListView2(generic.ListView):
     model               = Event
     context_object_name = 'events'
     template_name       = "events/list.html"
 
 
+class EventListView(generic.TemplateView):
+    template_name       = "ems/events.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(EventListView, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(EventListView, self).get_context_data(**kwargs)
+        context['signals']      = Signal.objects.filter(status='NEW')
+        context['events']       = Event.objects.all()
+        context['sectors']      = Sector.objects.all()
+        context['profession']   = Event.PROFESSION
+        return context
+    
+    
+
 class SignalListView(generic.TemplateView):
+    template_name       = "ems/signals.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(SignalListView, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(SignalListView, self).get_context_data(**kwargs)
+        context['signals']      = Signal.objects.filter(status='NEW')
+        context['events']       = Event.objects.all()
+        context['sectors']  = Sector.objects.all()
+        context['profession']   = Event.PROFESSION
+        return context
+    
+
+class SignalListView2(generic.TemplateView):
     template_name       = "events/signals.html"
 
     def dispatch(self, request, *args, **kwargs):
@@ -105,7 +142,7 @@ def attach_sig2event(request):
     signal.status = 'ADDED'
     signal.save()
     
-    return JsonResponse("Attach success",safe=False)
+    return JsonResponse(1,safe=False)
 
 
 

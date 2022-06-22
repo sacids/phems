@@ -11,28 +11,24 @@
     
     <!-- App favicon -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
-    {% include 'partials/css.html'%} 
-    {% block custom_css %}
-    {% endblock %}
+    <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
 </head>
     <body>
 
         <!-- Begin page -->
-    <div id="pg-wrapper">
-
-        <div class="pg-header">
-            {%include 'partials/header.html'%}
+        <div class="h-screen flex flex-col text-slate-700">
+            <div class=""  x-data="getHeader()">
+                {%include 'partials2/header.html'%}
+            </div>
+            <div class="flex flex-col h-full overflow-hidden" x-data="getContents()">
+                {% block contents %}{% endblock %}
+            </div>
         </div>
-        <div class="pg-content">
-            {% block contents %}{% endblock %}
-        </div>
-        {% include 'partials/rightsidebar.html' %}
-       
-    </div>
+        
+        {% block get_header %}<script>function getHeader() {}</script>{% endblock %}
+        {% block get_contents %}<script>function getContents() {}</script>{% endblock %}
 
- {% block offcanvas %}{% endblock %}
- {% include 'partials/javascript.html' %}
- {% block custom_js %}{% endblock %}
- {% block script %}{% endblock %}
- </body>
+        <script src="{% static 'js/alpine.min.js'%}"></script>
+    </body>
  </html>
