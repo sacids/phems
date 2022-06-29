@@ -32,6 +32,9 @@ urlpatterns = [
     path('utils/me', manage_event, name='manage_event'),
     path('utils/sl', search_location, name='search_location'),
     path('utils/ae', add_event, name='add_event'),
+    path('utils/uf', upload_file, name='upload_file'),
+    path('utils/an', add_note, name='add_note'),
+    path('utils/gn', get_notes, name='get_notes'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
 
