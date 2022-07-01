@@ -93,6 +93,24 @@ def delete_signal(request):
     
 
 
+def delete_item(request):
+    item_id              = request.GET.get('ii',0)
+    item_ty              = request.GET.get('it',0)
+    
+    if item_ty == 'si':
+        sig_obj             = Signal.objects.get(pk=item_id)
+        sig_obj.status      = 'DISCARDED'
+        sig_obj.save()   
+    
+    if item_ty == 'ev':
+        sig_obj             = Event.objects.get(pk=item_id)
+        sig_obj.status      = 'DISCARDED'
+        sig_obj.save()
+           
+    return JsonResponse(1,safe=False)
+    
+
+
 def promote_signal(request):
     
     sig_id              = request.GET.get('sid',0) 

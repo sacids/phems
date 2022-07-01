@@ -153,7 +153,7 @@ class Event(models.Model):
   
     STATUS  = (
         ('NEW', 'New'),
-        ('CANCELLED', 'Cancelled'),
+        ('DISCARED', 'Discarded'),
         ('PROGRESS', 'On Progress'),
         ('COMPLETE', 'Complete'),
     )
