@@ -46,7 +46,7 @@ $.getJSON('channel-rate-chart', (data) => {
         //charts
         var options = {
             series: [{
-                name: "New",
+                name: "New signals",
                 data: arrNew
             }, {
                 name: "Approved",
@@ -76,7 +76,7 @@ $.getJSON('channel-rate-chart', (data) => {
             xaxis: {
                 categories: arrChannels,
             },
-            labels: ["New Signal","Approved", "Discarded"],
+            labels: ["New signals","Approved", "Discarded"],
             colors: ["#1565C0", "#388E3C", "#B71C1C"],
         };
 
