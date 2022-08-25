@@ -11,7 +11,7 @@
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
-    {% include 'partials/css.html'%}
+    {% include 'partials/css.html'%} 
     {% block custom_css %}
     {% endblock %}
 </head>
@@ -28,9 +28,9 @@
         {% include 'partials/rightsidebar.html' %}
     </div>
 
-    {% block offcanvas %}{% endblock %}
-    {% include 'partials/javascript.html' %}
-    {% block custom_js %}{% endblock %}
-    {% block script %}{% endblock %}
-</body>
-</html>
+ {% block offcanvas %}{% endblock %}
+ {% include 'partials/javascript.html' %}
+ {% block custom_js %}{% endblock %}
+ {% block script %}{% endblock %}
+ </body>
+ </html>

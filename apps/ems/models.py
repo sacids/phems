@@ -164,6 +164,7 @@ class Event(models.Model):
         ('HW', 'Health Worker'),
     )
 
+    title           = models.CharField(max_length=150,blank=True, null=True)
     description     = models.TextField(blank=True, null=True)
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
@@ -236,24 +237,23 @@ class files(models.Model):
     
     @property
     def filename(self):
-        return os.path.basename(self.doc.name)
+        return os.path.basename(self.obj.name)
 
     @property
     def css_icon(self):
-        name, extension = os.path.splitext(self.doc.name)
-        print(extension)
+        name, extension = os.path.splitext(self.obj.name)
         if extension == '.pdf':
-            return 'mdi mdi-file-pdf text-danger '
+            return 'mdi mdi-file-pdf text-red-500 '
         if extension == '.docx':
-            return 'mdi mdi-file-document text-primary '
+            return 'mdi mdi-file-document text-blue-500 '
         if extension == '.txt':
             return 'mdi mdi-text-box'
         if extension == '.jpeg':
-            return 'mdi mdi-image text-success '
+            return 'mdi mdi-image text-emerald-500 '
         if extension == '.xlsx':
-            return 'mdi mdi-file-excel-box text-success '
+            return 'mdi mdi-file-excel-box text-emerald-500 '
         
-        return 'mdi mdi-file text-success '
+        return 'mdi mdi-file text-emerald-500 '
 
     class Meta:
         db_table = 'ph_files'

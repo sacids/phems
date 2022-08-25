@@ -10,14 +10,33 @@ from .forms import *
 
 # Create your views here.
 
-class EventListView(generic.ListView):
+class EventListView2(generic.ListView):
     model               = Event
     context_object_name = 'events'
     template_name       = "events/list.html"
 
 
+class EventListView(generic.TemplateView):
+    template_name       = "ems/events.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(EventListView, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(EventListView, self).get_context_data(**kwargs)
+        context['signals']      = Signal.objects.filter(status='NEW')
+        context['events']       = Event.objects.all()
+        context['sectors']      = Sector.objects.all()
+        context['profession']   = Event.PROFESSION
+        return context
+    
+    
+
 class SignalListView(generic.TemplateView):
-    template_name       = "signals.html"
+    template_name       = "events/signals.html"
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -79,6 +98,35 @@ def add_event(request):
         form.save()
     return JsonResponse("Event Add success",safe=False)
 
+
+
+
+def get_notes(request):
+    
+    eid                 = request.GET.get('eid',0)
+    event_obj           = Event.objects.get(pk=eid)
+    
+    all_notes           = event_obj.notes.all().order_by('-created_at')
+    
+    notes               = []
+    
+    for n in all_notes:
+        tmp     = {
+            "message":      n.message,
+            "initials":     n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper(),
+            "name":         n.created_by.first_name+' '+n.created_by.last_name,
+            "created_on":   n.created_at,
+        }
+        notes.append(tmp)
+        #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
+     
+    
+    
+    return JsonResponse(notes, safe=False)
+
+
+
+
 def manage_event(request):
     
     eid                 = request.GET.get('eid',0) 
@@ -105,7 +153,26 @@ def attach_sig2event(request):
     signal.status = 'ADDED'
     signal.save()
     
-    return JsonResponse("Attach success",safe=False)
+    return JsonResponse(1,safe=False)
+
+
+def upload_file(request):
+    
+    if request.method == 'POST' and request.FILES['obj']:
+        event   = Event.objects.get(pk=request.POST.get('event_id'))
+        event.files.create(obj=request.FILES['obj'],title='sample title',created_by=request.user)
+    
+    return JsonResponse(1,safe=False)
+
+
+
+def add_note(request):
+    
+    if request.method == 'POST':
+        event   = Event.objects.get(pk=request.POST.get('event_id'))
+        event.notes.create(message=request.POST.get('message'),created_by=request.user)
+    
+    return JsonResponse(1,safe=False)
 
 
 
