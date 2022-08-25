@@ -56,3 +56,4 @@ class SignalChartView(APIView):
 
         #response
         return Response({"error": False, "chart" : arr_data}, status = status.HTTP_201_CREATED)
+      
