@@ -2,30 +2,53 @@
 {% load static %}
 {% load humanize %}
 {% load filters %}
-
 {% block contents %}
 
-<div class="list_title p-2">
+<!-- <div class="list_title px-4 p-1 pt-2">
     Dashboard
-</div>
+</div> -->
 
-<div class="list contents p-2">
+<div class="list contents px-4 p-1 mt-4">
     <div class="row">
         <div class="col-xl-12">
             <div class="row">
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="#" class="text-decoration-none">
+                        <div class="card mini-stats-wid">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1">
+                                        <p class="text-muted fw-medium">Total Signals</p>
+                                        <h4 class="mb-2 text-muted">{{ no_of_signals }}</h4>    
+                                    </div>
+
+                                    <div class="flex-shrink-0 align-self-center">
+                                        <div class="mini-stat-icon avatar-sm rounded-circle">
+                                            <span class="avatar-title bg-primary">
+                                                <i class="bx bx-copy-alt font-size-24"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!--./col -->
+
+                <div class="col-md-3">
+                    <a href="#" class="text-decoration-none">
                         <div class="card mini-stats-wid">
                             <div class="card-body">
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fw-medium">New Signals</p>
-                                        <h4 class="mb-2">9</h4>    
+                                        <h4 class="mb-2 text-muted">{{ no_of_new_signals }}</h4>    
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-warning">
-                                            <span class="avatar-title">
+                                        <div class="mini-stat-icon avatar-sm rounded-circle">
+                                            <span class="avatar-title bg-info">
                                                 <i class="bx bx-copy-alt font-size-24"></i>
                                             </span>
                                         </div>
@@ -38,18 +61,18 @@
                 <!--./col -->
 
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="#" class="text-decoration-none">
                         <div class="card mini-stats-wid">
                             <div class="card-body">
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">New Signals</p>
-                                        <h4 class="mb-2">9</h4>    
+                                        <p class="text-muted fw-medium">Discarded Signals</p>
+                                        <h4 class="mb-2 text-muted">{{ no_of_discarded_signals }}</h4>
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-warning">
-                                            <span class="avatar-title">
+                                        <div class="mini-stat-icon avatar-sm rounded-circle">
+                                            <span class="avatar-title bg-danger">
                                                 <i class="bx bx-copy-alt font-size-24"></i>
                                             </span>
                                         </div>
@@ -62,42 +85,18 @@
                 <!--./col -->
 
                 <div class="col-md-3">
-                    <a href="#">
+                    <a href="#" class="text-decoration-none">
                         <div class="card mini-stats-wid">
                             <div class="card-body">
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">Pending Signals</p>
-                                        <h4 class="mb-2">0</h4>
+                                        <p class="text-muted fw-medium">Approved Signals</p>
+                                        <h4 class="mb-2 text-muted">{{ no_of_success_signals }}</h4>
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-danger">
-                                            <span class="avatar-title">
-                                                <i class="bx bx-copy-alt font-size-24"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!--./col -->
-
-                <div class="col-md-3">
-                    <a href="#">
-                        <div class="card mini-stats-wid">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">Approved Event</p>
-                                        <h4 class="mb-2">9</h4>
-                                    </div>
-
-                                    <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle bg-success">
-                                            <span class="avatar-title">
+                                        <div class="mini-stat-icon avatar-sm rounded-circle">
+                                            <span class="avatar-title bg-success">
                                                 <i class="bx bx-copy-alt font-size-24"></i>
                                             </span>
                                         </div>
@@ -115,7 +114,7 @@
     </div>
     <!-- end row -->
 
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">
@@ -128,12 +127,12 @@
                                 <label class="input-group-text">Month</label>
                             </div>
                         </div>
-                        <h4 class="card-title mb-4">Events</h4>
+                        <h6 class="card-title mb-4">Notified signals per channel</h6>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <div id="line-chart" class="apex-charts" dir="ltr"></div>
+                            <div id="channel-rate-chart" class="apex-charts" dir="ltr"></div>
                         </div>
                     </div>
                 </div>
@@ -144,7 +143,7 @@
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Events Percentage Rates</h4>
+                    <h6 class="card-title mb-4">Signal percentage rates</h6>
                     <div>
                         <div id="pending-approve-chart" class="apex-charts"></div>
                     </div>
@@ -154,9 +153,9 @@
                             <div class="offset-2 col-4">
                                 <div class="mt-4">
                                     <p class="mb-2 text-truncate">
-                                        <i class="mdi mdi-circle text-warning me-1"></i> Pending
+                                        <i class="mdi mdi-circle text-danger me-1"></i> Discarded
                                     </p>
-                                    <h5>0</h5>
+                                    <h5>{{ no_of_discarded_signals }}</h5>
                                 </div>
                             </div>
 
@@ -164,7 +163,7 @@
                                 <div class="mt-4">
                                     <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-success me-1"></i> Approved
                                     </p>
-                                    <h5>9</h5>
+                                    <h5>{{ no_of_success_signals }}</h5>
                                 </div>
                             </div>
                         </div>
@@ -173,39 +172,6 @@
             </div>
         </div>
         <!--./col -->
-    </div>
-    <!-- end row -->
-
-    <div class="row">
-        <div class="col-xl-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-end">
-                            <div class="input-group input-group-sm">
-                                <select class="form-select form-select-sm" id="select-month">
-                                   
-                                </select>
-                                <label class="input-group-text">Month</label>
-                            </div>
-                        </div>
-                        <h4 class="card-title mb-4">Events by Sector Notified</h4>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div id="bar-chart" class="apex-charts" dir="ltr"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--./col -->
-
-        <div class="col-xl-4">
-        </div>
-        <!--./col -->
-
     </div>
     <!-- end row -->
     
