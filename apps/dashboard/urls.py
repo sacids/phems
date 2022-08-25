@@ -4,6 +4,7 @@ from .charts import *
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='dashboard'),
+    path('dashboard', DashboardView.as_view(), name='dashboard'),
 
     # chart
     path('percent-rate-chart', SignalPercentageChartView.as_view()),

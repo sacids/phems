@@ -19,7 +19,7 @@
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fw-medium">Total Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_signals }}</h4>    
+                                        <h4 class="mb-2 text-muted">{{ no_of_signals|default:0|intcomma }}</h4>    
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
@@ -43,7 +43,7 @@
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fw-medium">New Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_new_signals }}</h4>    
+                                        <h4 class="mb-2 text-muted">{{ no_of_new_signals|default:0|intcomma }}</h4>    
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
@@ -67,7 +67,7 @@
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fw-medium">Discarded Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_discarded_signals }}</h4>
+                                        <h4 class="mb-2 text-muted">{{ no_of_discarded_signals|default:0|intcomma }}</h4>
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
@@ -91,7 +91,7 @@
                                 <div class="d-flex">
                                     <div class="flex-grow-1">
                                         <p class="text-muted fw-medium">Approved Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_success_signals }}</h4>
+                                        <h4 class="mb-2 text-muted">{{ no_of_success_signals|default:0|intcomma }}</h4>
                                     </div>
 
                                     <div class="flex-shrink-0 align-self-center">
