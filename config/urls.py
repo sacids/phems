@@ -20,6 +20,8 @@ from apps.account import views as account_views
 from apps.account import utils as api
 
 urlpatterns = [
+    path('', include('apps.dashboard.urls')),
+    # path('dashboard/', include('apps.dashboard.urls')),
     path('admin/', admin.site.urls),
     path('auth/', include('apps.account.urls')),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -30,7 +32,4 @@ urlpatterns = [
     path('webpush/', include('apps.webpush.urls')),
     path('chatbot/', include('apps.chatbot.urls')),
     path('ems/', include('apps.ems.urls')),
-    path('dashboard/', include('apps.dashboard.urls')),
-
-
 ]

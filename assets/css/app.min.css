@@ -1879,7 +1879,7 @@ body[data-layout="horizontal"][data-layout-size="boxed"] .navbar-header {
   position: absolute;
   width: 8px;
   height: 54px;
-  background-color: rgba(255, 255, 255, 0.1);
+  /* background-color: rgba(255, 255, 255, 0.1); */
   left: 16px;
   -webkit-transform: rotate(32deg);
   transform: rotate(32deg);

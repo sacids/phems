@@ -61,7 +61,7 @@ class RegistrationView(View):
 class LoginView(View):
     form_class = LoginForm
     template_name = 'login.html'
-    success_url = '/ems/signals'
+    success_url = 'dashboard'
 
     def get(self, request, *args, **kwargs):
         form = LoginForm()

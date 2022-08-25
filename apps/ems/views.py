@@ -36,24 +36,6 @@ class EventListView(generic.TemplateView):
     
 
 class SignalListView(generic.TemplateView):
-    template_name       = "ems/signals.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('/auth/login/')
-        return super(SignalListView, self).dispatch(request, *args, **kwargs)
-    
-    def get_context_data(self, **kwargs):
-
-        context = super(SignalListView, self).get_context_data(**kwargs)
-        context['signals']      = Signal.objects.filter(status='NEW')
-        context['events']       = Event.objects.all()
-        context['sectors']  = Sector.objects.all()
-        context['profession']   = Event.PROFESSION
-        return context
-    
-
-class SignalListView2(generic.TemplateView):
     template_name       = "events/signals.html"
 
     def dispatch(self, request, *args, **kwargs):
