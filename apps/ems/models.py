@@ -121,6 +121,7 @@ class Contact(models.Model):
 class Stage(models.Model):
     
     title           = models.CharField(max_length=255)
+    form            = models.ForeignKey('Form', on_delete=models.CASCADE,blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -232,7 +233,7 @@ class files(models.Model):
     object_id    = models.PositiveIntegerField()
     content_object = GenericForeignKey()
 
-    def __str__(self):
+    def __str__(self): 
         return str(self.id)
     
     @property
@@ -311,3 +312,80 @@ class note(models.Model):
     class Meta:
         db_table = 'ph_notes'
         verbose_name_plural = 'Notes'
+        
+        
+class workflow_config(models.Model):
+    label           = models.CharField(max_length=50,blank=True, null=True) 
+    cur_stage       = models.ForeignKey('Stage', related_name='cur_stage', on_delete=models.CASCADE)
+    next_stage      = models.ForeignKey('Stage', related_name='next_stage', on_delete=models.CASCADE)
+    
+    
+
+    def __str__(self):
+        return self.cur_stage.title+' - '+self.next_stage.title
+
+    class Meta:
+        db_table = 'ph_workflow_cfg'
+        verbose_name_plural = 'Workflow Config'
+        
+        
+class workflow_data(models.Model):
+    event           = models.ForeignKey('Event', on_delete=models.CASCADE)
+    stage           = models.ForeignKey('Stage', related_name='workflow_stage', on_delete=models.CASCADE)
+    data            = models.JSONField(null=False)
+    created_at      = models.DateTimeField(auto_now_add=True, null=True)
+    created_by      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT)
+      
+    def __str__(self):
+        return 'WF: '+self.event.title
+
+    class Meta:
+        db_table = 'ph_workflow_data'
+        verbose_name_plural = 'Workflow Data'
+        
+        
+        
+class Form(models.Model):
+    title       = models.CharField(max_length=50)
+    description = models.TextField()
+    created_on  = models.DateTimeField(auto_now=True)
+    created_by  = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        db_table = 'ph_forms'
+        managed = True
+
+    def __str__(self):
+        return self.title if self.title else self.pk
+
+class Form_config(models.Model):
+
+    QN_OPTIONS = (
+        ('DATE', 'Date'),
+        ('BARCODE', 'Barcode'),
+        ('INT', 'Numeric'),
+        ('GEOPOINT', 'Geopoint'),
+        ('TEXT', 'String'),
+        ('INT', 'int'),
+        ('SELECT1', 'Select1'),
+        ('SELECT', 'Select'),
+        ('BINARY', 'Binary'),
+        ('TIME', 'Time'),
+        ('DATETIME', 'DateTime'),
+    )
+
+    form        = models.ForeignKey('Form', on_delete=models.CASCADE)
+    ref         = models.CharField(max_length=100,blank=True, null=True)
+    col_name    = models.CharField(max_length=50)
+    col_type    = models.CharField(max_length=10,choices=QN_OPTIONS,default='TEXT')
+    options     = models.TextField(null=True,blank=True)
+    hint        = models.TextField(null=True,blank=True)
+    label       = models.TextField(null=True,blank=True)
+    constraints = models.TextField(blank=True, null=True)
+    required    = models.CharField(max_length=1,default=0)
+    order       = models.IntegerField(blank=True, null=True,default=0)
+    page        = models.IntegerField(blank=True, null=True,default=0)
+
+    class Meta:
+        db_table = 'ph_forms_cfgf'
+        managed = True

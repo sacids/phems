@@ -148,14 +148,15 @@
 
             <p class="text-sm font-semibold mt-5 mb-3">Attachments</p>
             <div class="">
-                <template x-for="f in cur_event.files">
+                <template x-for="(f, index) in eventFiles" :key="index">
                     <div class="flex justify-between py-1 text-xs border-b">
                         <div class="flex space-x-2">
                             <i class="text-md" :class="f.css_icon"></i>
-                            <p class="" x-text="f.filename"></p>
-                            <p class="" x-text="f.created_on"></p>
+                            <p class="" x-text="f.file_name"></p>
                         </div>
                         <div class="flex space-x-2">
+
+                            <p class="" x-text="f.created_on"></p>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 hover:text-red-900" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                             </svg>
@@ -270,8 +271,10 @@
             link_uploading: false,
             note_uploading: false,
             getting_notes:  false,
+            getting_files:  false,
             new_note:       "",
             eventNotes:     [],
+            eventFiles:     [],
             sideScrolled:   true,
 
 
@@ -360,9 +363,20 @@
                 })
                 .then(res => res.json())
                 .then(data => {
-                    alert('upoload done');
                     console.log('upload done');
+
+                    // insert into place
                     //this.file_uploading     = true;
+
+                    tmp = {
+                        'css_icon': 'mdi mdi-file text-emerald-500 ',
+                        'filename':     '{{user.first_name}} {{user.last_name}}',
+                        'created_on': 'Just now',
+                    }
+
+                    this.eventFiles.unshift(tmp)
+                    console.log('adding file done');
+                    this.file_uploading     = false;
                 
                 })
                 .catch(() => {
@@ -467,6 +481,7 @@
     
                     // get Notesconsole.log('adding file');
                     this.fetchEventNotes();
+                    this.fetchEventFiles();
 
                 }
 
@@ -487,23 +502,33 @@
                 });
             },
 
-/*
-            fetchSignals(){
-                this.signals = [
-                    {% for signal in signals %}
-                        {
-                            id              : "{{ signal.id }}",
-                            channel         : "{{ signal.channel }}", 
-                            contact         : "{{ signal.contact }}",
-                            contents        : "{{ signal.contents.text }}",
-                            relevance       : "{{ signal.relevance }}",
-                            status          : "{{ signal.status }}",
-                            created_on      : "{{ signal.created_on }}",
-                        },
-                    {% endfor %}
-                ]
+
+
+            fetchEventFiles(){
+                            
+                this.getting_files = true;
+
+                var url         = window.location.origin + '/ems/utils/gf?eid='+this.cur_event.id;
+
+                fetch(url, {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('getting files done');
+                    //this.file_uploading     = true;
+                    this.eventFiles = data;
+                    console.log(this.eventFiles);
+                
+                })
+                .catch(() => {
+                    console.log('add files error')
+                    //this.file_uploading     = true;
+                })
+                .finally(() => {
+                    this.getting_files = false;
+                })
             },
-*/
 
             fetchEventNotes(){
                 

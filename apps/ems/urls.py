@@ -34,6 +34,7 @@ urlpatterns = [
     path('utils/sl', search_location, name='search_location'),
     path('utils/ae', add_event, name='add_event'),
     path('utils/uf', upload_file, name='upload_file'),
+    path('utils/gf', get_files, name='get_files'),
     path('utils/an', add_note, name='add_note'),
     path('utils/gn', get_notes, name='get_notes'),
     

@@ -6,6 +6,8 @@ from .models import *
 from django.views import generic
 from django.http import HttpResponse, JsonResponse
 from django.template.response import TemplateResponse
+from django.contrib.humanize.templatetags.humanize import naturalday
+
 from .forms import *
 
 # Create your views here.
@@ -133,8 +135,9 @@ def get_notes(request):
             "message":      n.message,
             "initials":     n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper(),
             "name":         n.created_by.first_name+' '+n.created_by.last_name,
-            "created_on":   n.created_at,
+            "created_on":   naturalday(n.created_at),
         }
+        
         notes.append(tmp)
         #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
      
@@ -143,6 +146,28 @@ def get_notes(request):
     return JsonResponse(notes, safe=False)
 
 
+
+
+def get_files(request):
+    
+    eid                 = request.GET.get('eid',0)
+    event_obj           = Event.objects.get(pk=eid)
+    
+    all_files           = event_obj.files.all().order_by('-created_at')
+    
+    files               = []
+    
+    for n in all_files:
+        tmp     = {
+            "css_icon":      n.css_icon,
+            "file_name":     n.filename,
+            "created_on":    naturalday(n.created_at),
+            "url":           n.obj.url,
+        }
+        
+        files.append(tmp)
+    
+    return JsonResponse(files, safe=False)
 
 
 def manage_event(request):
