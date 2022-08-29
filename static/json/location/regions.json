@@ -1,0 +1,158 @@
+[
+  {
+    "id": 1,
+    "name": "Mtwara",
+    "code": "MT",
+    "dictionary": "mtwara"
+  },
+  {
+    "id": 2,
+    "name": "Lindi",
+    "code": "LI",
+    "dictionary": "lindi"
+  },
+  {
+    "id": 3,
+    "name": "Tanga",
+    "code": "TN",
+    "dictionary": "tanga,tanga m,tanga mjini,tanga mujini"
+  },
+  {
+    "id": 4,
+    "name": "Ruvuma",
+    "code": "RV",
+    "dictionary": "ruvuma"
+  },
+  {
+    "id": 5,
+    "name": "Mbeya",
+    "code": "MB",
+    "dictionary": "mbeya"
+  },
+  {
+    "id": 6,
+    "name": "Singida",
+    "code": "SD",
+    "dictionary": "singida"
+  },
+  {
+    "id": 7,
+    "name": "Dodoma",
+    "code": "DO",
+    "dictionary": "dodoma"
+  },
+  {
+    "id": 8,
+    "name": "Tabora",
+    "code": "TB",
+    "dictionary": "tabora,tabora m,tabora mjini,tabora mujini"
+  },
+  {
+    "id": 9,
+    "name": "Pwani",
+    "code": "PW",
+    "dictionary": "pwani"
+  },
+  {
+    "id": 10,
+    "name": "Morogoro",
+    "code": "MO",
+    "dictionary": "morogoro,moro"
+  },
+  {
+    "id": 11,
+    "name": "Iringa",
+    "code": "IG",
+    "dictionary": "iringa,iringa,iring,irnga,iriga,ira"
+  },
+  {
+    "id": 13,
+    "name": "Njombe",
+    "code": "NJ",
+    "dictionary": "njombe"
+  },
+  {
+    "id": 14,
+    "name": "Kilimanjaro",
+    "code": "KL",
+    "dictionary": "kilimanjaro"
+  },
+  {
+    "id": 15,
+    "name": "SONGWE",
+    "code": "SN",
+    "dictionary": "songwe"
+  },
+  {
+    "id": 16,
+    "name": "Katavi",
+    "code": "KA",
+    "dictionary": "katavi"
+  },
+  {
+    "id": 17,
+    "name": "Shinyanga",
+    "code": "SY",
+    "dictionary": "shinyanga"
+  },
+  {
+    "id": 18,
+    "name": "Kigoma",
+    "code": "KM",
+    "dictionary": "kigoma"
+  },
+  {
+    "id": 20,
+    "name": "Manyara",
+    "code": "MY",
+    "dictionary": "manyara"
+  },
+  {
+    "id": 21,
+    "name": "Arusha",
+    "code": "AR",
+    "dictionary": "arusha"
+  },
+  {
+    "id": 23,
+    "name": "Kagera",
+    "code": "KG",
+    "dictionary": "kagera"
+  },
+  {
+    "id": 24,
+    "name": "Geita",
+    "code": "GE",
+    "dictionary": "geita"
+  },
+  {
+    "id": 25,
+    "name": "Mara",
+    "code": "MA",
+    "dictionary": "mara"
+  },
+  {
+    "id": 26,
+    "name": "Mwanza",
+    "code": "MZ",
+    "dictionary": "mwanza"
+  },
+  {
+    "id": 30,
+    "name": "Dar es salaam",
+    "code": "DS",
+    "dictionary": "dar es salaam,dar,dsm,daressalaam,darisalama"
+  },
+  {
+    "id": 31,
+    "name": "Simiyu",
+    "code": "SI",
+    "dictionary": "simiyu"
+  },
+  {
+    "id": 32,
+    "name": "Rukwa",
+    "code": "RU",
+    "dictionary": "rukwa"
+  }
+]

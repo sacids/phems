@@ -36,7 +36,7 @@ class EventListView(generic.TemplateView):
     
 
 class SignalListView(generic.TemplateView):
-    template_name       = "events/signals.html"
+    template_name       = "ems/signals.html"
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
