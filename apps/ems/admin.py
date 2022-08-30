@@ -31,9 +31,6 @@ class Form_configAdmin(admin.ModelAdmin):
 admin.site.register(Form_config,Form_configAdmin)
 
 
-
-
-
 class FormConfigInline(admin.StackedInline):
     model = Form_config
     
@@ -41,12 +38,6 @@ class FormAdmin(admin.ModelAdmin):
     inlines =[FormConfigInline]
     
 admin.site.register(Form,FormAdmin)
-
-
-
-
-
-
 
 admin.site.register(Event)
 admin.site.register(Stage)

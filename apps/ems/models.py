@@ -169,7 +169,7 @@ class Event(models.Model):
     description     = models.TextField(blank=True, null=True)
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
-    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,default=1) 
+    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True) 
     location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
     sector          = models.ManyToManyField(Sector)
     
@@ -315,10 +315,9 @@ class note(models.Model):
         
         
 class workflow_config(models.Model):
-    label           = models.CharField(max_length=50,blank=True, null=True) 
+    label           = models.CharField(max_length=100,blank=True, null=True) 
     cur_stage       = models.ForeignKey('Stage', related_name='cur_stage', on_delete=models.CASCADE)
     next_stage      = models.ForeignKey('Stage', related_name='next_stage', on_delete=models.CASCADE)
-    
     
 
     def __str__(self):
@@ -332,7 +331,7 @@ class workflow_config(models.Model):
 class workflow_data(models.Model):
     event           = models.ForeignKey('Event', on_delete=models.CASCADE)
     stage           = models.ForeignKey('Stage', related_name='workflow_stage', on_delete=models.CASCADE)
-    data            = models.JSONField(null=False)
+    data            = models.JSONField(null=False, blank=False)
     created_at      = models.DateTimeField(auto_now_add=True, null=True)
     created_by      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT)
       
@@ -346,7 +345,7 @@ class workflow_data(models.Model):
         
         
 class Form(models.Model):
-    title       = models.CharField(max_length=50)
+    title       = models.CharField(max_length=100)
     description = models.TextField()
     created_on  = models.DateTimeField(auto_now=True)
     created_by  = models.ForeignKey(User, on_delete=models.DO_NOTHING)
@@ -384,7 +383,7 @@ class Form_config(models.Model):
     form        = models.ForeignKey('Form', on_delete=models.CASCADE)
     ref         = models.CharField(max_length=100,blank=True, null=True)
     col_name    = models.CharField(max_length=50)
-    col_type    = models.CharField(max_length=15,choices=QN_OPTIONS,default='TEXT')
+    col_type    = models.CharField(max_length=30,choices=QN_OPTIONS,default='text')
     options     = models.TextField(null=True,blank=True)
     hint        = models.TextField(null=True,blank=True)
     label       = models.TextField(null=True,blank=True)
