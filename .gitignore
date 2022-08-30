@@ -141,3 +141,11 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+#migrations
+**/migrations/*
+
+makemigrations
+migrate
+run
+node_modules

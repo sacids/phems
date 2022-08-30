@@ -9,4 +9,8 @@ urlpatterns = [
     # chart
     path('percent-rate-chart', SignalPercentageChartView.as_view()),
     path('channel-rate-chart', SignalChartView.as_view()),
+
+    #events
+    path('event-percent-chart', EventPercentageChartView.as_view()),
+    path('event-sectors-chart', EventChartView.as_view()),
 ]

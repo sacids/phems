@@ -27,7 +27,6 @@ $.getJSON('percent-rate-chart', (data) => {
     }
 });
 
-
 //channel
 $.getJSON('channel-rate-chart', (data) => {
     if (data.error == false) {
@@ -85,62 +84,97 @@ $.getJSON('channel-rate-chart', (data) => {
     }
 });
 
-// //on CLICK 
-// $('#select-month').on('change', function (e) {
-//     e.preventDefault;
+//percentage rate of events
+$.getJSON('event-percent-chart', (data) => {
+    if (data.error == false) {
+        //charts
+        var options = {
+            series: [data.closed, data.discarded],
+            chart: {
+                type: "donut",
+                height: 260,
+            },
+            labels: ["Closed", "Discarded"],
+            colors: ["#388E3C", "#B71C1C"],
+            legend: {
+                show: !1
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: "70%"
+                    }
+                }
+            }
+        };
+        //render chart
+        var chart = new ApexCharts(document.querySelector("#event-percent-chart"), options);
+        chart.render()
+    }
+});
 
-//     //variables
-//     var monthName = $(this).val();
+//events
+$.getJSON('event-sectors-chart', (data) => {
+    if (data.error == false) {
+        var arrSectors = [];
+        var arrNew = [];
+        var arrProgress = [];
+        var arrClosed = [];
+        var arrDiscarded = [];
 
-//     $.getJSON('api/dashboard/consent-per-channel', { month: monthName }, (data) => {
-//         if (data.error == false) {
+        for (k = 0; k < data.chart.length; k++) {
+            arrSectors.push(data.chart[k].name);
+            arrNew.push(data.chart[k].new);
+            arrProgress.push(data.chart[k].progress);
+            arrClosed.push(data.chart[k].closed);
+            arrDiscarded.push(data.chart[k].discarded);
+        }
 
-//             var arrChannels = [];
-//             var arrApproved = [];
-//             var arrPending = [];
+        //charts
+        var options = {
+            series: [{
+                name: "New events",
+                data: arrNew
+            }, {
+                name: "On Progress",
+                data: arrProgress
+            },
+            {
+                name: "Discarded",
+                data: arrDiscarded
+            },
+            {
+                name: "Closed",
+                data: arrClosed
+            }
+            ],
+            chart: {
+                type: 'bar',
+                height: 320,
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                    dataLabels: {
+                        position: 'bottom'
+                    },
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: arrSectors,
+            },
+            labels: ["New events","On Progress", "Discarded", "Closed"],
+            colors: ["#1565C0", "#F57C00", "#B71C1C", "#388E3C"],
+        };
 
-//             for (k = 0; k < data.data_array.length; k++) {
-//                 arrChannels.push(data.data_array[k].name);
-//                 arrPending.push(data.data_array[k].pending);
-//                 arrApproved.push(data.data_array[k].approved);
-//             }
+        var chart = new ApexCharts(document.querySelector("#event-sectors-chart"), options);
+        chart.render();
+    }
+});
 
-//             //charts
-//             var options = {
-//                 series: [{
-//                     name: "Approved",
-//                     data: arrApproved
-//                 }, {
-//                     name: "Pending",
-//                     data: arrPending
-//                 }],
-//                 chart: {
-//                     type: 'bar',
-//                     height: 320,
-//                 },
-//                 plotOptions: {
-//                     bar: {
-//                         borderRadius: 4,
-//                         horizontal: true,
-//                         dataLabels: {
-//                             position: 'bottom'
-//                         },
-//                     }
-//                 },
-//                 dataLabels: {
-//                     enabled: false
-//                 },
-//                 xaxis: {
-//                     categories: arrChannels,
-//                 },
-//                 labels: ["Approved", "Pending"],
-//                 colors: ["#388E3C", "#f1b44c"],
-//             };
 
-//             var chart = new ApexCharts(document.querySelector("#bar-chart"), options);
-//             chart.render();
-//         }
-//     });
-
-// });
 
