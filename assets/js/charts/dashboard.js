@@ -84,6 +84,35 @@ $.getJSON('channel-rate-chart', (data) => {
     }
 });
 
+//percentage rate of events
+$.getJSON('event-percent-chart', (data) => {
+    if (data.error == false) {
+        //charts
+        var options = {
+            series: [data.closed, data.discarded],
+            chart: {
+                type: "donut",
+                height: 260,
+            },
+            labels: ["Closed", "Discarded"],
+            colors: ["#388E3C", "#B71C1C"],
+            legend: {
+                show: !1
+            },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: "70%"
+                    }
+                }
+            }
+        };
+        //render chart
+        var chart = new ApexCharts(document.querySelector("#event-percent-chart"), options);
+        chart.render()
+    }
+});
+
 //events
 $.getJSON('event-sectors-chart', (data) => {
     if (data.error == false) {
