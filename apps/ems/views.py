@@ -52,6 +52,7 @@ class SignalListView(generic.TemplateView):
         context['signals']      = Signal.objects.filter(status='NEW')
         context['profession']   = Event.PROFESSION
         context['sectors']      = Sector.objects.all()
+        context['events']       = Event.objects.all()
         return context
 
 
