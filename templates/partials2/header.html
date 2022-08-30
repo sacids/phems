@@ -3,14 +3,14 @@
         <div class="p-1 my-3 text-lg">Information System</div>
 
         {% with request.resolver_match.url_name as url_name %}
+        <div class="pt-5 {% if url_name == 'dashboard' %} border-b-4 border-green-700 {% endif %}">
+            <a  href="{% url 'dashboard' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Dashboard</a>
+        </div>
         <div class="pt-5 {% if url_name == 'signals' %} border-b-4 border-green-700 {% endif %}">
             <a  href="{% url 'signals' %}" class="p-2 hover:bg-green-100 hover:rounded-md hover:text-green-900">Signals</a>
         </div>
         <div class="pt-5 {% if url_name == 'events' %} border-b-4 border-green-700 {% endif %}">
             <a  href="{% url 'events' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Events</a>
-        </div>
-        <div class="pt-5 {% if url_name == 'dashboard' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'dashboard' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Dashboard</a>
         </div>
         <div class="pt-5 {% if url_name == 'messages' %} border-b-4 border-green-700 {% endif %}">
             <a  href="{% url 'messages' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Messages</a>
