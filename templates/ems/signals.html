@@ -457,6 +457,7 @@
                 var data = new FormData();
                 data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
                 Object.entries(this.new_event).forEach(([key, value]) => {
+                    console.log(key+' '+value)
                     data.append(key,value)
                 });
 

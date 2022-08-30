@@ -32,6 +32,7 @@ class EventListView(generic.TemplateView):
         context['signals']      = Signal.objects.filter(status='NEW')
         context['events']       = Event.objects.all()
         context['sectors']      = Sector.objects.all()
+        context['workflows']    = workflow_config.objects.all()
         context['profession']   = Event.PROFESSION
         return context
     
@@ -49,6 +50,8 @@ class SignalListView(generic.TemplateView):
 
         context = super(SignalListView, self).get_context_data(**kwargs)
         context['signals']      = Signal.objects.filter(status='NEW')
+        context['profession']   = Event.PROFESSION
+        context['sectors']      = Sector.objects.all()
         return context
 
 
