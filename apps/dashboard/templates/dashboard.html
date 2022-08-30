@@ -2,188 +2,147 @@
 {% load static %}
 {% load humanize %}
 {% load filters %}
+{% block heading %} Dashboard {% endblock %}
+
 {% block contents %}
 
-<!-- <div class="list_title px-4 p-1 pt-2">
-    Dashboard
-</div> -->
+<p class="pl-5 mt-5 text-2xl"> Dashboard </p>
 
-<div class="list contents px-4 p-1 mt-4">
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="row">
-                <div class="col-md-3">
-                    <a href="#" class="text-decoration-none">
-                        <div class="card mini-stats-wid">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">Total Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_signals|default:0|intcomma }}</h4>    
-                                    </div>
-
-                                    <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle">
-                                            <span class="avatar-title bg-primary">
-                                                <i class="bx bx-copy-alt font-size-24"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<div class="d-flex  my-2">
+    <div class="flex flex-wrap">
+        <div class="w-full md:w-1/4 xl:w-1/4 p-4">
+            <!--Metric Card-->
+            <div class="bg-white border rounded p-4">
+                <div class="flex flex-row items-center">
+                    <div class="flex-shrink pr-4">
+                        <div class="rounded p-3 bg-blue-900">
+                            <i class="fa fa-notes-medical fa-2x fa-fw fa-inverse"></i>
                         </div>
-                    </a>
+                    </div>
+                    <div class="flex-1 text-right md:text-center">
+                        <h5 class="font-medium text-gray-600">Total Signals</h5>
+                        <h3 class="font-bold text-2xl">{{ no_of_signals|default:0|intcomma }}</h3>
+                    </div>
                 </div>
-                <!--./col -->
-
-                <div class="col-md-3">
-                    <a href="#" class="text-decoration-none">
-                        <div class="card mini-stats-wid">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">New Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_new_signals|default:0|intcomma }}</h4>    
-                                    </div>
-
-                                    <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle">
-                                            <span class="avatar-title bg-info">
-                                                <i class="bx bx-copy-alt font-size-24"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!--./col -->
-
-                <div class="col-md-3">
-                    <a href="#" class="text-decoration-none">
-                        <div class="card mini-stats-wid">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">Discarded Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_discarded_signals|default:0|intcomma }}</h4>
-                                    </div>
-
-                                    <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle">
-                                            <span class="avatar-title bg-danger">
-                                                <i class="bx bx-copy-alt font-size-24"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!--./col -->
-
-                <div class="col-md-3">
-                    <a href="#" class="text-decoration-none">
-                        <div class="card mini-stats-wid">
-                            <div class="card-body">
-                                <div class="d-flex">
-                                    <div class="flex-grow-1">
-                                        <p class="text-muted fw-medium">Approved Signals</p>
-                                        <h4 class="mb-2 text-muted">{{ no_of_success_signals|default:0|intcomma }}</h4>
-                                    </div>
-
-                                    <div class="flex-shrink-0 align-self-center">
-                                        <div class="mini-stat-icon avatar-sm rounded-circle">
-                                            <span class="avatar-title bg-success">
-                                                <i class="bx bx-copy-alt font-size-24"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <!--./col -->
             </div>
-            <!--./row -->
+            <!--/Metric Card-->
         </div>
-        <!--./col -->
+
+        <div class="w-full md:w-1/4 xl:w-1/4 p-4">
+            <!--Metric Card-->
+            <div class="bg-white border rounded p-4">
+                <div class="flex flex-row items-center">
+                    <div class="flex-shrink pr-4">
+                        <div class="rounded p-3 bg-blue-600">
+                            <i class="fa fa-notes-medical fa-2x fa-fw fa-inverse"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-right md:text-center">
+                        <h5 class="font-medium text-gray-600">New Signals</h5>
+                        <h3 class="font-bold text-2xl">{{ no_of_new_signals|default:0|intcomma }}</h3>
+                    </div>
+                </div>
+            </div>
+            <!--/Metric Card-->
+        </div>
+
+        <div class="w-full md:w-1/4 xl:w-1/4 p-4">
+            <!--Metric Card-->
+            <div class="bg-white border rounded p-4">
+                <div class="flex flex-row items-center">
+                    <div class="flex-shrink pr-4">
+                        <div class="rounded p-3 bg-red-600">
+                            <i class="fa fa-notes-medical fa-2x fa-fw fa-inverse"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-right md:text-center">
+                        <h5 class="font-medium text-gray-600">Discarded Signals</h5>
+                        <h3 class="font-bold text-2xl">{{ no_of_discarded_signals|default:0|intcomma }}</h3>
+                    </div>
+                </div>
+            </div>
+            <!--/Metric Card-->
+        </div>
+
+        <div class="w-full md:w-1/4 xl:w-1/4 p-4">
+            <!--Metric Card-->
+            <div class="bg-white border rounded p-4">
+                <div class="flex flex-row items-center">
+                    <div class="flex-shrink pr-4">
+                        <div class="rounded p-3 bg-green-600">
+                            <i class="fa fa-notes-medical fa-2x fa-fw fa-inverse"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 text-right md:text-center">
+                        <h5 class="font-medium text-gray-600">Approved Signals</h5>
+                        <h3 class="font-bold text-2xl">{{ no_of_success_signals|default:0|intcomma }}</h3>
+                    </div>
+                </div>
+            </div>
+            <!--/Metric Card-->
+        </div>
     </div>
-    <!-- end row -->
 
-    <div class="row mt-4">
-        <div class="col-xl-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-end">
-                            <div class="input-group input-group-sm">
-                                <select class="form-select form-select-sm" id="select-month">
-                                    
-                                </select>
-                                <label class="input-group-text">Month</label>
-                            </div>
-                        </div>
-                        <h6 class="card-title mb-4">Notified signals per channel</h6>
-                    </div>
+    <div class="flex flex-row flex-wrap flex-grow mt-2">
+        <div class="w-full md:w-1/2 p-4">
+            <!--Graph Card-->
+            <div class="bg-white border rounded">
+                <div class="border-b p-3">
+                    <h5 class="font-medium uppercase text-gray-600">Notified signals per channel</h5>
+                </div>
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div id="channel-rate-chart" class="apex-charts" dir="ltr"></div>
-                        </div>
-                    </div>
+                <div class="p-2">
+                    <div id="channel-rate-chart" class="apex-charts" dir="ltr"></div>
                 </div>
             </div>
         </div>
-        <!--./col -->
 
-        <div class="col-xl-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title mb-4">Signal percentage rates</h6>
-                    <div>
-                        <div id="pending-approve-chart" class="apex-charts"></div>
-                    </div>
+        <div class="w-full md:w-1/2 p-4">
+            <!--Graph Card-->
+            <div class="bg-white border rounded">
+                <div class="border-b p-3">
+                    <h5 class="font-medium uppercase text-gray-600">Signal percentage rates</h5>
+                </div>
 
-                    <div class="text-center text-muted">
-                        <div class="row">
-                            <div class="offset-2 col-4">
-                                <div class="mt-4">
-                                    <p class="mb-2 text-truncate">
-                                        <i class="mdi mdi-circle text-danger me-1"></i> Discarded
-                                    </p>
-                                    <h5>{{ no_of_discarded_signals }}</h5>
-                                </div>
+                <div class="p-2">
+                    <div id="pending-approve-chart" class="apex-charts"></div>
+                </div>
+
+                <div class="text-center text-muted">
+                    <div class="flex flex-row flex-wrap flex-grow">
+                        <div class="w-full md:w-1/2">
+                            <div class="mt-2">
+                                <p class="mb-1">
+                                    <i class="fa fa-circle text-red-500"></i> Discarded
+                                </p>
+                                <h5>{{ no_of_discarded_signals }}</h5>
                             </div>
+                        </div>
 
-                            <div class="col-4">
-                                <div class="mt-4">
-                                    <p class="mb-2 text-truncate"><i class="mdi mdi-circle text-success me-1"></i> Approved
-                                    </p>
-                                    <h5>{{ no_of_success_signals }}</h5>
-                                </div>
+                        <div class="w-full md:w-1/2">
+                            <div class="mt-2">
+                                <p class="mb-1">
+                                    <i class="fa fa-circle text-green-500"></i> Approved
+                                </p>
+                                <h5>{{ no_of_success_signals }}</h5>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--./col -->
+        
     </div>
-    <!-- end row -->
-    
 </div>
-
 {% endblock %}
 
-{% block script %}
-    <!-- apexcharts -->
-    <script src="{% static 'libs/apexcharts/apexcharts.min.js' %}"></script>
+{% block get_contents %}
+<script src="{% static 'libs/popper/popper.min.js' %}"></script>
+<script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
 
-    <!-- Saas dashboard init -->
-    <script src="{% static 'js/charts/dashboard.js' %}"></script>
+<!-- apexcharts -->
+<script src="{% static 'libs/apexcharts/apexcharts.min.js' %}"></script>
 
+<!-- Saas dashboard init -->
+<script src="{% static 'js/charts/dashboard.js' %}"></script>
 {% endblock %}
