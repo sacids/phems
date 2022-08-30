@@ -31,9 +31,6 @@ class Form_configAdmin(admin.ModelAdmin):
 admin.site.register(Form_config,Form_configAdmin)
 
 
-
-
-
 class FormConfigInline(admin.StackedInline):
     model = Form_config
     
@@ -42,16 +39,10 @@ class FormAdmin(admin.ModelAdmin):
     
 admin.site.register(Form,FormAdmin)
 
-
-
-
-
-
-
 admin.site.register(Event)
 admin.site.register(Stage)
 admin.site.register(Contact)
 admin.site.register(Sector)
 admin.site.register(note)
-# admin.site.register(workflow_data)
-# admin.site.register(workflow_config)
+admin.site.register(workflow_data)
+admin.site.register(workflow_config)
