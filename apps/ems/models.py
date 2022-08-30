@@ -169,7 +169,7 @@ class Event(models.Model):
     description     = models.TextField(blank=True, null=True)
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
-    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True) 
+    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,default=1) 
     location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
     sector          = models.ManyToManyField(Sector)
     
