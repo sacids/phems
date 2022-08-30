@@ -106,7 +106,7 @@ class Contact(models.Model):
 
     full_name       = models.CharField(max_length = 150)
     contact_source  = models.CharField(max_length=15,choices=CONTACT_SOURCE,default='SECOND_HAND')
-    contact_type    = models.CharField(max_length=15,choices=CONTACT_TYPE,default='PHONE')
+    #contact_type    = models.CharField(max_length=15,choices=CONTACT_TYPE,default='PHONE')
     contact_data    = models.CharField(max_length = 150)
     
     def __str__(self):
