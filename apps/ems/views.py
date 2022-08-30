@@ -30,7 +30,7 @@ class EventListView(generic.TemplateView):
 
         context = super(EventListView, self).get_context_data(**kwargs)
         context['signals']      = Signal.objects.filter(status='NEW')
-        context['events']       = Event.objects.all()
+        context['events']       = Event.objects.all().order_by('-pk')
         context['sectors']      = Sector.objects.all()
         context['workflows']    = workflow_config.objects.all()
         context['profession']   = Event.PROFESSION
@@ -117,10 +117,15 @@ def promote_signal(request):
 def add_event(request):
     
     form                = EventForm(request.POST or None, request.FILES or None)
+
+
     if form.is_valid():
         # save the form data to model
         form.save()
-    return JsonResponse("Event Add success",safe=False)
+    else:
+        print('invalid form')
+        print(form.errors)
+    return JsonResponse(1,safe=False)
 
 
 
@@ -265,7 +270,20 @@ def get_list(list_name):
 
 
 
-
+def change_wf(request):
+    new_stage   = request.GET.get('ns')
+    event_id    = request.GET.get('ei')
+    form_id     = request.GET.get('fi')
+    
+    context     = {}
+    context['new_stage']    = new_stage
+    context['event_id']     = event_id
+    context['form_details'] = Form_config.objects.filter(form_id=form_id)
+    
+    for i in context['form_details']:
+        print(i)
+    
+    return TemplateResponse(request, "ems/async/form_detail.html", context=context)
 
 
 
