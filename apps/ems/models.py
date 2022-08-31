@@ -360,23 +360,30 @@ class Form(models.Model):
 class Form_config(models.Model):
 
     QN_OPTIONS = (
-        ('DATE', 'Date'),
-        ('BARCODE', 'Barcode'),
-        ('INT', 'Numeric'),
-        ('GEOPOINT', 'Geopoint'),
-        ('TEXT', 'String'),
-        ('INT', 'int'),
-        ('SELECT1', 'Select1'),
-        ('SELECT', 'Select'),
-        ('BINARY', 'Binary'),
-        ('TIME', 'Time'),
-        ('DATETIME', 'DateTime'),
+        ('date', 'date'),
+        ('url', 'url'),
+        ('number', 'number'),
+        ('email', 'email'),
+        ('text', 'text'),
+        ('password', 'password'),
+        ('month', 'month'),
+        ('week', 'week'),
+        ('tel', 'tel'),
+        ('month', 'month'),
+        ('time', 'time'),
+        ('radio', 'radio'),
+        ('checkbox', 'checkbox'),
+        ('select1', 'select'),
+        ('textarea', 'textarea'),
+        ('select', 'select multiple'),
+        ('datetime-local', 'datetime'),
+        
     )
 
     form        = models.ForeignKey('Form', on_delete=models.CASCADE)
     ref         = models.CharField(max_length=100,blank=True, null=True)
-    col_name    = models.CharField(max_length=100)
-    col_type    = models.CharField(max_length=30,choices=QN_OPTIONS,default='TEXT')
+    col_name    = models.CharField(max_length=50)
+    col_type    = models.CharField(max_length=30,choices=QN_OPTIONS,default='text')
     options     = models.TextField(null=True,blank=True)
     hint        = models.TextField(null=True,blank=True)
     label       = models.TextField(null=True,blank=True)
