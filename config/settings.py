@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'apps.webpush',
     'apps.ems.apps.EmsConfig',
     'apps.verifier.apps.VerifierConfig',
-    'apps.dashboard.apps.DashboardConfig'
+    'apps.dashboard.apps.DashboardConfig',
+    'apps.notification.apps.NotificationConfig'
 ]
 
 MIDDLEWARE = [
