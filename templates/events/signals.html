@@ -1,0 +1,253 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block contents %}
+
+<div class="d-flex">
+
+
+    <div class="sig_filters_wrp p-1 px-4">
+        <div class="card bg-light text-black-50 m-1 my-4">
+            <div class="card-body">
+                <strong class="mt-0 mb-1 text-black">Today</strong>
+                <span class="badge bg-success">34</span>
+            </div>
+        </div>
+        <div class="card bg-light text-black-50 m-1 my-3">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-black">Week</h6>
+                <span class="badge bg-warm">34</span>
+            </div>
+        </div>
+        <div class="card bg-ligbt text-black-50 m-1 my-3">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-black"> > 5</h6>
+                <span class="badge bg-success">34</span>
+            </div>
+        </div>
+        <div class="card bg-light text-black-50 m-1 my-3">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-black"><i class="mdi mdi-alert-outline me-3"></i> > 1</h6>
+                <span class="badge bg-primary">34</span>
+            </div>
+        </div>
+        <div class="card bg-light text-black-50 m-1 my-3">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-black"> 0 </h6>
+                <span class="badge bg-primary">34</span>
+            </div>
+        </div>
+        <div class="card bg-light text-black-50 m-1 my-3">
+            <div class="card-body">
+                <h6 class="mt-0 mb-1 text-white"><i class="mdi mdi-alert-outline me-3"></i>All</h6>
+                <span class="badge bg-danger">344</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sig_list_wrp">
+        <div class="sig_search_wrp p-2">
+            Search bar 
+        </div>
+        <div class="signal_list_wrp">
+            <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                <tbody>
+                {% for signal in signals %}
+                    <tr>
+                        <td>
+                            <div class="d-flex sig_item_wrp" sid="{{signal.id}}">
+                                <div class="sig_item_content wos">
+                                    <div>{{signal.contents.text}}</div>
+                                    <div>
+                                        <span class="{{signal.css_icon}}"></span>
+                                        <span class="badge bg-success">{{signal.relevance}}</span>
+                                        <small> {{signal.channel}} </small>
+                                        <small> {{signal.contact}} </small>
+                                        <small> {{signal.created_on}} </small>
+                                        <small> {{signal.status}} </small>
+                                    </div>
+                                </div>
+                                <div class="sig_item_options_wrp">
+                                    <div class="sig_item_options p-1">
+                                        <i class="bx bx-trash ds"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="evn_att_wrp">
+        <div id="event_content"></div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block custom_css %}
+
+
+<link href="{% static 'libs/select2/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+
+<style>
+
+.sig_search_wrp{
+
+    position: relative;
+    width: 100%;
+    background: white;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+.sig_filters_wrp{
+    width: 150px;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+}
+
+.sig_list_wrp{
+    width: 37vw;
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+}
+
+.evn_att_wrp{
+    width: calc(63vw - 150px);
+    height: calc(100vh - 80px);
+    overflow-y: scroll;
+    #background-color: aliceblue;
+}
+
+
+.sig_item_wrp{
+    min-height: 50px;
+}
+.sig_item_wrp:hover .sig_item_options{
+    display: block;
+}
+
+.sig_item_content{
+    width: calc(100% - 30px);
+    cursor:pointer;
+}
+.sig_item_options_wrp{
+    width: 30px;
+    font-size: 1.5em;
+    font-weight: 100;
+    color: #777;
+}
+.sig_item_options{
+    display: none;
+}
+
+</style>
+{% endblock %}
+
+
+
+{% block offcanvas %}
+
+
+{% endblock %}
+
+{% block custom_js %}
+
+
+<script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'libs/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
+<script src="{% static 'libs/select2/js/select2.min.js' %}"></script>
+
+<script>
+    
+$(document).ready(function() {
+    
+    //$(".select2").select2();
+
+    $(document).on('click', '.wos',function (event) {
+        event.preventDefault();
+
+        $('#datatable tbody tr').removeClass('tr_active');
+        $(this).closest('tr').addClass('tr_active');
+
+        var sid     = $(this).closest('.sig_item_wrp').attr('sid')
+        var url     = window.location.origin + '/ems/utils/ps?sid='+sid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            //alert(data)
+            
+            $('#event_content').html(data);
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+
+    });
+
+    $(document).on('click', '.ds',function (event) {
+        event.preventDefault();
+
+        var sid     = $(this).closest('.sig_item').attr('sid')
+        var url     = window.location.origin + '/ems/utils/ds?sid='+sid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            //alert(data)
+            $(this).closest('.sig_item').remove()
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+
+
+
+    $(document).on('click', '.attach_sig', function (event) {
+        event.preventDefault();
+
+        var eid     = $(this).attr('eid')
+        var sid     = $("#sid").val()
+        var url     = window.location.origin + '/ems/utils/as?sid='+sid+'&eid='+eid;
+            
+        var jqXHR = $.ajax({
+            type: "GET",
+            url: url,
+        }).done(function (data) {
+            alert(data)
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert('Failed to update progress');
+            if (console && console.log) {
+                console.log("Loading Ajax: " + textStatus + ", " + errorThrown);
+            }
+        });
+    });
+
+
+    
+
+
+    
+
+});
+
+</script>
+
+{% endblock %}

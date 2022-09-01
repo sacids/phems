@@ -1,0 +1,338 @@
+.break {
+    flex-basis: 100%;
+    width:100%;
+    height: 0;
+}
+  
+/* Use a collapsed column to break to a new column */
+.break-column {
+flex-basis: 100%;
+width: 0;
+break-after: always; 
+}
+
+.navbar-sub-header{
+
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    -webkit-box-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin: 0 auto;
+    height: 30px;
+    border-bottom: 1px solid rgba(207, 209, 211, 0.6);
+}
+
+body[data-sidebar="dark"].vertical-collpsed {
+    min-height: 1760px;
+    background-color: #fff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.item_row{
+    width:100%;
+    border-bottom: 1px solid #dcdcdc;
+    padding: 2px;
+    cursor: pointer;
+}
+.item_row:first-child{
+    border-top: 1px solid #dcdcdc;
+}
+.item_td{
+    border-left: 1px solid #dcdcdc;
+    padding: 4px;
+}
+.item_td:first-child{
+    border-left: 0px;
+}
+.item_row:hover{
+    background-color: rgb(187, 235, 199);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#datatable tbody tr{
+    #cursor: pointer;
+}
+
+#datatable tbody tr:hover, .tr_active{
+
+    background-color: aliceblue;
+}
+
+
+
+
+
+
+
+
+/**
+OFFCANVAS
+**/
+#offcanvas-wrp{
+    width: 55vw;
+    height: calc(100vh - 80px);
+    margin-top: 80px;
+    background-color: #fafafa;
+    background-color: #fff;
+    position: fixed;
+    top:0;
+    right:0;
+    border-left: 1px solid #dcdcdc;
+    z-index: 3;
+    overflow-y: scroll;
+}
+
+.offcanvas-wrp-fs{
+    width: 100vw !important;
+    height: 100vh !important;
+    margin-top:0px !important;
+    z-index: 1000000 !important;
+}
+
+
+@media screen and (max-width: 600px) {
+    #offcanvas-wrp{
+        width: 100vw;
+        height: calc(100vh - 100px);
+        margin-top: 40px;
+    }
+
+    .oc-shown{
+        display: none;
+    }
+}
+
+
+
+
+
+.footer{
+    position: fixed;
+    z-index: 10;
+}
+
+
+
+
+.hdr_wrp{
+    border-bottom: 1px solid #dcdcdc;
+    padding: 10px;
+}
+
+
+
+
+
+
+
+.overview_wrp{
+    height: calc(100vh - 157px);
+    width: 100vw;
+    background-color: lemonchiffon;
+    margin-left: -22px;
+    background: url('../images/web/overview_bg1.png') no-repeat center center fixed;
+    background-blend-mode: darken;
+    background-size: cover;
+    background-color: rgb(0,0,0,0.45);
+    padding: 0% 10%;
+}
+
+.link_box{
+    background-color: rgb(255,255,255,0.85);
+    padding: 20px;
+}
+.link_box_wrp{
+    justify-content: center;
+}
+.display_box_wrp{
+    justify-content: end;
+    padding-right: 10%;
+    padding-top:5%;
+    display: flex;
+}
+.display_box{
+
+    padding: 2%;
+}
+
+
+.section_wrp{
+    width: 100vw;
+    margin-left: -22px;
+    padding: 0% 10%;
+}
+
+.bg_f4{
+    background-color: #f4f4f4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body, html, .page-content, .main-content, .layout-wrapper, .topnav{
+    background: #fff;
+}
+
+.pg-content{
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    background: white;
+}
+
+.pg-header{
+    height: 80px;
+}
+
+.pg-footer{
+    height: 50px;
+    background: blue;
+}
+
+
+
+
+.hd_links a{
+    color: #424242;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.hd_links div:hover{
+    border-bottom: 2px solid blue;
+}
+
+.hd_links{
+    height: 40px;
+    padding-top: 3px;
+}
+.hd_title{
+    height: 40px;
+    padding-top: 12px;
+    padding-left: 5px;
+    font-size: 1.5em;
+}
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 600px) {
+    .mrv-nav{
+        display: none !important;
+    }
+    .mrv-topnav .col-icon {
+      display: block;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .mrv-nav.responsive {
+        position: relative;
+        display: block !important;
+        height: auto;
+    }
+    
+    .mrv-nav.responsive .nav-item {
+      float: none;
+      display: block;
+      text-align: left;
+      margin-left: 0px;
+    }
+  }
+
+
+.lib-btn{
+  position: relative;
+  display: inline-block;
+}
+
+.lib-btn .lib-btn-text {
+    /*visibility: hidden;*/
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */ 
+    z-index: 1;  
+    top: -5px;
+    left: 105%;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .lib-btn:hover .lib-btn-text {
+    visibility: visible;
+  }
+
+  .ucne_rw{
+      font-style: italic;
+      color: #999;
+  }
+  #loading{
+    height: calc(100vh - 160px);
+    display: none !important;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  #btn-add-item::after {
+    content: none;
+}
