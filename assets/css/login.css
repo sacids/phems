@@ -1,0 +1,64 @@
+/*===========================
+	Header Rules
+ ==========================*/
+ .header {
+    width: 100%;
+    background-color: inherit;
+}
+
+.header #top-bar {
+    width: 100%;
+}
+
+.header #top-img img {
+    padding-left: 30px;
+    padding-bottom: 10px;
+    height: 120px !important;
+}
+
+.header #top-content {
+    padding-top: 10px;
+}
+
+.header #top-content h1 {
+    color: #424242;
+    font-size: 28px;
+    text-align: center;
+}
+
+.header #top-content h3 {
+    color: #022859;
+    font-size: 28px;
+    padding-top: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/*==================================================
+
+===================================================*/
+.login-card {
+    width: 100%;
+    min-height: 400px;
+    padding: 4px 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    border-top: solid 5px #022859;
+    border-bottom: solid 5px #1565c0;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow: 0 0 2em #ccc;
+    -webkit-box-shadow: 0 0 2em #ccc;
+    box-shadow: 0 0 2em #ccc;
+}
+
+.bg-login-card {
+    background: #e0e0e0 url(../img/bg_hd_block.jpg) top repeat;
+}
+
+.bg-login-image {
+    min-height: 400px;
+    background: url("../img/nkurumah.jpg");
+    background-position: center;
+    background-size: cover;
+}
