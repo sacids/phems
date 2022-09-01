@@ -1,0 +1,61 @@
+{% load filters %}
+
+<div class="flex flex-col text-xs">
+{% for element in form_details %}
+
+    <p class="mt-5 mb-1">{{element.label}}</p>
+
+    {% if element.col_type == 'select' %}
+        <select class="form-select px-4 py-2 text-xs rounded-md" multiple>
+            {% with element.options|split:"," as options %}
+                {% for option in options %}
+                    <option value="{{option}}">{{option}}</option>
+                {% endfor %}
+            {% endwith %}
+        </select>
+    {% elif element.col_type == 'select1' %}
+        <select class="form-select px-4 py-1 text-xs  rounded-md">
+            {% with element.options|split:"," as options %}
+                {% for option in options %}
+                    <option value="{{option}}">{{option}}</option>
+                {% endfor %}
+            {% endwith %}
+        </select>
+    {% elif element.col_type == 'radio' %}
+        {% with element.options|split:"," as options %}
+            {% for option in options %}
+                <div class="flex items-center mb-1">
+                    <input type="radio" name="{{element.col_name}}" class="form-checkbox rounded text-emerald-500">
+                    <label class="ml-2">{{option}}</label>
+                </div>
+            {% endfor %}
+        {% endwith %}
+    {% elif element.col_type == 'checkbox' %}
+        {% with element.options|split:"," as options %}
+            {% for option in options %}
+                <div class="flex items-center mb-1">
+                    <input type="checkbox" name="{{element.col_name}}[]" class="form-checkbox rounded text-emerald-500">
+                    <label for="default-checkbox" class="ml-2">{{option}}</label>
+                </div>
+            {% endfor %}
+        {% endwith %}
+    {% elif element.col_type == 'textarea' %}
+        <textarea class="form-input px-4 py-3 rounded-full"></textarea>
+    {% else %}
+        <input type="{{element.col_type}}" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="n_form.{{element.col_nae}}"/>
+    {% endif %}
+
+{% endfor %}
+
+    <div class="flex space-x-2 mt-2">
+        <button class="bg-emerald-500 hover:bg-emerald-300 px-3 py-1 rounded-sm" @click="alert('juma is here'">Save</button>
+        <button class="bg-gray-100 hover:bg-gray-300 px-3 py-1 rounded-sm" @click="">Cancel</button>
+    </div>
+
+</div>
+
+<script>
+
+
+
+</script>

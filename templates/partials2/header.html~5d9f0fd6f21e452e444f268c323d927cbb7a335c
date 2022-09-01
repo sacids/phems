@@ -1,6 +1,8 @@
+{% load static %}
+
 <div class="flex justify-between border-b px-4">
     <div class="flex text-sm text-gray-600 font-medium space-x-2">
-        <div class="p-1 my-3 text-lg">Information System</div>
+        <div class="p-1 my-3 text-lg">PMO One Health Detects</div>
 
         {% with request.resolver_match.url_name as url_name %}
         <div class="pt-5 {% if url_name == 'dashboard' %} border-b-4 border-green-700 {% endif %}">
@@ -48,6 +50,4 @@
             </div>
         </div>
     </div>
-
-
 </div>
