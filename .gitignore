@@ -10,6 +10,7 @@ media
 assets/library/
 **/migrations/*
 migrations/
+static/*
 
 
 # Backup files # 
