@@ -1,53 +1,157 @@
-<div class="flex justify-between border-b px-4">
-    <div class="flex text-sm text-gray-600 font-medium space-x-2">
-        <div class="p-1 my-3 text-lg">Information System</div>
+{% load static %}
 
-        {% with request.resolver_match.url_name as url_name %}
-        <div class="pt-5 {% if url_name == 'dashboard' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'dashboard' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Dashboard</a>
-        </div>
-        <div class="pt-5 {% if url_name == 'signals' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'signals' %}" class="p-2 hover:bg-green-100 hover:rounded-md hover:text-green-900">Rumours</a>
-        </div>
-        <div class="pt-5 {% if url_name == 'events' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'events' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Alerts</a>
-        </div>
-        <div class="pt-5 {% if url_name == 'messages' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'messages' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Messages</a>
-        </div>
-        <div class="pt-5 {% if url_name == 'files' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'files' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Files</a>
-        </div>
-        <div class="pt-5 {% if url_name == 'reports' %} border-b-4 border-green-700 {% endif %}">
-            <a  href="{% url 'reports' %}" class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900">Reports</a>
-        </div>
-        {% endwith %}
-        <a class="p-2 mx-1 my-3 rounded-sm text-white bg-green-700 hover:bg-green-900">Create</a>
-    </div>
+<!-- This example requires Tailwind CSS v2.0+ -->
+<nav class="bg-white border-b">
+    <div class="mx-auto px-4">
+        <div class="relative flex h-16 items-center justify-between">
+            <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                <!-- Mobile menu button-->
+                <button type="button"
+                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                    aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
 
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
 
-    <div class="flex justify-end ">
-        <div class="my-auto mx-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
-            </svg>
-        </div>
-        <div class="my-auto mx-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-            </svg>
-        </div>
-        <div class="my-auto mx-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-            </svg>
-        </div>
-        <div class="my-auto mx-2">
-            <div class="p-1 text-xs rounded-full bg-blue-700 text-white">
-                {{user.first_name|make_list|first}}{{user.last_name|make_list|first}}
+                    <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div class="flex flex-shrink-0 items-center">
+                    <img class="block h-10 w-auto lg:hidden" src="{% static 'images/CoatofArms_Lg.png' %}"
+                        alt="One Health Detects">
+                    <img class="hidden h-10 w-auto lg:block" src="{% static 'images/CoatofArms_Lg.png' %}"
+                        alt="One Health Detects">
+
+                    <div class="px-2 text-xl font-medium text-center text-gray-700 md:text-xl">PMO One Health Detects
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:block">
+                    <div class="flex space-x-4">
+                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+                        <a href="{% url 'dashboard' %}"
+                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium"
+                            aria-current="page">
+                            Dashboard
+                        </a>
+
+                        <a href="{% url 'signals' %}"
+                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                            Signals
+                        </a>
+
+                        <a href="{% url 'events' %}"
+                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                            Events
+                        </a>
+
+                        <a href="{% url 'messages' %}"
+                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                            Messages
+                        </a>
+
+                        <!-- <a href="#"
+                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                            Files
+                        </a> -->
+
+                        <a href="{% url 'reports' %}"
+                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                            Reports
+                        </a>
+
+                        <a href="#"
+                            class="p-2 my-3 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm font-medium">
+                            <i class="mdi mdi-add-circle-outline"></i> Create
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <button type="button"
+                    class="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <span class="sr-only">View notifications</span>
+                    <!-- Heroicon name: outline/bell -->
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                    </svg>
+                </button>
+
+                <!-- Profile dropdown -->
+                <div class="relative ml-3">
+                    <div>
+                        <button type="button"
+                            class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                            id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="h-8 w-8 rounded-full"
+                                src="{% static 'images/CoatofArms_Lg.png' %}"
+                                alt="{{user.first_name }}">
+                        </button>
+                    </div>
+                    <!--
+                    Dropdown menu, show/hide based on menu state.
+
+                    Entering: "transition ease-out duration-100"
+                    From: "transform opacity-0 scale-95"
+                    To: "transform opacity-100 scale-100"
+                    Leaving: "transition ease-in duration-75"
+                    From: "transform opacity-100 scale-100"
+                    To: "transform opacity-0 scale-95"
+                    -->
+                    <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                        <!-- Active: "bg-gray-100", Not Active: "" -->
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
+                            id="user-menu-item-0">Your Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
+                            id="user-menu-item-1">Settings</a>
+                        <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                            tabindex="-1" id="user-menu-item-2">Sign out</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="sm:hidden" id="mobile-menu">
+        <div class="space-y-1 px-2 pt-2 pb-3">
+            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            <a href="{% url 'dashboard' %}"
+                class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+                aria-current="page">Dashboard</a>
 
-</div>
+            <a href="{% url 'signals' %}"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                Signals
+            </a>
+
+            <a href="{% url 'events' %}"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                Events
+            </a>
+
+            <a href="{% url 'messages' %}"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                Messages
+            </a>
+
+            <a href="{% url 'reports' %}"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                Reports
+            </a>
+        </div>
+    </div>
+</nav>
