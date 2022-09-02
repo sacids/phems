@@ -14,6 +14,9 @@
     <!-- Icons Css -->
     <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+
+    <script src="{% static 'libs/popper/popper.min.js' %}"></script>
+    <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
 </head>
 
 <body>
@@ -32,7 +35,9 @@
     {% block get_contents %}
     <script>function getContents() { }</script>{% endblock %}
 
+    <!--./alpine js -->
     <script src="{% static 'js/alpine.min.js'%}"></script>
+
 </body>
 
 </html>
