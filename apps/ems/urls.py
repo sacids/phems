@@ -37,7 +37,9 @@ urlpatterns = [
     path('utils/gf', get_files, name='get_files'),
     path('utils/an', add_note, name='add_note'),
     path('utils/gn', get_notes, name='get_notes'),
+    path('utils/ged', get_event_data, name='get_event_data'),
     path('utils/cwf', change_wf, name='change_wf'),
+    path('utils/uwf', update_wf, name='update_wf'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
 

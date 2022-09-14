@@ -129,6 +129,35 @@ def add_event(request):
 
 
 
+def get_event_data(request):
+    
+    eid                 = request.GET.get('eid',0)
+    #event_obj           = Event.objects.get(pk=eid)
+    
+    all_data            = workflow_data.objects.filter(event__id=eid).order_by('-created_at')
+      
+    data                = []
+    
+    for n in all_data:
+        
+        tmp         = {}
+        tmp['stage']        = n.stage.title
+        tmp['created_at']   = naturalday(n.created_at)
+        tmp['name']        = n.created_by.first_name+' '+n.created_by.last_name
+        
+        y = json.loads(n.data)
+        tmp2        = {}
+        for k,v in y.items():
+            tmp2[k]         = v
+        
+        tmp['data']         = tmp2
+        data.append(tmp)
+        print(tmp)
+        #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
+    
+    return JsonResponse(data, safe=False)
+
+
 
 def get_notes(request):
     
@@ -248,26 +277,12 @@ def search_location(request):
     
     return JsonResponse(results,safe=False)
     
-    
-
-
-
-
-
-
-
-
-
-
 
 
 def get_list(list_name):
     with open("assets/json/location/"+list_name+".json", 'r') as file:
         regions = json.loads(file.read().rstrip())
-
     return JsonResponse(1,safe=False)
-
-
 
 
 def change_wf(request):
@@ -284,6 +299,33 @@ def change_wf(request):
         print(i)
     
     return TemplateResponse(request, "ems/async/form_detail.html", context=context)
+
+
+def update_wf(request):
+    formData    = request.POST.get('fda')
+    event_id    = request.POST.get('eid')
+    next_stage  = request.POST.get('nst')
+    
+    eventObj        = Event.objects.get(pk=event_id)
+    stageObj        = Stage.objects.get(pk=next_stage)
+    
+    # UPDATE WORKFLOW
+    wfObj           = workflow_data()
+    wfObj.event     = eventObj
+    wfObj.stage     = stageObj
+    wfObj.data      = formData
+    wfObj.created_by    = request.user
+    wfObj.save()
+    
+    # ADD COMMENT
+    note            = request.user.first_name + ' changed stage from '+eventObj.stage.title+' to '+stageObj.title;
+    eventObj.notes.create(message=note,created_by=request.user)
+    
+    # UPDATE OBJECT
+    eventObj.stage  = stageObj 
+    eventObj.save()
+    
+    return JsonResponse(1,safe=False)
 
 
 
