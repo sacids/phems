@@ -34,6 +34,7 @@ class EventListView(generic.TemplateView):
         context['sectors']      = Sector.objects.all()
         context['workflows']    = workflow_config.objects.all()
         context['profession']   = Event.PROFESSION
+        context['alerts']       = Alert.objects.all().order_by('reference')
         return context
     
     
@@ -53,6 +54,7 @@ class SignalListView(generic.TemplateView):
         context['profession']   = Event.PROFESSION
         context['sectors']      = Sector.objects.all()
         context['events']       = Event.objects.all()
+        context['alerts']       = Alert.objects.all()
         return context
 
 

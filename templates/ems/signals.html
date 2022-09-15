@@ -206,6 +206,12 @@
                 <p class="mt-5 mb-1">Description</p>
                 <textarea id="textarea" name="description" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" maxlength="225" rows="3" placeholder="" x-model="new_event.description"></textarea>
         
+                <p class="mt-5 mb-1">Alert Type</p>
+                <select class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" id="alert_id" name="alert" aria-label="Alert"  x-model="new_event.alert">
+                    {% for alert in alerts %}
+                        <option value="{{alert.id}}">{{alert.reference}} : {{alert.title}}</option>
+                    {% endfor %}
+                </select>
 
                 <p class="mt-5 mb-1">Location</p>
                 <select x-ref="location" class="get_location text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 md:w-1/2" id="location" name="location" x-model="new_event.location"></select>
@@ -311,6 +317,7 @@
 
             new_event: {
                 location        : "",
+                alert           : "",
                 contact_name    : "",
                 title           : "",
                 description     : "",
