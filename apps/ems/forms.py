@@ -8,4 +8,4 @@ class EventForm(forms.ModelForm):
     # specify the name of model to use
     class Meta:
         model   = Event
-        fields  = ('title','description', 'sector', 'contact_name', 'contact_email', 'contact_prof','contact_phone', 'location', 'signal')
+        fields  = ('title','description','alert', 'sector', 'contact_name', 'contact_email', 'contact_prof','contact_phone', 'location', 'signal')

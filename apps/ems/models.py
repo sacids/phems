@@ -167,9 +167,10 @@ class Event(models.Model):
 
     title           = models.CharField(max_length=150,blank=True, null=True)
     description     = models.TextField(blank=True, null=True)
+    alert           = models.ForeignKey('Alert', on_delete=DO_NOTHING,default=1) 
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
-    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True) 
+    stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True,default=1) 
     location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
     sector          = models.ManyToManyField(Sector)
     
@@ -381,7 +382,6 @@ class Form_config(models.Model):
     )
 
     form        = models.ForeignKey('Form', on_delete=models.CASCADE)
-    ref         = models.CharField(max_length=100,blank=True, null=True)
     col_name    = models.CharField(max_length=50)
     col_type    = models.CharField(max_length=30,choices=QN_OPTIONS,default='text')
     options     = models.TextField(null=True,blank=True)
@@ -394,4 +394,19 @@ class Form_config(models.Model):
 
     class Meta:
         db_table = 'ph_forms_cfgf'
+        managed = True
+
+
+
+class Alert(models.Model):
+    reference   = models.CharField(max_length=5,blank=True, null=True,)
+    label       = models.CharField(max_length=30,blank=True, null=True,)
+    title       = models.TextField()
+    sector      = models.ManyToManyField(Sector) 
+    
+    def __str__(self):
+        return self.label
+    
+    class Meta:
+        db_table = 'ph_alerts'
         managed = True

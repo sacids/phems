@@ -25,10 +25,16 @@ admin.site.register(Location, LocationAdmin)
 
 
 class Form_configAdmin(admin.ModelAdmin):
-    list_display = ['form','ref' ,'col_name' ,'col_type','constraints','page' ,'order' ]
+    list_display = ['form','col_name' ,'col_type','constraints','page' ,'order' ]
     list_filter = ['form']
 
 admin.site.register(Form_config,Form_configAdmin)
+
+
+class AlertAdmin(admin.ModelAdmin):
+    list_display = ['reference','label','title']
+
+admin.site.register(Alert,AlertAdmin)
 
 
 class FormConfigInline(admin.StackedInline):
