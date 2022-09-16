@@ -66,22 +66,27 @@ class EventPercentageChartView(APIView):
         # discarded events
         discarded = events.filter(status='DISCARED').count()
 
+        #on progress
+        on_progress = events.filter(status='PROGRESS').count()
+
         # closed events
         closed = events.filter(status='COMPLETE').count()
 
         # aggregate
-        aggregate = discarded + closed
+        aggregate = discarded + closed + on_progress
 
         # percentage
         percent_discarded = 0
         percent_closed = 0
+        percent_on_progress = 0
 
         if(aggregate != 0):
             percent_discarded = (discarded / aggregate) * 100
             percent_closed = (closed / aggregate) * 100
+            percent_on_progress = (on_progress / aggregate) * 100
 
         # response
-        return Response({"error": False, 'closed': percent_closed, 'discarded': percent_discarded}, status=status.HTTP_201_CREATED)
+        return Response({"error": False, 'closed': percent_closed, 'discarded': percent_discarded, 'on_progress': percent_on_progress}, status=status.HTTP_201_CREATED)
 
 
 class EventChartView(APIView):

@@ -1,6 +1,7 @@
 from django.urls import path, include
 from .views import *
 from .charts import *
+from .map import *
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='dashboard'),
@@ -13,4 +14,7 @@ urlpatterns = [
     #events
     path('event-percent-chart', EventPercentageChartView.as_view()),
     path('event-sectors-chart', EventChartView.as_view()),
+
+    #map
+    path('update-event-map', UpdateEventMapView.as_view()),
 ]
