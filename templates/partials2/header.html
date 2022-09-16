@@ -53,7 +53,7 @@
                             </a>
                         </div>
 
-                        <div class="pt-5 {% if url_name == 'events' %} border-b-4 border-green-700 {% endif %}">
+                        <div class="pt-5 {% if url_name == 'events' or url_name == 'event' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'events' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Alerts

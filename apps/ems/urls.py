@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('', SignalListView.as_view(), name='signals'),
     path('events', EventListView.as_view(), name='events'),
+    path('event/<int:eid>', EventView.as_view(), name='event'),
     #path('oevents', EventListView2.as_view(), name='oevents'),
     path('signals', SignalListView.as_view(), name='signals'),
     path('overview', SignalListView.as_view(), name='overview'),

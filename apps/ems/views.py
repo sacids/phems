@@ -37,6 +37,25 @@ class EventListView(generic.TemplateView):
         context['alerts']       = Alert.objects.all().order_by('reference')
         return context
     
+class EventView(generic.TemplateView):
+    template_name       = "ems/event.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(EventView, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(EventView, self).get_context_data(**kwargs)
+        
+        eid                     = self.kwargs['eid']
+        context['event']        = Event.objects.get(pk=eid)
+        context['workflows']    = workflow_config.objects.all()
+        context['alerts']       = Alert.objects.filter(event__id=eid)
+        
+        return context
+    
     
 
 class SignalListView(generic.TemplateView):
@@ -134,10 +153,13 @@ def add_event(request):
 def get_event_data(request):
     
     eid                 = request.GET.get('eid',0)
-    #event_obj           = Event.objects.get(pk=eid)
+    data                = _get_event_data(eid)
     
-    all_data            = workflow_data.objects.filter(event__id=eid).order_by('-created_at')
-      
+    return JsonResponse(data, safe=False)
+
+def _get_event_data(eid):
+    
+    all_data            = workflow_data.objects.filter(event__id=eid).order_by('-created_at')  
     data                = []
     
     for n in all_data:
@@ -154,20 +176,19 @@ def get_event_data(request):
         
         tmp['data']         = tmp2
         data.append(tmp)
-        print(tmp)
-        #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
-    
-    return JsonResponse(data, safe=False)
-
-
+        
+        return data
 
 def get_notes(request):
     
     eid                 = request.GET.get('eid',0)
+    notes       = _get_event_notes(eid)
+     
+    return JsonResponse(notes, safe=False)
+
+def _get_event_notes(eid):
     event_obj           = Event.objects.get(pk=eid)
-    
     all_notes           = event_obj.notes.all().order_by('-created_at')
-    
     notes               = []
     
     for n in all_notes:
@@ -178,23 +199,18 @@ def get_notes(request):
             "created_on":   naturalday(n.created_at),
         }
         
-        notes.append(tmp)
-        #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
-     
-    
-    
-    return JsonResponse(notes, safe=False)
-
-
-
+    notes.append(tmp)
+    return notes
 
 def get_files(request):
     
-    eid                 = request.GET.get('eid',0)
+    eid     = request.GET.get('eid',0)
+    files   = _get_event_files(eid)
+    return JsonResponse(files, safe=False)
+
+def _get_event_files(eid):
     event_obj           = Event.objects.get(pk=eid)
-    
     all_files           = event_obj.files.all().order_by('-created_at')
-    
     files               = []
     
     for n in all_files:
@@ -207,8 +223,7 @@ def get_files(request):
         
         files.append(tmp)
     
-    return JsonResponse(files, safe=False)
-
+    return files
 
 def manage_event(request):
     
