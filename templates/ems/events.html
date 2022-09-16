@@ -5,7 +5,33 @@
 
 {% block contents %}
 
-<p class="pl-10 mt-5 text-xl"> Alerts </p>
+
+
+<div class="flex justify-between">
+    <p class="pl-10 mt-5 text-xl"> Alerts </p>
+    <!-- filter buttons --> 
+    <div class="mt-6 mr-5 text-sm space-x-2">
+        <button 
+            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3"
+            :class="{ 'bg-gray-300': eventStatus == false }" 
+            @click="$refs.searchEvents.focus(), eventStatus = false"> All </button>
+
+        <button 
+            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3"
+            :class="{ 'bg-gray-300': eventStatus == 'NEW' }" 
+            @click="eventStatus = 'NEW', $refs.searchEvents.focus()"> New </button>
+
+        <button 
+            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3"
+            :class="{ 'bg-gray-300': eventStatus == 'PROGRESS' }" 
+            @click="eventStatus = 'PROGRESS',$refs.searchEvents.focus()"> In Progress </button>
+
+        <button 
+            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3" 
+            :class="{ 'bg-gray-300': eventStatus == 'DISCARDED'  }" 
+            @click="eventStatus = 'DISCARDED', $refs.searchEvents.focus()"> Discarded </button>
+    </div>
+</div>
 <div class="pl-10 flex w-full my-2  space-x-2" x-init="fetchEvents();fetchWF();">
 
     <!-- search signal input field-->
@@ -31,7 +57,6 @@
             </div>
         </div>
     </div>
-
     <div class="p-0">
         <button 
                 class="rounded-sm bg-gray-100 hover:bg-gray-300 p-1 px-3 text-sm"
@@ -46,32 +71,8 @@
         {% endfor %}
     </div>
 
-    <!-- filter buttons -->
-    <!--
-    <div class="p-1">
-        <button 
-            class="ml-3  rounded bg-gray-100 hover:bg-gray-300 p-1 px-3 text-xs"
-            :class="{ 'bg-gray-300': eventStatus == false }" 
-            @click="$refs.searchEvents.focus(), eventStatus = false"> All </button>
-
-        <button 
-            class="ml-3  rounded bg-gray-100 hover:bg-gray-300 p-1 px-3 text-xs"
-            :class="{ 'bg-gray-300': eventStatus == 'NEW' }" 
-            @click="eventStatus = 'NEW', $refs.searchEvents.focus()"> New </button>
-    </div>
-    <div class="p-1">
-        <button 
-            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3 text-xs"
-            :class="{ 'bg-gray-300': eventStatus == 'PROGRESS' }" 
-            @click="eventStatus = 'PROGRESS',$refs.searchEvents.focus()"> In Progress </button>
-    </div>
-    <div class="p-1">
-        <button 
-            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3 text-xs" 
-            :class="{ 'bg-gray-300': eventStatus == 'DISCARDED'  }" 
-            @click="eventStatus = 'DISCARDED', $refs.searchEvents.focus()"> Discarded </button>
-    </div> -->
 </div>
+
 
 <div class="flex h-full overflow-hidden">
     <div class="flex-1 h-full overflow-y-auto pl-10">
@@ -96,10 +97,10 @@
                         class="line-clamp-1 px-2 flex-1 hover:cursor-e-resize" 
                         @click="sidebarOpen = true, activeEvent = index, setEvent(event)"
                         x-text="event.title"></p>
-                    <p class="w-48" x-text="event.alert_label"></p>
-                    <div class="w-36"><span class="rounded-lg bg-orange-300 px-3 text-[10px]" x-text="event.stage"></span></div>
-                    <div class="w-20"><span class="rounded-lg bg-orange-300 px-3 text-[10px]" x-text="event.status"></span></div>
-                    <p class="w-48" x-text="event.created_on"></p>
+                    <p class="line-clamp-1 w-48" x-text="event.alert_label"></p>
+                    <div class="line-clamp-1 w-36"><span class="rounded-lg bg-orange-300 px-3 text-[10px]" x-text="event.stage"></span></div>
+                    <div class="line-clamp-1 w-20"><span class="rounded-lg bg-orange-300 px-3 text-[10px]" x-text="event.status"></span></div>
+                    <p class="line-clamp-1 w-48" x-text="event.created_on"></p>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-200 hover:text-slate-500 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" @click="discardEvent(event,index)">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
