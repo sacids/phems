@@ -1,0 +1,389 @@
+[
+    {
+    "model": "ems.event",
+    "pk": 1,
+    "fields": {
+      "title": "Name of Event",
+      "description": "Some event",
+      "alert": 1,
+      "status": "DISCARDED",
+      "stage": 3,
+      "location": 4736,
+      "contact_name": "2022-05-11 11:56:33.318649+00:00",
+      "contact_prof": "HW",
+      "contact_phone": "787878787",
+      "contact_email": null,
+      "created_on": "2022-09-12T10:58:30.363Z",
+      "signal": [
+        1,
+        4,
+        5,
+        6,
+        9,
+        11,
+        14,
+        16,
+        18,
+        35,
+        36,
+        40,
+        63,
+        91,
+        377
+      ],
+      "sector": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 4,
+    "fields": {
+      "title": "Name of Event 2",
+      "description": "Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event Another Event",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 5,
+      "location": 1087,
+      "contact_name": "James losane",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "eric.beda@sacids.org",
+      "created_on": "2022-09-14T07:20:39.962Z",
+      "signal": [
+        8
+      ],
+      "sector": [
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 7,
+    "fields": {
+      "title": null,
+      "description": "asdf asdf",
+      "alert": 1,
+      "status": "NEW",
+      "stage": null,
+      "location": 358,
+      "contact_name": "Eric B Mutagahywa",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "ericbeda@gmail.com",
+      "created_on": "2022-08-29T08:03:16.375Z",
+      "signal": [
+        12,
+        32
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 8,
+    "fields": {
+      "title": null,
+      "description": "Trying again",
+      "alert": 1,
+      "status": "DISCARDED",
+      "stage": null,
+      "location": 20200,
+      "contact_name": "Eric B Mutagahywa",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "ericbeda@gmail.com",
+      "created_on": "2022-07-01T11:41:16.636Z",
+      "signal": [
+        10,
+        13
+      ],
+      "sector": [
+        3,
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 9,
+    "fields": {
+      "title": null,
+      "description": "tunajaribu",
+      "alert": 1,
+      "status": "NEW",
+      "stage": null,
+      "location": 5430,
+      "contact_name": "james",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "james@james.com",
+      "created_on": "2022-08-29T12:58:57.790Z",
+      "signal": [
+        13,
+        19
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 10,
+    "fields": {
+      "title": "title A",
+      "description": "title A description",
+      "alert": 1,
+      "status": "NEW",
+      "stage": null,
+      "location": 5008,
+      "contact_name": "jones",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "jones@jones.com",
+      "created_on": "2022-08-29T13:19:24.632Z",
+      "signal": [
+        22
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 11,
+    "fields": {
+      "title": "title B",
+      "description": "title B description",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 4739,
+      "contact_name": "namaja",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "namaja@anamaja.com",
+      "created_on": "2022-08-29T13:29:28.102Z",
+      "signal": [
+        50
+      ],
+      "sector": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 12,
+    "fields": {
+      "title": "aa",
+      "description": "aa",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 20291,
+      "contact_name": "asa",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "asa@asa.com",
+      "created_on": "2022-08-30T19:20:51.151Z",
+      "signal": [
+        45
+      ],
+      "sector": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 13,
+    "fields": {
+      "title": "bbb",
+      "description": "bbb",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 5148,
+      "contact_name": "bbb",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "ddd@bb.cccb",
+      "created_on": "2022-08-30T19:35:30.325Z",
+      "signal": [
+        20
+      ],
+      "sector": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 14,
+    "fields": {
+      "title": "ada",
+      "description": "ada",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 5045,
+      "contact_name": "ada",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "ada@ada.com",
+      "created_on": "2022-08-30T19:51:18.690Z",
+      "signal": [
+        51
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 15,
+    "fields": {
+      "title": "vvv",
+      "description": "vvv",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 9818,
+      "contact_name": "vvv",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "vv@vv.com",
+      "created_on": "2022-08-30T20:05:28.376Z",
+      "signal": [
+        29
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 16,
+    "fields": {
+      "title": "bbb",
+      "description": "bbb",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 3028,
+      "contact_name": "adfasd",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "asd@vads.com",
+      "created_on": "2022-08-30T20:08:05.141Z",
+      "signal": [
+        84
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 17,
+    "fields": {
+      "title": "jjj",
+      "description": "jjj",
+      "alert": 1,
+      "status": "NEW",
+      "stage": 1,
+      "location": 5342,
+      "contact_name": "jjj",
+      "contact_prof": "LFO",
+      "contact_phone": null,
+      "contact_email": "jjj@jjj.com",
+      "created_on": "2022-08-30T20:09:46.821Z",
+      "signal": [
+        99
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 18,
+    "fields": {
+      "title": "vvv",
+      "description": "vvvv",
+      "alert": 1,
+      "status": "DISCARDED",
+      "stage": null,
+      "location": 14428,
+      "contact_name": "vvvv",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "vvv@vvv.vvv",
+      "created_on": "2022-08-31T06:04:31.727Z",
+      "signal": [
+        62
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 19,
+    "fields": {
+      "title": "Alert Change of behavior",
+      "description": "some description",
+      "alert": 6,
+      "status": "NEW",
+      "stage": null,
+      "location": 24123,
+      "contact_name": "Eric Beda",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "eric.beda@beda.com",
+      "created_on": "2022-09-15T10:29:33.430Z",
+      "signal": [
+        19
+      ],
+      "sector": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "ems.event",
+    "pk": 20,
+    "fields": {
+      "title": "A07 - Incease in abortion",
+      "description": "New abortions detected in Muheza district",
+      "alert": 8,
+      "status": "NEW",
+      "stage": 1,
+      "location": 39,
+      "contact_name": "Juma Nkaa",
+      "contact_prof": "CHW",
+      "contact_phone": null,
+      "contact_email": "juma@nkaa.com",
+      "created_on": "2022-09-15T10:31:36.133Z",
+      "signal": [
+        25
+      ],
+      "sector": [
+        2
+      ]
+    }
+  }
+]
