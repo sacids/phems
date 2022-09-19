@@ -32,7 +32,7 @@
             @click="eventStatus = 'DISCARDED', $refs.searchEvents.focus()"> Discarded </button>
     </div>
 </div>
-<div class="pl-10 flex w-full my-2  space-x-2" x-init="fetchEvents();fetchWF();">
+<div class="pl-10 flex w-full my-2  space-x-2" x-init="fetchEvents();fetchWF();initjq()">
 
     <!-- search signal input field-->
     <div class="flex rounded-sm bg-gray-100 border border-gray-300 hover:bg-gray-200 text-xs">
@@ -179,6 +179,7 @@
                 <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showAttachments }" @click="hideAllActivities(); showAttachments = true;">Attachments</button>
                 <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showNotes }" @click="hideAllActivities();showNotes = true;">Notes</button>
                 <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showData }" @click="hideAllActivities();showData=true;">Data</button>
+                <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showColabs }" @click="hideAllActivities();showColabs=true;">Collaborators</button>
             </div>
 
 
@@ -266,6 +267,35 @@
                 </div>
             </div>
 
+            <div x-show="showColabs|showAll " class="space-y-3 w-full">
+                <p class="text-sm font-semibold mt-5 mb-3">Collaborators</p>
+                
+                <div class="flex flex-wrap space-x-2 space-y-2">
+                    <template x-for="(user, index) in eventColabs" :key="index">
+                        <div class="flex text-xs pr-4 pl-2 py-1 w-56 rounded-2xl bg-green-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="cursor-pointer h-7 w-7 pt-1 pr-2 text-green-200 hover:text-black" viewBox="0 0 20 20" fill="currentColor" @click="delColab(index)">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <ul class="flex-1">
+                                <li class="" x-text="user.name"></li>
+                                <li class="text-xs text-gray-500" x-text="user.email"></li>
+                            </ul>
+                        </div>  
+                    </template>
+                </div>
+
+
+
+
+                <div class="flex w-full space-x-2">
+                    <select x-ref="colaborator" class="get_colaborator text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 md:w-1/2" id="colaborator" x-model="cur_colab"></select>
+                    <button class="px-2 py-1 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm" @click="addColab">Add Collaborator</button>
+                </div>
+                <div class="flex space-x-2">
+                    <input type="email" class="rounded py-0" />
+                    <button class="px-2 py-1 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm">Send Invite</button>
+                </div>
+            </div>
             
         </div>
     </div>
@@ -355,6 +385,11 @@
             workflow:       [],
             sideScrolled:   true,
 
+
+            cur_colab:      "", 
+            eventColabs:    [],
+            getting_collaborators:  false,
+
             
             showModal:      false,
             loadingWfModal: false,
@@ -364,6 +399,7 @@
             showNotes:          false,
             showAll:            true,
             showData:           false,
+            showColabs:         false,
 
             cur_workflow: {
                 id              : "",
@@ -583,6 +619,7 @@
                     this.fetchEventNotes();
                     this.fetchEventFiles();
                     this.fetchEventData();
+                    this.fetchEventCollaborators();
 
                 }
 
@@ -607,6 +644,114 @@
 
             },
 
+
+            fetchEventCollaborators(){
+              
+                this.getting_collaborators = true;
+
+                var url         = window.location.origin + '/ems/utils/gec?eid='+this.cur_event.id;
+
+                fetch(url, {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('getting collaborators done');
+                    //this.file_uploading     = true;
+                    this.eventColabs     = data;
+                    console.log(this.eventColabs);
+                
+                })
+                .catch(() => {
+                    console.log('getting collaborators error')
+                    //this.file_uploading     = true;
+                })
+                .finally(() => {
+                    this.getting_collaborators = false;
+                })
+            },
+
+            addColab(){
+
+                var data = new FormData();
+                data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                data.append('uid', this.$refs.colaborator.value)
+                data.append('eid', this.cur_event.id)
+
+                //this.eventFormEl.label      = 'Submitting...'
+                //this.eventFormEl.loading    = true;
+
+                var url     = window.location.origin + '/ems/utils/aec'
+
+                fetch(url, {
+                    method: 'POST',
+                    body: data,
+                    credentials : 'same-origin',
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.label = 'Add Collaborator';
+
+                    this.eventColabs.unshift(data)
+                    this.$refs.collaborator.value = "";
+
+                
+                })
+                .catch(() => {
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.label = 'Add Collaborator';
+                })
+                .finally(() => {
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.Label = 'Add Event'
+                })
+
+            },
+
+
+            delColab(cid){
+
+                var data = new FormData();
+                data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+                uid     = this.eventColabs[cid].id;
+
+                data.append('uid', uid)
+                data.append('eid', this.cur_event.id)
+
+                //this.eventFormEl.label      = 'Submitting...'
+                //this.eventFormEl.loading    = true;
+
+                var url     = window.location.origin + '/ems/utils/dec'
+
+                fetch(url, {
+                    method: 'POST',
+                    body: data,
+                    credentials : 'same-origin',
+                })
+                .then(res => res.json())
+                .then(data => {
+
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.label = 'Add Collaborator';
+
+                    this.eventColabs.splice(cid,1)
+                    this.$refs.collaborator.value = "";
+
+                
+                })
+                .catch(() => {
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.label = 'Add Collaborator';
+                })
+                .finally(() => {
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.Label = 'Add Event'
+                })
+
+            },
 
 
             fetchEventFiles(){
@@ -905,6 +1050,7 @@
                 this.showAttachments = false;
                 this.showNotes = false;
                 this.showData = false;
+                this.showColabs = false;
                 this.showAll = false;
             },
         }
@@ -915,10 +1061,10 @@
         $(".select2").select2();
         $(".input-mask").inputmask();
 
-        $('.get_location').select2({
-            minimumInputLength: 3,
+        $('.get_colaborator').select2({
+            minimumInputLength: 2,
             ajax: {
-            url: window.location.origin + '/ems/utils/sl',
+            url: window.location.origin + '/ems/utils/su',
             dataType: 'json',
             // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
             }

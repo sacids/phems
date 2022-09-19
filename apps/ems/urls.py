@@ -38,9 +38,13 @@ urlpatterns = [
     path('utils/gf', get_files, name='get_files'),
     path('utils/an', add_note, name='add_note'),
     path('utils/gn', get_notes, name='get_notes'),
+    path('utils/gec', get_colabs, name='get_colabs'),
+    path('utils/aec', add_colabs, name='add_colabs'),
+    path('utils/dec', del_colabs, name='del_colabs'),
     path('utils/ged', get_event_data, name='get_event_data'),
     path('utils/cwf', change_wf, name='change_wf'),
     path('utils/uwf', update_wf, name='update_wf'),
+    path('utils/su', search_users, name='search_users'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
 

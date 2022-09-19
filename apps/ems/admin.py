@@ -1,10 +1,16 @@
 from django.contrib import admin
 from treebeard.admin import TreeAdmin
 from treebeard.forms import movenodeform_factory
+from django.contrib.contenttypes.admin import GenericTabularInline
 
 
 from .models import *
 
+
+
+class permsUserInline(GenericTabularInline):
+    model = perms_user
+    extra = 0
 
 class SignalAdmin(admin.ModelAdmin):
     list_display = ['id','channel','contents','relevance','status','created_on']
@@ -45,7 +51,14 @@ class FormAdmin(admin.ModelAdmin):
     
 admin.site.register(Form,FormAdmin)
 
-admin.site.register(Event)
+
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['title','alert','stage','location','contact_phone','created_on']
+    inlines =[permsUserInline]
+    
+admin.site.register(Event, EventAdmin)
+
+
 admin.site.register(Stage)
 admin.site.register(Contact)
 admin.site.register(Sector)

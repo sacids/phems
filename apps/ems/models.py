@@ -80,7 +80,7 @@ class Signal(models.Model):
 class Sector(models.Model):
 
     title           = models.CharField(max_length=50)
-
+    linked_group    = models.ForeignKey(Group, on_delete=DO_NOTHING,blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -184,7 +184,7 @@ class Event(models.Model):
     notes           = GenericRelation('note')    
     files           = GenericRelation('files')   
     user_access     = GenericRelation('perms_user')  
-    group_access    = GenericRelation('perms_group')   
+    group_access    = GenericRelation('perms_group')
       
 
     def __str__(self):

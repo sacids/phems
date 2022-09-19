@@ -7,6 +7,11 @@ from django.views import generic
 from django.http import HttpResponse, JsonResponse
 from django.template.response import TemplateResponse
 from django.contrib.humanize.templatetags.humanize import naturalday
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth import get_user_model
+User    = get_user_model()
 
 from .forms import *
 
@@ -35,6 +40,7 @@ class EventListView(generic.TemplateView):
         context['workflows']    = workflow_config.objects.all()
         context['profession']   = Event.PROFESSION
         context['alerts']       = Alert.objects.all().order_by('reference')
+        
         return context
     
 class EventView(generic.TemplateView):
@@ -50,10 +56,27 @@ class EventView(generic.TemplateView):
         context = super(EventView, self).get_context_data(**kwargs)
         
         eid                     = self.kwargs['eid']
-        context['event']        = Event.objects.get(pk=eid)
+        event_obj               = Event.objects.get(pk=eid)
+        context['event']        = event_obj
         context['workflows']    = workflow_config.objects.all()
         context['alerts']       = Alert.objects.filter(event__id=eid)
+        context['e_col_u']      = event_obj.user_access.all()
         
+        ''' 
+        user_perms              = event_obj.user_access.all()
+        plist                   = []
+        for perm in user_perms:
+            plist.append(perm.user.id)
+        context['user_perms']   = plist
+        context['users']        = User.objects.all()
+
+        group_perms               = event_obj.group_access.all()
+        plist                   = []
+        for perm in group_perms:
+            plist.append(perm.group.id)
+        context['group_perms']   = plist
+        context['groups']        = Group.objects.all()
+        '''
         return context
     
     
@@ -179,6 +202,70 @@ def _get_event_data(eid):
         
         return data
 
+
+def get_colabs(request):
+    eid                 = request.GET.get('eid',0)
+    event_obj           = Event.objects.get(pk=eid)
+    all_colabs          = event_obj.user_access.all()
+    colabs              = []
+    
+    for n in all_colabs:
+        tmp     = {
+            "id":           n.user.id,
+            "initials":     n.user.first_name[0].upper()+n.user.last_name[0].upper(),
+            "name":         n.user.first_name+' '+n.user.last_name,
+            "email":        n.user.email,
+        }
+        
+        colabs.append(tmp)
+    return JsonResponse(colabs, safe=False)
+   
+   
+
+def add_colabs(request):
+    
+    usr_id          = request.POST.get('uid',0) 
+    evt_id          = request.POST.get('eid',0)
+    
+    evt_obj         = Event.objects.get(pk=evt_id)
+    usr_obj         = User.objects.get(pk=usr_id)
+       
+    #obj.user_access.create(user=sel_user)
+    
+    evt_obj.user_access.create(user=usr_obj)
+    
+    
+    # ADD COMMENT
+    note            = request.user.first_name + ' added '+usr_obj.first_name+' as collaborator '
+    evt_obj.notes.create(message=note,created_by=User.objects.get(pk=1))
+    
+    tmp             = {
+        "id":           usr_obj.id,
+        "initials":     usr_obj.first_name[0].upper()+usr_obj.last_name[0].upper(),
+        "name":         usr_obj.first_name+' '+usr_obj.last_name,
+        "email":        usr_obj.email,  
+    }
+    
+    return JsonResponse(tmp,safe=False)
+
+
+def del_colabs(request):
+    
+    usr_id          = request.POST.get('uid',0) 
+    evt_id          = request.POST.get('eid',0)
+    
+    evt_obj         = Event.objects.get(pk=evt_id)
+    usr_obj         = User.objects.get(pk=usr_id)
+       
+    evt_obj.user_access.filter(user=usr_obj).delete()
+    
+    # ADD COMMENT
+    note            = request.user.first_name + ' removed '+usr_obj.first_name+' as collaborator '
+    evt_obj.notes.create(message=note,created_by=User.objects.get(pk=1))
+    
+    return JsonResponse(1,safe=False)
+
+ 
 def get_notes(request):
     
     eid                 = request.GET.get('eid',0)
@@ -199,7 +286,7 @@ def _get_event_notes(eid):
             "created_on":   naturalday(n.created_at),
         }
         
-    notes.append(tmp)
+        notes.append(tmp)
     return notes
 
 def get_files(request):
@@ -296,6 +383,30 @@ def search_location(request):
     
 
 
+def search_users(request):
+    
+    term        = request.GET.get('term',0) 
+    user_qs     = User.objects.filter(
+            Q(first_name__icontains=term) | 
+            Q(last_name__icontains=term) | 
+            Q(email__icontains=term) | 
+            Q(username__icontains=term))
+    
+    data        = []
+    for item in user_qs:
+        
+        tmp     = {}
+        tmp['id']   = item.id
+        text        = item.first_name+' '+item.last_name
+        tmp['text'] = (text.replace("'", "")).lower().title()
+        data.append(tmp)
+        
+    results    = {}
+    results['results']  = data
+    
+    return JsonResponse(results,safe=False)
+    
+
 def get_list(list_name):
     with open("assets/json/location/"+list_name+".json", 'r') as file:
         regions = json.loads(file.read().rstrip())
@@ -336,7 +447,7 @@ def update_wf(request):
     
     # ADD COMMENT
     note            = request.user.first_name + ' changed stage from '+eventObj.stage.title+' to '+stageObj.title;
-    eventObj.notes.create(message=note,created_by=request.user)
+    eventObj.notes.create(message=note,created_by=1)
     
     # UPDATE OBJECT
     eventObj.stage  = stageObj 
@@ -429,3 +540,58 @@ def build_location_db(request):
 
     return HttpResponse('moja')
 """
+
+
+@login_required
+def submitPermsForm(request):
+
+    template            = 'mrv/ajax/lib_form_input.html'
+    if request.method == 'POST':
+
+        users           = request.POST.getlist('u_access')
+        groups          = request.POST.getlist('g_access')
+        eid             = request.POST.get('eid')
+
+        # reset perms to new values
+        resetPerms(users,groups,eid)
+
+        obj             = Event.objects.get(pk=eid)
+
+        context         = {
+            'library'   : obj,
+        }
+        user_perms               = obj.user_access.all()
+        plist               = []
+        for perm in user_perms:
+            plist.append(perm.user.id)
+        context['user_perms']   = plist
+        context['users']        = User.objects.all()
+
+        group_perms               = obj.group_access.all()
+        plist               = []
+        for perm in group_perms:
+            plist.append(perm.group.id)
+        context['group_perms']   = plist
+        context['groups']        = Group.objects.all()
+
+        template            = 'mrv/ajax/lib_access.html'
+
+        return TemplateResponse(request,template,context)
+    else:
+        return JsonResponse(0) 
+
+
+def resetPerms(users, groups, eid):
+    obj             = Event.objects.get(pk=eid)
+    obj.user_access.all().delete()
+    obj.group_access.all().delete()
+
+    for id in users:
+        sel_user    = User.objects.get(pk=id)
+        obj.user_access.create(user=sel_user)
+    
+    for id in groups:
+        #perms_group.objects.create(content_object=obj,group=Group.objects.get(pk=id))
+        sel_group   = Group.objects.get(pk=id)
+        obj.group_access.create(group=sel_group)
+
