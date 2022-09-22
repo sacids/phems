@@ -60,6 +60,14 @@
                             </a>
                         </div>
 
+
+                        <div class="pt-3 pb-2 {% if url_name == 'event_list' or url_name == 'event' %} border-b-4 border-green-700 {% endif %}">
+                            <a href="{% url 'event_list' %}"
+                                class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                                Lists
+                            </a>
+                        </div>
+
                         <div class="pt-3 pb-2 {% if url_name == 'messages' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'messages' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">

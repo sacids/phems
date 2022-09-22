@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.humanize',
     'treebeard',
+    'ajax_datatable',
     
     
     # apps

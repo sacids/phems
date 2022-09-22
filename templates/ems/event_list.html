@@ -1,0 +1,53 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block contents %}
+
+
+<div class="my-5 px-10">
+    <p class="text-2xl">Alerts</p>
+</div>
+
+<div class="table-responsive px-10">
+    <table id="datatable_permissions" width="100%" class="table border=1 table-striped table-bordered dt-responsive compact nowrap text-sm">
+    </table>
+</div>
+
+<script language="javascript">
+
+    $(document).ready(function() {
+        AjaxDatatableViewUtils.initialize_table(
+            $('#datatable_permissions'),
+            "{% url 'event_list' %}",
+            {
+                // extra_options (example)
+                processing: false,
+                autoWidth: false,
+                full_row_select: false,
+                scrollX: false,
+                dom: 'rtip'
+            }, {
+                // extra_data
+                // ...
+            },
+        );
+    });
+
+</script>
+
+{% endblock %}
+
+{% block extrajs %}
+
+    <script type="text/javascript" src="{% static 'ajax_datatable/js/utils.js' %}"></script>
+
+{% endblock %}
+
+{% block extrastyle %}
+
+    <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
+    <link href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
+{% endblock extrastyle %}

@@ -171,7 +171,8 @@ class Event(models.Model):
     signal          = models.ManyToManyField("Signal")
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
     stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True,default=1) 
-    location        = models.ForeignKey('location', on_delete=DO_NOTHING) 
+    location        = models.ForeignKey('location', on_delete=DO_NOTHING)
+    pri_sector      = models.ForeignKey('Sector', related_name="pri_sector",on_delete=DO_NOTHING,blank=True, null=True,default=1)
     sector          = models.ManyToManyField(Sector)
     
     contact_name    = models.CharField(max_length=150, blank=True, null=True)
@@ -179,7 +180,8 @@ class Event(models.Model):
     contact_phone   = models.CharField(max_length=20, blank=True, null=True)
     contact_email   = models.CharField(max_length=50,blank=True, null=True)
     
-    created_on      = models.DateTimeField(auto_now=True)
+    created_on      = models.DateTimeField(auto_now_add=True)
+    updated_on      = models.DateTimeField(auto_now=True)
 
     notes           = GenericRelation('note')    
     files           = GenericRelation('files')   
@@ -402,6 +404,7 @@ class Alert(models.Model):
     reference   = models.CharField(max_length=5,blank=True, null=True,)
     label       = models.CharField(max_length=30,blank=True, null=True,)
     title       = models.TextField()
+    pri_sector  = models.ForeignKey('Sector',related_name="alert_pri_sector", on_delete=DO_NOTHING,blank=True, null=True,default=1)
     sector      = models.ManyToManyField(Sector) 
     
     def __str__(self):

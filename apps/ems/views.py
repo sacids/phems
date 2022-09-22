@@ -43,6 +43,25 @@ class EventListView(generic.TemplateView):
         
         return context
     
+class EventList1View(generic.TemplateView):
+    template_name       = "ems/event_list.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(EventList1View, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(EventList1View, self).get_context_data(**kwargs)
+        context['events']       = Event.objects.all().order_by('-pk')
+        context['sectors']      = Sector.objects.all()
+        context['workflows']    = workflow_config.objects.all()
+        context['profession']   = Event.PROFESSION
+        context['alerts']       = Alert.objects.all().order_by('reference')
+        
+        return context
+    
 class EventView(generic.TemplateView):
     template_name       = "ems/event.html"
 
@@ -427,6 +446,70 @@ def change_wf(request):
         print(i)
     
     return TemplateResponse(request, "ems/async/form_detail.html", context=context)
+
+
+def get_alert_data(request):
+    
+    
+    draw            = request.GET.get('draw')
+    row             = request.GET.get('start')
+    rowperpage      = request.GET.get('length')
+    columnIndex     = request.GET.get('order')
+    columnName      = request.GET.get('columns')
+    columnSortOrder = request.GET.get('order')
+    searchValue     = request.GET.get('search')
+    
+    
+    data  = {
+        "data": [
+                {
+                    "id": "1",
+                    "name": "Tiger Nixon",
+                    "position": "System Architect",
+                    "salary": "$320,800",
+                    "start_date": "2011/04/25",
+                    "office": "Edinburgh",
+                    "extn": "5421"
+                },
+                {
+                    "id": "2",
+                    "name": "Garrett Winters",
+                    "position": "Accountant",
+                    "salary": "$170,750",
+                    "start_date": "2011/07/25",
+                    "office": "Tokyo",
+                    "extn": "8422"
+                },
+                {
+                    "id": "3",
+                    "name": "Ashton Cox",
+                    "position": "Junior Technical Author",
+                    "salary": "$86,000",
+                    "start_date": "2009/01/12",
+                    "office": "San Francisco",
+                    "extn": "1562"
+                },
+                {
+                    "id": "4",
+                    "name": "Cedric Kelly",
+                    "position": "Senior Javascript Developer",
+                    "salary": "$433,060",
+                    "start_date": "2012/03/29",
+                    "office": "Edinburgh",
+                    "extn": "6224"
+                },
+                {
+                    "id": "5",
+                    "name": "Airi Satou",
+                    "position": "Accountant",
+                    "salary": "$162,700",
+                    "start_date": "2008/11/28",
+                    "office": "Tokyo",
+                    "extn": "5407"
+                }
+        ]
+    }
+    return JsonResponse(data,safe=False)
 
 
 def update_wf(request):

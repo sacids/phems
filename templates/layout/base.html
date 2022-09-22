@@ -17,6 +17,7 @@
 
     <!--./jquery -->
     <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
 
     <!-- Leaflets Maps-->
@@ -30,6 +31,9 @@
 
     <!-- map Css -->
     <link href="{% static 'css/map.css' %}" rel="stylesheet" type="text/css" />
+
+    {% block extrastyle %} {% endblock %}
+    
 </head>
 
 <body>
@@ -44,12 +48,16 @@
     </div>
 
     {% block get_header %}
-    <script>function getHeader1() { }</script>{% endblock %}
+        <script>function getHeader1() { }</script>
+    {% endblock %}
     {% block get_contents %}
-    <script>function getContents() { }</script>{% endblock %}
+        <script>function getContents() { }</script>
+    {% endblock %}
 
     <!--./alpine js -->
     <script src="{% static 'js/alpine.min.js'%}"></script>
+    {% block extrajs %}{% endblock %}
+    
 
 </body>
 

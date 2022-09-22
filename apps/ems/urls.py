@@ -4,6 +4,7 @@ from django.urls.resolvers import URLPattern
 from .views import *
 from . import api
 
+from . import ajax_datatable_views
 
 router = routers.DefaultRouter()
 router.register(r'signal', api.SignalViewSet)
@@ -15,6 +16,7 @@ urlpatterns = [
 
     path('', SignalListView.as_view(), name='signals'),
     path('events', EventListView.as_view(), name='events'),
+    path('event_list', EventList1View.as_view(), name='event_list'),
     path('event/<int:eid>', EventView.as_view(), name='event'),
     #path('oevents', EventListView2.as_view(), name='oevents'),
     path('signals', SignalListView.as_view(), name='signals'),
@@ -42,6 +44,7 @@ urlpatterns = [
     path('utils/aec', add_colabs, name='add_colabs'),
     path('utils/dec', del_colabs, name='del_colabs'),
     path('utils/ged', get_event_data, name='get_event_data'),
+    path('utils/gad', get_alert_data, name='gad'),
     path('utils/cwf', change_wf, name='change_wf'),
     path('utils/uwf', update_wf, name='update_wf'),
     path('utils/su', search_users, name='search_users'),
@@ -49,5 +52,9 @@ urlpatterns = [
     path('utils/mea', manage_event_act, name='manage_event_act'),
 
     #path('build', build_location_db)
+    
+    
+    path('ajax_datatable/permissions/', ajax_datatable_views.PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
+    path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="event_list"),
     
 ]
