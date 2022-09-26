@@ -12,8 +12,10 @@ click-plugins==1.1.1
 click-repl==0.2.0
 cryptography==36.0.2
 Django==4.0.1
+django-celery-beat==2.3.0
 django-cors-headers==3.11.0
 django-crispy-forms==1.13.0
+django-timezone-field==5.0
 django-treebeard==4.5.1
 django-utils-six==2.0
 djangorestframework==3.13.1
@@ -30,6 +32,8 @@ pycodestyle==2.8.0
 pycparser==2.21
 PyJWT==2.3.0
 pyngrok==5.1.0
+python-crontab==2.6.0
+python-dateutil==2.8.2
 python-decouple==3.5
 pytz==2021.3
 pywebpush==1.14.0
@@ -39,6 +43,7 @@ six==1.16.0
 sqlparse==0.4.2
 toml==0.10.2
 twilio==7.8.0
+tzdata==2022.2
 urllib3==1.26.9
 vine==5.0.0
 wcwidth==0.2.5
