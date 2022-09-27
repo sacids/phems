@@ -55,6 +55,6 @@ urlpatterns = [
     
     
     path('ajax_datatable/permissions/', ajax_datatable_views.PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
-    path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="event_list"),
+    path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="e_list"),
     
 ]

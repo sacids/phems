@@ -11,7 +11,7 @@
 </div>
 
 <div class="table-responsive px-10">
-    <table id="datatable_permissions" width="100%" class="table border=1 table-striped table-bordered dt-responsive compact nowrap text-sm">
+    <table id="datatable" width="100%" class="table border=1 table-striped table-bordered dt-responsive compact nowrap text-sm">
     </table>
 </div>
 
@@ -19,8 +19,8 @@
 
     $(document).ready(function() {
         AjaxDatatableViewUtils.initialize_table(
-            $('#datatable_permissions'),
-            "{% url 'event_list' %}",
+            $('#datatable'),
+            "{% url 'e_list' %}",
             {
                 // extra_options (example)
                 processing: false,
