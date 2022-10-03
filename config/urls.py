@@ -32,4 +32,5 @@ urlpatterns = [
     path('webpush/', include('apps.webpush.urls')),
     path('chatbot/', include('apps.chatbot.urls')),
     path('ems/', include('apps.ems.urls')),
+    path('notification/', include('apps.notification.urls')),
 ]

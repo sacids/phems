@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zvn6=*_ip*z-tly_%bz$mzfr-*_2ad%j@k_-f1q+&hz93k1!p$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -178,3 +178,11 @@ CORS_ORIGIN_WHITELIST = [
 
 LOGIN_URL = '/auth/login'
 LOGIN_REDIRECT_URL = '/ems/signals'
+
+# CELERY SETINGS
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Nairobi'
+#CELERY_RESULT_BACKEND = 'django-db'
