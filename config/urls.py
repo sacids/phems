@@ -19,6 +19,9 @@ from rest_framework_simplejwt import views as jwt_views
 from apps.account import views as account_views
 from apps.account import utils as api
 
+
+
+
 urlpatterns = [
     path('', include('apps.dashboard.urls')),
     # path('dashboard/', include('apps.dashboard.urls')),

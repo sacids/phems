@@ -7,6 +7,11 @@ from django.views import generic
 from django.http import HttpResponse, JsonResponse
 from django.template.response import TemplateResponse
 from django.contrib.humanize.templatetags.humanize import naturalday
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
+from django.contrib.auth import get_user_model
+User    = get_user_model()
 
 from .forms import *
 
@@ -35,6 +40,62 @@ class EventListView(generic.TemplateView):
         context['workflows']    = workflow_config.objects.all()
         context['profession']   = Event.PROFESSION
         context['alerts']       = Alert.objects.all().order_by('reference')
+        
+        return context
+    
+class EventList1View(generic.TemplateView):
+    template_name       = "ems/event_list.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(EventList1View, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(EventList1View, self).get_context_data(**kwargs)
+        context['events']       = Event.objects.all().order_by('-pk')
+        context['sectors']      = Sector.objects.all()
+        context['workflows']    = workflow_config.objects.all()
+        context['profession']   = Event.PROFESSION
+        context['alerts']       = Alert.objects.all().order_by('reference')
+        
+        return context
+    
+class EventView(generic.TemplateView):
+    template_name       = "ems/event.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(EventView, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(EventView, self).get_context_data(**kwargs)
+        
+        eid                     = self.kwargs['eid']
+        event_obj               = Event.objects.get(pk=eid)
+        context['event']        = event_obj
+        context['workflows']    = workflow_config.objects.all()
+        context['alerts']       = Alert.objects.filter(event__id=eid)
+        context['e_col_u']      = event_obj.user_access.all()
+        
+        ''' 
+        user_perms              = event_obj.user_access.all()
+        plist                   = []
+        for perm in user_perms:
+            plist.append(perm.user.id)
+        context['user_perms']   = plist
+        context['users']        = User.objects.all()
+
+        group_perms               = event_obj.group_access.all()
+        plist                   = []
+        for perm in group_perms:
+            plist.append(perm.group.id)
+        context['group_perms']   = plist
+        context['groups']        = Group.objects.all()
+        '''
         return context
     
     
@@ -134,10 +195,13 @@ def add_event(request):
 def get_event_data(request):
     
     eid                 = request.GET.get('eid',0)
-    #event_obj           = Event.objects.get(pk=eid)
+    data                = _get_event_data(eid)
     
-    all_data            = workflow_data.objects.filter(event__id=eid).order_by('-created_at')
-      
+    return JsonResponse(data, safe=False)
+
+def _get_event_data(eid):
+    
+    all_data            = workflow_data.objects.filter(event__id=eid).order_by('-created_at')  
     data                = []
     
     for n in all_data:
@@ -154,20 +218,83 @@ def get_event_data(request):
         
         tmp['data']         = tmp2
         data.append(tmp)
-        print(tmp)
-        #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
+        
+        return data
+
+
+def get_colabs(request):
+    eid                 = request.GET.get('eid',0)
+    event_obj           = Event.objects.get(pk=eid)
+    all_colabs          = event_obj.user_access.all()
+    colabs              = []
     
-    return JsonResponse(data, safe=False)
+    for n in all_colabs:
+        tmp     = {
+            "id":           n.user.id,
+            "initials":     n.user.first_name[0].upper()+n.user.last_name[0].upper(),
+            "name":         n.user.first_name+' '+n.user.last_name,
+            "email":        n.user.email,
+        }
+        
+        colabs.append(tmp)
+    return JsonResponse(colabs, safe=False)
+   
+   
+
+def add_colabs(request):
+    
+    usr_id          = request.POST.get('uid',0) 
+    evt_id          = request.POST.get('eid',0)
+    
+    evt_obj         = Event.objects.get(pk=evt_id)
+    usr_obj         = User.objects.get(pk=usr_id)
+       
+    #obj.user_access.create(user=sel_user)
+    
+    evt_obj.user_access.create(user=usr_obj)
+    
+    
+    # ADD COMMENT
+    note            = request.user.first_name + ' added '+usr_obj.first_name+' as collaborator '
+    evt_obj.notes.create(message=note,created_by=User.objects.get(pk=1))
+    
+    tmp             = {
+        "id":           usr_obj.id,
+        "initials":     usr_obj.first_name[0].upper()+usr_obj.last_name[0].upper(),
+        "name":         usr_obj.first_name+' '+usr_obj.last_name,
+        "email":        usr_obj.email,  
+    }
+    
+    return JsonResponse(tmp,safe=False)
 
 
+def del_colabs(request):
+    
+    usr_id          = request.POST.get('uid',0) 
+    evt_id          = request.POST.get('eid',0)
+    
+    evt_obj         = Event.objects.get(pk=evt_id)
+    usr_obj         = User.objects.get(pk=usr_id)
+       
+    evt_obj.user_access.filter(user=usr_obj).delete()
+    
+    # ADD COMMENT
+    note            = request.user.first_name + ' removed '+usr_obj.first_name+' as collaborator '
+    evt_obj.notes.create(message=note,created_by=User.objects.get(pk=1))
+    
+    return JsonResponse(1,safe=False)
 
+ 
 def get_notes(request):
     
     eid                 = request.GET.get('eid',0)
+    notes       = _get_event_notes(eid)
+     
+    return JsonResponse(notes, safe=False)
+
+def _get_event_notes(eid):
     event_obj           = Event.objects.get(pk=eid)
-    
     all_notes           = event_obj.notes.all().order_by('-created_at')
-    
     notes               = []
     
     for n in all_notes:
@@ -179,22 +306,17 @@ def get_notes(request):
         }
         
         notes.append(tmp)
-        #notes   += '{ message: "'+n.message+'", name: "'+n.created_by.first_name[0].upper()+n.created_by.last_name[0].upper()+'"},'
-     
-    
-    
-    return JsonResponse(notes, safe=False)
-
-
-
+    return notes
 
 def get_files(request):
     
-    eid                 = request.GET.get('eid',0)
+    eid     = request.GET.get('eid',0)
+    files   = _get_event_files(eid)
+    return JsonResponse(files, safe=False)
+
+def _get_event_files(eid):
     event_obj           = Event.objects.get(pk=eid)
-    
     all_files           = event_obj.files.all().order_by('-created_at')
-    
     files               = []
     
     for n in all_files:
@@ -207,8 +329,7 @@ def get_files(request):
         
         files.append(tmp)
     
-    return JsonResponse(files, safe=False)
-
+    return files
 
 def manage_event(request):
     
@@ -281,6 +402,30 @@ def search_location(request):
     
 
 
+def search_users(request):
+    
+    term        = request.GET.get('term',0) 
+    user_qs     = User.objects.filter(
+            Q(first_name__icontains=term) | 
+            Q(last_name__icontains=term) | 
+            Q(email__icontains=term) | 
+            Q(username__icontains=term))
+    
+    data        = []
+    for item in user_qs:
+        
+        tmp     = {}
+        tmp['id']   = item.id
+        text        = item.first_name+' '+item.last_name
+        tmp['text'] = (text.replace("'", "")).lower().title()
+        data.append(tmp)
+        
+    results    = {}
+    results['results']  = data
+    
+    return JsonResponse(results,safe=False)
+    
+
 def get_list(list_name):
     with open("assets/json/location/"+list_name+".json", 'r') as file:
         regions = json.loads(file.read().rstrip())
@@ -303,6 +448,70 @@ def change_wf(request):
     return TemplateResponse(request, "ems/async/form_detail.html", context=context)
 
 
+def get_alert_data(request):
+    
+    
+    draw            = request.GET.get('draw')
+    row             = request.GET.get('start')
+    rowperpage      = request.GET.get('length')
+    columnIndex     = request.GET.get('order')
+    columnName      = request.GET.get('columns')
+    columnSortOrder = request.GET.get('order')
+    searchValue     = request.GET.get('search')
+    
+    
+    data  = {
+        "data": [
+                {
+                    "id": "1",
+                    "name": "Tiger Nixon",
+                    "position": "System Architect",
+                    "salary": "$320,800",
+                    "start_date": "2011/04/25",
+                    "office": "Edinburgh",
+                    "extn": "5421"
+                },
+                {
+                    "id": "2",
+                    "name": "Garrett Winters",
+                    "position": "Accountant",
+                    "salary": "$170,750",
+                    "start_date": "2011/07/25",
+                    "office": "Tokyo",
+                    "extn": "8422"
+                },
+                {
+                    "id": "3",
+                    "name": "Ashton Cox",
+                    "position": "Junior Technical Author",
+                    "salary": "$86,000",
+                    "start_date": "2009/01/12",
+                    "office": "San Francisco",
+                    "extn": "1562"
+                },
+                {
+                    "id": "4",
+                    "name": "Cedric Kelly",
+                    "position": "Senior Javascript Developer",
+                    "salary": "$433,060",
+                    "start_date": "2012/03/29",
+                    "office": "Edinburgh",
+                    "extn": "6224"
+                },
+                {
+                    "id": "5",
+                    "name": "Airi Satou",
+                    "position": "Accountant",
+                    "salary": "$162,700",
+                    "start_date": "2008/11/28",
+                    "office": "Tokyo",
+                    "extn": "5407"
+                }
+        ]
+    }
+    return JsonResponse(data,safe=False)
+
+
 def update_wf(request):
     formData    = request.POST.get('fda')
     event_id    = request.POST.get('eid')
@@ -321,7 +530,7 @@ def update_wf(request):
     
     # ADD COMMENT
     note            = request.user.first_name + ' changed stage from '+eventObj.stage.title+' to '+stageObj.title;
-    eventObj.notes.create(message=note,created_by=request.user)
+    eventObj.notes.create(message=note,created_by=1)
     
     # UPDATE OBJECT
     eventObj.stage  = stageObj 
@@ -414,3 +623,58 @@ def build_location_db(request):
 
     return HttpResponse('moja')
 """
+
+
+@login_required
+def submitPermsForm(request):
+
+    template            = 'mrv/ajax/lib_form_input.html'
+    if request.method == 'POST':
+
+        users           = request.POST.getlist('u_access')
+        groups          = request.POST.getlist('g_access')
+        eid             = request.POST.get('eid')
+
+        # reset perms to new values
+        resetPerms(users,groups,eid)
+
+        obj             = Event.objects.get(pk=eid)
+
+        context         = {
+            'library'   : obj,
+        }
+        user_perms               = obj.user_access.all()
+        plist               = []
+        for perm in user_perms:
+            plist.append(perm.user.id)
+        context['user_perms']   = plist
+        context['users']        = User.objects.all()
+
+        group_perms               = obj.group_access.all()
+        plist               = []
+        for perm in group_perms:
+            plist.append(perm.group.id)
+        context['group_perms']   = plist
+        context['groups']        = Group.objects.all()
+
+        template            = 'mrv/ajax/lib_access.html'
+
+        return TemplateResponse(request,template,context)
+    else:
+        return JsonResponse(0) 
+
+
+def resetPerms(users, groups, eid):
+    obj             = Event.objects.get(pk=eid)
+    obj.user_access.all().delete()
+    obj.group_access.all().delete()
+
+    for id in users:
+        sel_user    = User.objects.get(pk=id)
+        obj.user_access.create(user=sel_user)
+    
+    for id in groups:
+        #perms_group.objects.create(content_object=obj,group=Group.objects.get(pk=id))
+        sel_group   = Group.objects.get(pk=id)
+        obj.group_access.create(group=sel_group)
+

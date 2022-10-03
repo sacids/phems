@@ -1,0 +1,165 @@
+[
+{
+  "model": "ems.alert",
+  "pk": 1,
+  "fields": {
+    "reference": "A01",
+    "label": "Unexplained Bleeding",
+    "title": "Illness associated with fever and unexplained bleeding or death in human, livestock and/or wildlife",
+    "sector": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 2,
+  "fields": {
+    "reference": "A02",
+    "label": "Increased Death",
+    "title": "Increased death of human/livestock/wildlife  including aquatic plant and animals",
+    "sector": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 3,
+  "fields": {
+    "reference": "A03",
+    "label": "Difficulty Breathing",
+    "title": "Illness associated with fever, difficulty in breathing, skin conditions or abdominal pain or altered consciousness in human",
+    "sector": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 4,
+  "fields": {
+    "reference": "A04",
+    "label": "Pest Outbreak",
+    "title": "Pest outbreaks (rodents, quelea birds, locusts and fall armyworms) ,massive wilting of maize or banana associated with dying of leaves and premature plant death or dust like appearance (molds) in groundnuts or maize",
+    "sector": [
+      3
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 5,
+  "fields": {
+    "reference": "A05",
+    "label": "Extreme Weather",
+    "title": "Weather forecast and geological information- indicating extreme weather(floods, drought, landslide, cyclone, temperature) and environmental changes; vegetation cover, Decreasing or increasing of natural water reservoirs, earth quakes, tremor or damage of infrastructure",
+    "sector": [
+      3
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 6,
+  "fields": {
+    "reference": "A06",
+    "label": "Animal Behaviour",
+    "title": "Change of behaviour of one or more domestic or wild animals e.g. biting other animals or humans and other non-living things.",
+    "sector": [
+      1
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 7,
+  "fields": {
+    "reference": "A08",
+    "label": "Excessive Export",
+    "title": "Excessive export of agricultural produces (Rice, beans, potatoes) and food price volatility.",
+    "sector": [
+      3
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 8,
+  "fields": {
+    "reference": "A07",
+    "label": "Increase Abortion",
+    "title": "Increased abortion events in domestic or wild animals within a week.",
+    "sector": [
+      1
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 9,
+  "fields": {
+    "reference": "A09",
+    "label": "Weight Loss",
+    "title": "Illness associated with massive weight loss, enlarged lymphnodes, headaches, joint pains, swelling and itching in human, domestic and wild animals.",
+    "sector": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 10,
+  "fields": {
+    "reference": "A10",
+    "label": "Accident",
+    "title": "Accidents; Leakage of fuels, chemicals, radioactive materials, fire, marine and traffic",
+    "sector": [
+      3
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 11,
+  "fields": {
+    "reference": "A11",
+    "label": "Chemical Usage",
+    "title": "Excessive application /purchase of pesticide /medicine or other chemicals.",
+    "sector": [
+      1,
+      2,
+      3
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 12,
+  "fields": {
+    "reference": "A12",
+    "label": "Unusual Migration",
+    "title": "Unusual migration of human/livestock/wildlife from their natural residence to other areas",
+    "sector": [
+      1,
+      2
+    ]
+  }
+},
+{
+  "model": "ems.alert",
+  "pk": 13,
+  "fields": {
+    "reference": "A13",
+    "label": "Social Instability",
+    "title": "Political instability, societal disputes(abuse, rape, fight), and other events causing social instability and are against human rights",
+    "sector": [
+      2
+    ]
+  }
+}
+]

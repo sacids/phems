@@ -3,7 +3,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <nav class="bg-white border-b">
     <div class="mx-auto px-4">
-        <div class="relative flex h-14 items-center justify-between">
+        <div class="relative flex h-11 items-center justify-between">
             <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <!-- Mobile menu button-->
                 <button type="button"
@@ -38,7 +38,7 @@
                     <div class="flex space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                         {% with request.resolver_match.url_name as url_name %}
-                        <div class="pt-5 {% if url_name == 'dashboard' %} border-b-4 border-green-700 {% endif %}">
+                        <div class="pt-3 pb-2 {% if url_name == 'dashboard' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'dashboard' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium"
                                 aria-current="page">
@@ -46,21 +46,29 @@
                             </a>
                         </div>
 
-                        <div class="pt-5 {% if url_name == 'signals' %} border-b-4 border-green-700 {% endif %}">
+                        <div class="pt-3 pb-2 {% if url_name == 'signals' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'signals' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Rumor
                             </a>
                         </div>
 
-                        <div class="pt-5 {% if url_name == 'events' %} border-b-4 border-green-700 {% endif %}">
+                        <div class="pt-3 pb-2 {% if url_name == 'events' or url_name == 'event' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'events' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Alerts
                             </a>
                         </div>
 
-                        <div class="pt-5 {% if url_name == 'messages' %} border-b-4 border-green-700 {% endif %}">
+
+                        <div class="pt-3 pb-2 {% if url_name == 'event_list' %} border-b-4 border-green-700 {% endif %}">
+                            <a href="{% url 'event_list' %}"
+                                class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                                Lists
+                            </a>
+                        </div>
+
+                        <div class="pt-3 pb-2 {% if url_name == 'messages' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'messages' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Messages
@@ -72,18 +80,19 @@
                             Files
                         </a> -->
 
-                        <div class="pt-5 {% if url_name == 'reports' %} border-b-4 border-green-700 {% endif %}">
+                        <div class="pt-3 pb-2 {% if url_name == 'reports' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'reports' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Reports
                             </a>
                         </div>
                         {% endwith %}
-
-                        <a href="#"
-                            class="p-2 my-3 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm font-medium">
-                            <i class="mdi mdi-add-circle-outline"></i> Create
-                        </a>
+                        <div class="pt-3 pb-2 ">
+                            <a href="#"
+                                class="p-2 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm font-medium">
+                                <i class="mdi mdi-add-circle-outline"></i> Create
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,127 +7,36 @@
 
 
 
-<div class="flex justify-between">
-    <p class="pl-10 mt-5 text-xl"> Alerts </p>
-    <!-- filter buttons --> 
-    <div class="mt-6 mr-5 text-sm space-x-2">
-        <button 
-            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3"
-            :class="{ 'bg-gray-300': eventStatus == false }" 
-            @click="$refs.searchEvents.focus(), eventStatus = false"> All </button>
-
-        <button 
-            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3"
-            :class="{ 'bg-gray-300': eventStatus == 'NEW' }" 
-            @click="eventStatus = 'NEW', $refs.searchEvents.focus()"> New </button>
-
-        <button 
-            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3"
-            :class="{ 'bg-gray-300': eventStatus == 'PROGRESS' }" 
-            @click="eventStatus = 'PROGRESS',$refs.searchEvents.focus()"> In Progress </button>
-
-        <button 
-            class="rounded bg-gray-100 hover:bg-gray-300 p-1 px-3" 
-            :class="{ 'bg-gray-300': eventStatus == 'DISCARDED'  }" 
-            @click="eventStatus = 'DISCARDED', $refs.searchEvents.focus()"> Discarded </button>
-    </div>
-</div>
-<div class="pl-10 flex w-full my-2  space-x-2" x-init="fetchEvents();fetchWF();initjq()">
-
-    <!-- search signal input field-->
-    <div class="flex rounded-sm bg-gray-100 border border-gray-300 hover:bg-gray-200 text-xs">
-        <input  
-            x-ref="searchEvents"
-            x-model="search"
-            x-on:keydown.window.prevent.slash="$refs.searchEvents.focus()"
-            placeholder="Search events"
-            type="text"
-            class="bg-transparent border-0 text-xs py-0 px-2 outline-none border-transparent focus:border-transparent focus:ring-0" 
-            />
-        <div class="pt-1 px-2">
-            <div x-show="search.length == 0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-            </div>
-            <div x-show="search.length > 0">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hover:bg-gray-300" viewBox="0 0 20 20" fill="currentColor" @click="search=''">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </div>
+<div class="px-10 mt-5 flex w-full  space-x-2">
+    <div class=" flex w-full justify-between">
+        <div class="flex space-x-3 text-sm text-gray-500">
+            <p class=""> Alert </p>
+            <p> / </p>
+            <p class=""> {{ event.alert.reference }} - {{ event.alert.label}} </p>
+            <p> / </p>
+            <p class=""> {{ event.id}} </p>
+        </div>
+        <div class="flex space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hover:bg-gray-100" viewBox="0 0 20 20" fill="currentColor" @click="sidebarOpen = false">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
         </div>
     </div>
-    <div class="p-0">
-        <button 
-                class="rounded-sm bg-gray-100 hover:bg-gray-300 p-1 px-3 text-sm"
-                :class="{ 'bg-green-800 text-white': !alertRef }" 
-                @click="alertRef = false,$refs.searchEvents.focus()"> All </button>
-        
-        {% for alert in alerts %}
-            <button 
-                class="rounded-sm bg-gray-100 hover:bg-gray-300 p-1 px-3 text-sm"
-                :class="{ 'bg-green-800 text-white': alertRef == '{{alert.reference}}' }" 
-                @click="alertRef = '{{alert.reference}}',$refs.searchEvents.focus()"> {{alert.reference}} </button>
-        {% endfor %}
-    </div>
-
 </div>
 
 
-<div class="flex h-full overflow-hidden">
-    <div class="flex-1 h-full overflow-y-auto pl-10">
-        <div class="flex justify-between">
-            <p class="my-3 font-semibold text-sm"> Events </p>
-            <p class="my-3 p-1 px-3 rounded-sm text-sm text-white bg-emerald-700 hover:bg-emerald-900">Create Event + </p>
-        </div>
-        <ul class="divide-y border text-sm">
-            <template x-for="(event, index) in filteredEvents" :key="index">
-                <li 
-                    class="p-1 flex hover:bg-gray-100 pr-10 space-x-3"  
-                    :class="{'bg-emerald-100':activeEvent === index}"
-                    :id="event.id">
-
-                    <span class="text-emerald-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
-                    <p class="" x-text="event.alert_ref"></p>
-                    <p 
-                        class="line-clamp-1 px-2 flex-1 hover:cursor-e-resize" 
-                        @click="sidebarOpen = true, activeEvent = index, setEvent(event)"
-                        x-text="event.title"></p>
-                    <p class="line-clamp-1 w-48" x-text="event.alert_label"></p>
-                    <div class="line-clamp-1 w-36"><span class="rounded-lg bg-orange-300 px-3 text-[10px]" x-text="event.stage"></span></div>
-                    <div class="line-clamp-1 w-20"><span class="rounded-lg bg-orange-300 px-3 text-[10px]" x-text="event.status"></span></div>
-                    <p class="line-clamp-1 w-48" x-text="event.created_on"></p>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-200 hover:text-slate-500 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" @click="discardEvent(event,index)">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </li>
-            </template>
-        </ul>
-        <p class="p-5"> Create Event + </p>
-    </div>
-    <div class="flex-shrink-0 w-[850px] h-full flex flex-col overflow-y-hidden px-5 ml-5 transition-all duration-500" :class="{ '-mr-[850px]': !sidebarOpen }">
-        <div class="py-2 flex justify-between" :class="{ 'border-b-2' : !sideScrolled }">
-            <div></div>
-            <div class="flex space-x-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hover:bg-gray-100" viewBox="0 0 20 20" fill="currentColor" @click="sidebarOpen = false">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </div>
-        </div>
-        <div class="h-full overflow-y-auto" @scroll="sideScrolled = ($el.scrollTop > 5 ? false : true), console.log(sideScrolled)">
+<div class="flex h-full overflow-hidden px-10" x-init="setEvent({{event.id}}); fetchWF();" defer>
+    <div class="w-7/12 h-full overflow-y-auto">    
+        <div class="h-full overflow-y-auto" @scroll="sideScrolled = ($el.scrollTop > 5 ? false : true)">
             
             <p class="text-2xl font-semibold" x-text="cur_event.title"></p>
             <div class="flex space-x-3">
@@ -153,16 +62,7 @@
                         <button class="bg-gray-100 p-1 rounded-sm hover:bg-gray-300 px-3" @click="wfModal(wf)" x-text="wf.label"></button>
                     </template>
                 </template>
-<!-- 
-                <select class="h-8 text-xs w-48 rounded-sm bg-gray-100 px-2 hover:bg-gray-300 font-semibold">
-                    <option>On Progress</option>
-                    <option>Confirming</option>
-                    <option>Notify</option>
-                    <option>Risk Assessment</option>
-                    <option>Monitoring</option>
-                    <option>Complete</option>
-                </select>
--->
+
             </div>
 
             
@@ -177,9 +77,7 @@
                 <p class="py-1">Show : </p>
                 <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showAll }" @click="hideAllActivities(); showAll = true;">All</button>
                 <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showAttachments }" @click="hideAllActivities(); showAttachments = true;">Attachments</button>
-                <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showNotes }" @click="hideAllActivities();showNotes = true;">Notes</button>
                 <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showData }" @click="hideAllActivities();showData=true;">Data</button>
-                <button class="bg-gray-100 p-0 rounded-sm hover:bg-gray-300 px-3" :class="{ 'bg-gray-300': showColabs }" @click="hideAllActivities();showColabs=true;">Collaborators</button>
             </div>
 
 
@@ -235,69 +133,40 @@
 
             </div>
 
-            <div x-show="showNotes|showAll ">
-                <p class="text-sm font-semibold mt-5 mb-3">Notes</p>
-                <div class="flex flex-col mb-5 space-y-5">
-
-
-
-                    <div class="flex text-xs">
-                        <p class="mr-5 bg-red-500 rounded-full h-10 px-3 pt-3 text-white">{{user.first_name|upper|make_list|first}}{{user.last_name|upper|make_list|first}}</p>
-                        <div class="flex-1">
-                            <textarea x-model="new_note" rows="3" class="block p-2.5 w-full text-sm rounded-sm text-gray-900 border border-gray-300 focus:ring-gray-400 focus:border-gray-400" placeholder="Your message..."></textarea>
-                            <div class="flex space-x-2 mt-2">
-                                <button class="bg-emerald-500 hover:bg-emerald-300 px-3 py-1 rounded-sm" :disabled="note_uploading" @click="addNote()">Save</button>
-                                <button class="bg-gray-100 hover:bg-gray-300 px-3 py-1 rounded-sm">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <template x-for="(note, index) in eventNotes" :key="index">
-                        <div class="flex text-xs">
-                            <p class="mr-5 bg-red-500 rounded-full h-10 px-3 pt-3 text-white" x-text="note.initials"></p>
-                            <ul class="flex-1">
-                                <li class="" x-text="note.name"></li>
-                                <li class="" x-text="note.message"></li>
-                                <li class="text-xs text-gray-500" x-text="note.created_on"></li>
-                            </ul>
-                        </div>  
-                    </template>
-
-
-                </div>
-            </div>
-
-            <div x-show="showColabs|showAll " class="space-y-3 w-full">
-                <p class="text-sm font-semibold mt-5 mb-3">Collaborators</p>
-                
-                <div class="flex flex-wrap space-x-2 space-y-2">
-                    <template x-for="(user, index) in eventColabs" :key="index">
-                        <div class="flex text-xs pr-4 pl-2 py-1 w-56 rounded-2xl bg-green-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="cursor-pointer h-7 w-7 pt-1 pr-2 text-green-200 hover:text-black" viewBox="0 0 20 20" fill="currentColor" @click="delColab(index)">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                            </svg>
-                            <ul class="flex-1">
-                                <li class="" x-text="user.name"></li>
-                                <li class="text-xs text-gray-500" x-text="user.email"></li>
-                            </ul>
-                        </div>  
-                    </template>
-                </div>
-
-
-
-
-                <div class="flex w-full space-x-2">
-                    <select x-ref="colaborator" class="get_colaborator text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 md:w-1/2" id="colaborator" x-model="cur_colab"></select>
-                    <button class="px-2 py-1 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm" @click="addColab">Add Collaborator</button>
-                </div>
-                <div class="flex space-x-2">
-                    <input type="email" class="rounded py-0" />
-                    <button class="px-2 py-1 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm">Send Invite</button>
-                </div>
-            </div>
             
         </div>
+    </div>
+    <div class="w-5/12 h-full flex flex-col overflow-y-hidden ml-5">
+        
+        <div class="">
+            <p class="text-sm font-semibold mt-5 mb-3">Notes</p>
+            <div class="flex flex-col mb-5 space-y-5">
+                <div class="flex text-xs">
+                    <p class="mr-5 bg-red-500 rounded-full h-10 px-3 pt-3 text-white">{{user.first_name|upper|make_list|first}}{{user.last_name|upper|make_list|first}}</p>
+                    <div class="flex-1">
+                        <textarea x-model="new_note" rows="3" class="block p-2.5 w-full text-sm rounded-sm text-gray-900 border border-gray-300 focus:ring-gray-400 focus:border-gray-400" placeholder="Your message..."></textarea>
+                        <div class="flex space-x-2 mt-2">
+                            <button class="bg-emerald-500 hover:bg-emerald-300 px-3 py-1 rounded-sm" :disabled="note_uploading" @click="addNote()">Save</button>
+                            <button class="bg-gray-100 hover:bg-gray-300 px-3 py-1 rounded-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <template x-for="(note, index) in eventNotes" :key="index">
+                    <div class="flex text-xs">
+                        <p class="mr-5 bg-red-500 rounded-full h-10 px-3 pt-3 text-white" x-text="note.initials"></p>
+                        <ul class="flex-1">
+                            <li class="" x-text="note.name"></li>
+                            <li class="" x-text="note.message"></li>
+                            <li class="text-xs text-gray-500" x-text="note.created_on"></li>
+                        </ul>
+                    </div>  
+                </template>
+
+
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -385,11 +254,6 @@
             workflow:       [],
             sideScrolled:   true,
 
-
-            cur_colab:      "", 
-            eventColabs:    [],
-            getting_collaborators:  false,
-
             
             showModal:      false,
             loadingWfModal: false,
@@ -399,7 +263,6 @@
             showNotes:          false,
             showAll:            true,
             showData:           false,
-            showColabs:         false,
 
             cur_workflow: {
                 id              : "",
@@ -441,24 +304,31 @@
             },
 
             cur_event: {
-                id              : "",
-                alert_ref       : "",
-                alert_label     : "",
-                alert_desc      : "",
-                alert_sectors   : "",
-                location        : "",
-                title           : "",
-                contact_name    : "",
-                description     : "",
-                sector          : "",
-                contact_prof    : "",
-                contact_phone   : "",
-                contact_email   : "",
-                signal          : "",
-                stage           : "",
-                status          : "",
-                files           : {},
-            },
+                 id              : "{{ event.id }}",
+                alert_ref       : "{{ event.alert.reference }}",
+                alert_label     : "{{ event.alert.label }}",
+                alert_desc      : "{{ event.alert.title }}",
+                title           : "{{ event.title }}",
+                status          : "{{ event.status }}",
+                stage           : "{{ event.stage.title }}",
+                stage_id        : "{{ event.stage.id }}",
+                description     : "{{ event.description }}",
+                location        : "{{ event.location.title }}",
+                sectors         : "{% for e in event.sector.all %}{{ e.title }},{% endfor %}",
+                status          : "{{ event.status }}",
+                created_on      : "{{ event.created_on }}",
+                files           : [
+                    {% for file in event.files.all %}
+                    {
+                        url         : "{{file.obj.url}}",
+                        css_icon    : "{{file.css_icon}}",
+                        filename    : "{{file.filename}}",
+                        created_on  : "{{file.created_at}}",
+                    },
+                    {% endfor %}
+                ],
+            }, 
+
 
             new_link: {
                 title           : "",
@@ -611,154 +481,25 @@
                 reader.onload = () => (this.imageUrl = reader.result)*/
             },
 
-            setEvent(e){
-                if(this.cur_event.id != e.id){
-                    this.cur_event = e;
-    
+            setEvent(eid){
                     // get Notesconsole.log('adding file');
-                    this.fetchEventNotes();
-                    this.fetchEventFiles();
-                    this.fetchEventData();
-                    this.fetchEventCollaborators();
-
-                }
-
+                    this.fetchEventNotes(eid);
+                    this.fetchEventFiles(eid);
+                    this.fetchEventData(eid);
             },
 
-
-            get filteredEvents() {
-
-
-                if (this.search === "" && !this.eventStatus && !this.alertRef) {
-                    return this.events;
-                }
-                 
-                return this.events.filter((item) => {
-                    return item.description
-                        .toLowerCase()
-                        .includes(this.search.toLowerCase()) && (!this.eventStatus || item.status == this.eventStatus) && (!this.alertRef || item.alert_ref == this.alertRef);
-                });
-            },
 
             get filteredWorkflow(){
 
             },
 
 
-            fetchEventCollaborators(){
-              
-                this.getting_collaborators = true;
 
-                var url         = window.location.origin + '/ems/utils/gec?eid='+this.cur_event.id;
-
-                fetch(url, {
-                    method: 'GET',
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log('getting collaborators done');
-                    //this.file_uploading     = true;
-                    this.eventColabs     = data;
-                    console.log(this.eventColabs);
-                
-                })
-                .catch(() => {
-                    console.log('getting collaborators error')
-                    //this.file_uploading     = true;
-                })
-                .finally(() => {
-                    this.getting_collaborators = false;
-                })
-            },
-
-            addColab(){
-
-                var data = new FormData();
-                data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-                data.append('uid', this.$refs.colaborator.value)
-                data.append('eid', this.cur_event.id)
-
-                //this.eventFormEl.label      = 'Submitting...'
-                //this.eventFormEl.loading    = true;
-
-                var url     = window.location.origin + '/ems/utils/aec'
-
-                fetch(url, {
-                    method: 'POST',
-                    body: data,
-                    credentials : 'same-origin',
-                })
-                .then(res => res.json())
-                .then(data => {
-
-                    //this.eventFormEl.loading = false;
-                    //this.eventFormEl.label = 'Add Collaborator';
-
-                    this.eventColabs.unshift(data)
-                    this.$refs.collaborator.value = "";
-
-                
-                })
-                .catch(() => {
-                    //this.eventFormEl.loading = false;
-                    //this.eventFormEl.label = 'Add Collaborator';
-                })
-                .finally(() => {
-                    //this.eventFormEl.loading = false;
-                    //this.eventFormEl.Label = 'Add Event'
-                })
-
-            },
-
-
-            delColab(cid){
-
-                var data = new FormData();
-                data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-
-                uid     = this.eventColabs[cid].id;
-
-                data.append('uid', uid)
-                data.append('eid', this.cur_event.id)
-
-                //this.eventFormEl.label      = 'Submitting...'
-                //this.eventFormEl.loading    = true;
-
-                var url     = window.location.origin + '/ems/utils/dec'
-
-                fetch(url, {
-                    method: 'POST',
-                    body: data,
-                    credentials : 'same-origin',
-                })
-                .then(res => res.json())
-                .then(data => {
-
-                    //this.eventFormEl.loading = false;
-                    //this.eventFormEl.label = 'Add Collaborator';
-
-                    this.eventColabs.splice(cid,1)
-                    this.$refs.collaborator.value = "";
-
-                
-                })
-                .catch(() => {
-                    //this.eventFormEl.loading = false;
-                    //this.eventFormEl.label = 'Add Collaborator';
-                })
-                .finally(() => {
-                    //this.eventFormEl.loading = false;
-                    //this.eventFormEl.Label = 'Add Event'
-                })
-
-            },
-
-
-            fetchEventFiles(){
+            fetchEventFiles(eid){
                             
                 this.getting_files = true;
 
-                var url         = window.location.origin + '/ems/utils/gf?eid='+this.cur_event.id;
+                var url         = window.location.origin + '/ems/utils/gf?eid='+eid;
 
                 fetch(url, {
                     method: 'GET',
@@ -780,11 +521,11 @@
                 })
             },
 
-            fetchEventNotes(){
+            fetchEventNotes(eid){
                 
                 this.getting_notes = true;
 
-                var url         = window.location.origin + '/ems/utils/gn?eid='+this.cur_event.id;
+                var url         = window.location.origin + '/ems/utils/gn?eid='+eid;
 
                 fetch(url, {
                     method: 'GET',
@@ -806,11 +547,11 @@
                 })
             },
 
-            fetchEventData(){
+            fetchEventData(eid){
                 
                 this.getting_data = true;
 
-                var url         = window.location.origin + '/ems/utils/ged?eid='+this.cur_event.id;
+                var url         = window.location.origin + '/ems/utils/ged?eid='+eid;
 
                 fetch(url, {
                     method: 'GET',
@@ -832,37 +573,6 @@
                 })
             },
 
-            fetchEvents(){
-                this.events = [
-                    {% for event in events %}
-                        {
-                            id              : "{{ event.id }}",
-                            alert_ref       : "{{ event.alert.reference }}",
-                            alert_label     : "{{ event.alert.label }}",
-                            alert_desc      : "{{ event.alert.title }}",
-                            title           : "{{ event.title }}",
-                            status          : "{{ event.status }}",
-                            stage           : "{{ event.stage.title }}",
-                            stage_id        : "{{ event.stage.id }}",
-                            description     : "{{ event.description }}",
-                            location        : "{{ event.location.title }}",
-                            sectors         : "{% for e in event.sector.all %}{{ e.title }},{% endfor %}",
-                            status          : "{{ event.status }}",
-                            created_on      : "{{ event.created_on }}",
-                            files           : [
-                                {% for file in event.files.all %}
-                                {
-                                    url         : "{{file.obj.url}}",
-                                    css_icon    : "{{file.css_icon}}",
-                                    filename    : "{{file.filename}}",
-                                    created_on  : "{{file.created_at}}",
-                                },
-                                {% endfor %}
-                            ],
-                        },
-                    {% endfor %}
-                ]
-            },
 
 
             fetchWF(){
@@ -1050,7 +760,6 @@
                 this.showAttachments = false;
                 this.showNotes = false;
                 this.showData = false;
-                this.showColabs = false;
                 this.showAll = false;
             },
         }
@@ -1061,10 +770,10 @@
         $(".select2").select2();
         $(".input-mask").inputmask();
 
-        $('.get_colaborator').select2({
-            minimumInputLength: 2,
+        $('.get_location').select2({
+            minimumInputLength: 3,
             ajax: {
-            url: window.location.origin + '/ems/utils/su',
+            url: window.location.origin + '/ems/utils/sl',
             dataType: 'json',
             // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
             }
