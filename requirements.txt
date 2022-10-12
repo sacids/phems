@@ -14,6 +14,7 @@ click-repl==0.2.0
 cryptography==36.0.2
 Deprecated==1.2.13
 Django==4.0.1
+django-ajax-datatable==4.4.4
 django-celery-beat==2.3.0
 django-celery-results==2.4.0
 django-cors-headers==3.11.0
