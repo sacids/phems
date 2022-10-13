@@ -35,12 +35,12 @@ class EventList(AjaxDatatableView):
     column_defs = [
         {'name': 'id', 'visible': False, },
         {'name': 'alert', 'foreign_field': 'alert__reference', 'visible': True, 'className':'w-10 text-left'  },
-        {'name': 'title', 'visible': True,'className':'text-left text-green-800' },
+        {'name': 'title', 'visible': True,'className':'text-left text-green-800 font-medium' },
         {'name': 'pri_sector', 'foreign_field': 'pri_sector__title', 'title': 'Sector', 'visible': True,'className':'w-36 text-left' },
         {'name': 'location', 'foreign_field': 'location__title','visible': True,'max_length': 15, 'className':'w-36 text-left' },
         {'name': 'stage', 'foreign_field': 'stage__title','visible': True, 'className':'w-32 text-left'  },
-        {'name': 'created_on', 'title':'Created','visible': True, 'className':'w-[87px] text-left'  },
-        {'name': 'updated_on','title':'Updated','visible': True, 'className':'w-[87px] text-left'  },
+        {'name': 'created_on', 'title':'Created','visible': True, 'className':'w-[100px] text-left'  },
+        {'name': 'updated_on','title':'Updated','visible': True, 'className':'w-[100px] text-left'  },
     ]
     
     def get_show_column_filters(self, request):

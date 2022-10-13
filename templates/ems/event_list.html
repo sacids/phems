@@ -50,4 +50,25 @@
     <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
     <link href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
+    <style>
+        table.dataTable {
+            /*table-layout: fixed;*/
+            font-size: 14px;
+            border-bottom:rgb(203 213 225) solid 1px;
+        }
+
+        table.dataTable th {
+            border-bottom: 1px solid rgb(203 213 225);
+        }
+
+        table.dataTable tbody tr:hover{
+            background-color: rgb(240 253 244);
+        }
+
+        .table.dataTable.compact td, .table.dataTable.compact th {
+            padding: 3 4px;
+        }
+
+    </style>
+
 {% endblock extrastyle %}
