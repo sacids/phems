@@ -111,7 +111,7 @@ class SignalListView(generic.TemplateView):
     def get_context_data(self, **kwargs):
 
         context = super(SignalListView, self).get_context_data(**kwargs)
-        context['signals']      = Signal.objects.filter(status='NEW')
+        context['signals']      = Signal.objects.filter(status='NEW').order_by('-created_on')
         context['profession']   = Event.PROFESSION
         context['sectors']      = Sector.objects.all()
         context['events']       = Event.objects.all()
