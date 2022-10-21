@@ -119,7 +119,6 @@ class Contact(models.Model):
         verbose_name_plural = 'contacts'
 
 class Stage(models.Model):
-    
     title           = models.CharField(max_length=255)
     form            = models.ForeignKey('Form', on_delete=models.CASCADE,blank=True, null=True)
 
