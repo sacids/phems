@@ -387,7 +387,7 @@
                             id              : "{{ signal.id }}",
                             channel         : "{{ signal.channel }}", 
                             contact         : "{{ signal.contact }}",
-                            contents        : "{{ signal.contents.text }}",
+                            contents        : "{{ signal.contents.text }} | {{ signal.contents.date }} | {{ signal.contents.ward }} | {{ signal.contents.village }} | {{ signal.contents.phone }} | {{ signal.contents.sector }}",
                             relevance       : "{{ signal.relevance }}",
                             status          : "{{ signal.status }}",
                             created_on      : "{{ signal.created_on }}",
