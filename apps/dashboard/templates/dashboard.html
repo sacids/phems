@@ -125,15 +125,15 @@
     </div>
 
     <!-- signal graphs-->
-    <!-- <div class="flex flex-row flex-wrap mt-2">
+    <div class="flex flex-row flex-wrap mt-2">
         <div class="w-full md:w-2/3 p-4">
             <div class="bg-gray-50 border rounded">
                 <div class="pt-3">
-                    <h5 class="font-medium text-lg text-gray-600 text-left">Notified signals per channel</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Notified signals per channel</h5>
                 </div>
 
                 <div class="p-2">
-                    <div id="channel-rate-chart" class="apex-charts" dir="ltr"></div>
+                    <div id="channel-rate-chart" dir="ltr"></div>
                 </div>
             </div>
         </div>
@@ -141,38 +141,16 @@
         <div class="w-full md:w-1/3 p-4">
             <div class="bg-gray-50 border rounded">
                 <div class="pt-3">
-                    <h5 class="font-medium text-lg text-gray-600 text-left">Signal percentage rates</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Signal percentage rates</h5>
                 </div>
 
                 <div class="p-2">
-                    <div id="pending-approve-chart" class="apex-charts"></div>
+                    <div id="signal-percent-chart"></div>
                 </div>
 
-                <div class="text-center text-muted">
-                    <div class="flex flex-row flex-wrap flex-grow">
-                        <div class="w-full md:w-1/2">
-                            <div class="mt-2">
-                                <p class="mb-1">
-                                    <i class="fa fa-circle text-red-500"></i> Discarded
-                                </p>
-                                <h5>{{ no_of_discarded_signals }}</h5>
-                            </div>
-                        </div>
-
-                        <div class="w-full md:w-1/2">
-                            <div class="mt-2">
-                                <p class="mb-1">
-                                    <i class="fa fa-circle text-green-500"></i> Approved
-                                </p>
-                                <h5>{{ no_of_success_signals }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-    </div> -->
-
+    </div>
 
 </div>
 {% endblock %}
@@ -213,8 +191,9 @@
         if (props) {
             this._div.innerHTML = '<h6 style="font-size: 12px !important; font-weight: 600;">PMO Dashboard</h6>' +
                 '<h6 style="font-size: 10px !important; font-weight: 600;">' + props.name + '</h6>' +
-                'Reported Cases: 0 <br/>' +
-                'Closed case: 0 ';
+                'Reported Events: 0 <br/>' +
+                'Discarded Events: 0 <br/>' +
+                'Closed Events: 0 ';
         } else {
             this._div.innerHTML = '<h6 style="font-size: 12px !important; font-weight: 600;">PMO Dashboard</h6> Hover over a region';
         }

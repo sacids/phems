@@ -11,6 +11,9 @@ class SignalPercentageChartView(APIView):
         # signals
         signals = Signal.objects
 
+        # new signals
+        pending = signals.filter(status='NEW').count()
+
         # discarded signals
         discarded = signals.filter(status='DISCARDED').count()
 
@@ -18,14 +21,15 @@ class SignalPercentageChartView(APIView):
         success = signals.filter(status='ADDED').count()
 
         # aggregate
-        aggregate = discarded + success
+        aggregate = pending + discarded + success
 
         # percentage
+        percent_pending = (pending / aggregate) * 100
         percent_discarded = (discarded / aggregate) * 100
         percent_success = (success / aggregate) * 100
 
         # response
-        return Response({"error": False, 'success': percent_success, 'discarded': percent_discarded}, status=status.HTTP_201_CREATED)
+        return Response({"error": False, 'pending': percent_pending ,'success': percent_success, 'discarded': percent_discarded}, status=status.HTTP_201_CREATED)
 
 
 class SignalChartView(APIView):
