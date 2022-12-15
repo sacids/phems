@@ -202,13 +202,13 @@
             <div class="flex flex-col text-xs" x-init="initjq()">
 
                 <p class="mt-5 mb-1">Title</p>
-                <input type="text" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="new_event.title"/>
+                <input type="text" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="new_event.title" required/>
 
                 <p class="mt-5 mb-1">Description</p>
-                <textarea id="textarea" name="description" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" maxlength="225" rows="3" placeholder="" x-model="new_event.description"></textarea>
+                <textarea id="textarea" name="description" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" maxlength="225" rows="3" placeholder="" x-model="new_event.description" required></textarea>
         
                 <p class="mt-5 mb-1">Alert Type</p>
-                <select class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" id="alert_id" name="alert" aria-label="Alert"  x-model="new_event.alert">
+                <select class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" id="alert_id" name="alert" aria-label="Alert"  x-model="new_event.alert" required>
                     {% for alert in alerts %}
                         <option value="{{alert.id}}">{{alert.reference}} : {{alert.title}}</option>
                     {% endfor %}
@@ -218,14 +218,14 @@
                 <select x-ref="location" class="get_location text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 md:w-1/2" id="location" name="location" x-model="new_event.location"></select>
 
                 <p class="mt-5 mb-1">Sectors</p>
-                <select x-ref="sectors" class="select2 select2-multiple text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 multiple"  name="sector" id="sectors" multiple="multiple" data-placeholder="Choose ..."  x-model="new_event.sector">
+                <select x-ref="sectors" class="select2 select2-multiple text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 multiple"  name="sector" id="sectors" multiple="multiple" data-placeholder="Choose ..."  x-model="new_event.sector" required>
                     {% for sector in sectors %}
                         <option value="{{sector.id}}">{{sector.title}}</option>
                     {% endfor %}
                 </select>
 
                 <p class="mt-5 mb-1">Contact Person</p>
-                <input type="text" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="new_event.contact_name"/>
+                <input type="text" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="new_event.contact_name" required/>
 
                 <div class="mt-5 mb-1 flex justify-between">
                     <div>
