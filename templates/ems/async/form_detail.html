@@ -8,7 +8,7 @@
 
             {% if element.col_type == 'select' %}
                 <select     class="form-select px-4 py-2 text-xs rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full"  
-                            x-model="formData.{{element.col_name}}" multiple>
+                            x-model="formData.{{element.col_name}}" multiple {% if element.requred %} required {% endif %}>
                     {% with element.options|split:"," as options %}
                         {% for option in options %}
                             <option value="{{option}}">{{option}}</option>
@@ -17,7 +17,7 @@
                 </select>
             {% elif element.col_type == 'select1' %}
                 <select     class="form-select px-4 py-3 text-xs rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full" 
-                            x-model="formData.{{element.col_name}}">
+                            x-model="formData.{{element.col_name}}"  {% if element.requred %} required {% endif %}>
                     {% with element.options|split:"," as options %}
                         {% for option in options %}
                             <option value="{{option}}">{{option}}</option>
@@ -31,7 +31,8 @@
                             <input  type="radio" 
                                     name="{{element.col_name}}" 
                                     class="form-checkbox rounded text-emerald-500 w-full"  
-                                    x-model="formData.{{element.col_name}}">
+                                    x-model="formData.{{element.col_name}}"
+                                    {% if element.requred %} required {% endif %}>
                             <label class="ml-2">{{option}}</label>
                         </div>
                     {% endfor %}
@@ -43,25 +44,30 @@
                             <input  type="checkbox" 
                                     name="{{element.col_name}}[]" 
                                     class="form-checkbox rounded text-emerald-500 w-full" 
-                                    x-model="formData.{{element.col_name}}>
+                                    x-model="formData.{{element.col_name}}
+                                    {% if element.requred %} required {% endif %}>
                             <label for="default-checkbox" class="ml-2">{{option}}</label>
                         </div>
                     {% endfor %}
                 {% endwith %}
             {% elif element.col_type == 'textarea' %}
                 <textarea   class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full" 
-                            x-model="formData.{{element.col_name}}"></textarea>
+                            x-model="formData.{{element.col_name}}"
+                            {% if element.requred %} required {% endif %}></textarea>
+            {% elif element.col_type == 'label' %}
+                <!-- label -->
             {% else %}
                 <input  type="{{element.col_type}}" 
                         class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full"  
-                        x-model="formData.{{element.col_name}}" />
+                        x-model="formData.{{element.col_name}}" 
+                        {% if element.required %} required {% endif %}/>
             {% endif %}
 
         {% endfor %}
 
-        <div class="flex space-x-2 mt-2">
-            <button class="bg-emerald-500 hover:bg-emerald-300 px-3 py-1 rounded-sm" >Save</button>
-            <button class="bg-gray-100 hover:bg-gray-300 px-3 py-1 rounded-sm" @click="">Cancel</button>
+        <div class="flex space-x-2 mt-5">
+            <button class="bg-emerald-500 hover:bg-emerald-700 px-3 py-2 rounded-sm" >Save</button>
+            <button class="bg-gray-100 hover:bg-gray-300 px-3 py-2 rounded-sm" @click="">Cancel</button>
         </div>
     </form>
 </div>

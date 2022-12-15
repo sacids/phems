@@ -45,9 +45,11 @@ admin.site.register(Alert,AlertAdmin)
 
 class FormConfigInline(admin.StackedInline):
     model = Form_config
+    extra = 1
     
 class FormAdmin(admin.ModelAdmin):
     inlines =[FormConfigInline]
+
     
 admin.site.register(Form,FormAdmin)
 
