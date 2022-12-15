@@ -442,8 +442,8 @@ def change_wf(request):
     context['event_id']     = event_id
     context['form_details'] = Form_config.objects.filter(form_id=form_id)
     
-    for i in context['form_details']:
-        print(i)
+    #for i in context['form_details']:
+    #    print(i)
     
     return TemplateResponse(request, "ems/async/form_detail.html", context=context)
 
@@ -530,7 +530,7 @@ def update_wf(request):
     
     # ADD COMMENT
     note            = request.user.first_name + ' changed stage from '+eventObj.stage.title+' to '+stageObj.title;
-    eventObj.notes.create(message=note,created_by=1)
+    eventObj.notes.create(message=note,created_by=request.user)
     
     # UPDATE OBJECT
     eventObj.stage  = stageObj 
