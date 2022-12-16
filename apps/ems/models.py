@@ -379,6 +379,7 @@ class Form_config(models.Model):
         ('textarea', 'textarea'),
         ('select', 'select multiple'),
         ('datetime-local', 'datetime'),
+        ('label', 'label'),
         
     )
 
