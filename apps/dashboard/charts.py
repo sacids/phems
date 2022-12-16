@@ -4,50 +4,41 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Sum, Count
-from apps.ems.models import Signal, Event, Sector
+from apps.ems.models import Signal, Event, Sector, Alert
 
 class SignalPercentageChartView(APIView):
     def get(self, request, format=None):
-        # signals
+        """ Signals """
         signals = Signal.objects
 
-        # new signals
+        """Number of signals"""
         pending = signals.filter(status='NEW').count()
-
-        # discarded signals
         discarded = signals.filter(status='DISCARDED').count()
-
-        # success signals
         success = signals.filter(status='ADDED').count()
-
-        # aggregate
         aggregate = pending + discarded + success
 
-        # percentage
+        """Percentage"""
         percent_pending = (pending / aggregate) * 100
         percent_discarded = (discarded / aggregate) * 100
         percent_success = (success / aggregate) * 100
 
-        # response
+        """response"""
         return Response({"error": False, 'pending': percent_pending ,'success': percent_success, 'discarded': percent_discarded}, status=status.HTTP_201_CREATED)
 
 
 class SignalChartView(APIView):
     def get(self, request, format=None):
+        """channels"""
         channels = ['SMS', 'WHATSAPP', 'TELEGRAM', 'TWITTER', 'WEB', 'APP']
 
         arr_data = []
         for val in channels:
-            #new
+            """Number of signals"""
             new = Signal.objects.filter(channel=val, status='NEW').count()
-
-            #success
             success = Signal.objects.filter(channel=val, status='ADDED').count()
-
-            #discarded
             discarded = Signal.objects.filter(channel=val, status='DISCARDED').count()
 
-            #create dict
+            """dictionary"""
             chart = {
                 'name': val,
                 'new': new,
@@ -55,31 +46,27 @@ class SignalChartView(APIView):
                 'discarded': discarded
             }
             
-            #append to arr_data
+            """append dictionary"""
             arr_data.append(chart)
 
-        #response
+        """response"""
         return Response({"error": False, "chart" : arr_data}, status = status.HTTP_201_CREATED)
 
 
 class EventPercentageChartView(APIView):
     def get(self, request, format=None):
-        # events
+        """Events"""
         events = Event.objects
 
-        # discarded events
+        """Number of events"""
         discarded = events.filter(status='DISCARED').count()
-
-        #on progress
         on_progress = events.filter(status='PROGRESS').count()
-
-        # closed events
         closed = events.filter(status='COMPLETE').count()
 
-        # aggregate
+        """aggregate data"""
         aggregate = discarded + closed + on_progress
 
-        # percentage
+        """Percentage"""
         percent_discarded = 0
         percent_closed = 0
         percent_on_progress = 0
@@ -89,29 +76,24 @@ class EventPercentageChartView(APIView):
             percent_closed = (closed / aggregate) * 100
             percent_on_progress = (on_progress / aggregate) * 100
 
-        # response
+        """response"""
         return Response({"error": False, 'closed': percent_closed, 'discarded': percent_discarded, 'on_progress': percent_on_progress}, status=status.HTTP_201_CREATED)
 
 
 class EventChartView(APIView):
     def get(self, request, format=None):
+        """sectors"""
         sectors = Sector.objects.all()
 
         arr_data = []
         for val in sectors:
-            #new
+            """Number of events"""
             new = Event.objects.filter(sector__id=val.id, status='NEW').count()
-
-            #on progress
             progress = Event.objects.filter(sector__id=val.id, status='PROGRESS').count()
-
-            #closed
             closed = Event.objects.filter(sector__id=val.id, status='COMPLETE').count()
-
-            #discarded
             discarded = Event.objects.filter(sector__id=val.id, status='DISCARED').count()
 
-            #create dict
+            """dictionary"""
             chart = {
                 'name': val.title,
                 'new': new,
@@ -120,9 +102,34 @@ class EventChartView(APIView):
                 'closes': closed
             }
             
-            #append to arr_data
+            """append dictionary"""
             arr_data.append(chart)
 
-        #response
+        """response"""
+        return Response({"error": False, "chart" : arr_data}, status = status.HTTP_201_CREATED)
+
+
+class AlertChartView(APIView):
+    def get(self, request, format=None):
+        """alerts"""
+        alerts = Alert.objects.all()
+
+        arr_data = []
+        for val in alerts:
+            """Number of events"""
+            number_of_events = Event.objects.filter(alert__id=val.id).count()
+            confirmed_number_of_events = Event.objects.filter(alert__id=val.id, stage__id=2).count()
+
+            """dictionary"""
+            chart = {
+                'name': val.label,
+                'number_of_events':  number_of_events,
+                'confirmed_events': confirmed_number_of_events
+            }
+            
+            """append dictionary"""
+            arr_data.append(chart)
+
+        """response"""
         return Response({"error": False, "chart" : arr_data}, status = status.HTTP_201_CREATED)
       

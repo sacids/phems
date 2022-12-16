@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="flex-1 text-right md:text-center">
-                        <h5 class="font-medium text-gray-600">New Events</h5>
+                        <h5 class="font-medium text-gray-600">New Alerts</h5>
                         <h3 class="font-bold text-2xl">{{ no_of_new_events|default:0|intcomma }}</h3>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="flex-1 text-right md:text-center">
-                        <h5 class="font-medium text-gray-600">On Progress Events</h5>
+                        <h5 class="font-medium text-gray-600">On Progress Alerts</h5>
                         <h3 class="font-bold text-2xl">{{ no_of_progress_events|default:0|intcomma }}</h3>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="flex-1 text-right md:text-center">
-                        <h5 class="font-medium text-gray-600">Discarded Events</h5>
+                        <h5 class="font-medium text-gray-600">Discarded Alerts</h5>
                         <h3 class="font-bold text-2xl">{{ no_of_discarded_events|default:0|intcomma }}</h3>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="flex-1 text-right md:text-center">
-                        <h5 class="font-medium text-gray-600">Closed Events</h5>
+                        <h5 class="font-medium text-gray-600">Closed Alerts</h5>
                         <h3 class="font-bold text-2xl">{{ no_of_closed_events|default:0|intcomma }}</h3>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
             <!--Graph Card-->
             <div class="bg-gray-50 border rounded">
                 <div class="p-2">
-                    <h5 class="font-medium text-lg text-gray-600 text-center">Events percentage rates</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Alerts percentage rates</h5>
                 </div>
 
                 <div class="p-2">
@@ -101,7 +101,7 @@
             <!--Graph Card-->
             <div class="bg-gray-50 border rounded">
                 <div class="p-2">
-                    <h5 class="font-medium text-lg text-gray-600 text-center">Reported events per sectors</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Reported alerts per sectors</h5>
                 </div>
 
                 <div class="p-2">
@@ -114,11 +114,26 @@
             <!--Graph Card-->
             <div class="bg-gray-50 border rounded">
                 <div class="pt-3">
-                    <h5 class="font-medium text-lg text-gray-600 text-center">Reported Events per region</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Reported alerts on map</h5>
                 </div>
 
                 <div class="p-2">
                     <div id="map" style="width: 100%; min-height:400px; height: auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- events graphs-->
+    <div class="flex flex-row flex-wrap mt-2">
+        <div class="w-full p-4">
+            <div class="bg-gray-50 border rounded">
+                <div class="pt-3">
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Reported alerts per type</h5>
+                </div>
+
+                <div class="p-2">
+                    <div id="alert-event-chart" dir="ltr"></div>
                 </div>
             </div>
         </div>
@@ -129,7 +144,7 @@
         <div class="w-full md:w-2/3 p-4">
             <div class="bg-gray-50 border rounded">
                 <div class="pt-3">
-                    <h5 class="font-medium text-lg text-gray-600 text-center">Notified signals per channel</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Notified rumors per channel</h5>
                 </div>
 
                 <div class="p-2">
@@ -141,7 +156,7 @@
         <div class="w-full md:w-1/3 p-4">
             <div class="bg-gray-50 border rounded">
                 <div class="pt-3">
-                    <h5 class="font-medium text-lg text-gray-600 text-center">Signal percentage rates</h5>
+                    <h5 class="font-medium text-lg text-gray-600 text-center">Rumors percentage rates</h5>
                 </div>
 
                 <div class="p-2">
