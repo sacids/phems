@@ -12,6 +12,8 @@ app.config_from_object(settings,namespace='CELERY')
 app.conf.beat_schedule = {
 }
 app.autodiscover_tasks()
+
+
 #task setting
 @app.task(bind=True)
 def debug_task(self):

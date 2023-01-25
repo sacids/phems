@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'apps.ems.apps.EmsConfig',
     'apps.verifier.apps.VerifierConfig',
     'apps.dashboard.apps.DashboardConfig',
-    'apps.notification.apps.NotificationConfig'
+    'apps.notification.apps.NotificationConfig',
+    'apps.api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [

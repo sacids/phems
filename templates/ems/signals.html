@@ -187,7 +187,7 @@
                         <li class="p-2 flex justify-between hover:bg-gray-100 space-x-3">
                             <div class="flex flex-col">
                                 <p class="hover:cursor-pointer" x-text="event.title"></p>
-                                <p class="text-xs font-light" x-text="event.status+' '+event.location+' '+event.status"></p>
+                                <p class="text-xs font-light" x-text="event.location+' - '+event.status"></p>
                             </div>
                             <button class="bg-emerald-500 hover:bg-emerald-400 text-sm p-2 px-4 rounded-md" @click="attachSignal(event)">Attach</button>
                         </li>

@@ -163,6 +163,73 @@ $(document).ready(function () {
         }//error false
     });
 
+    //alert charts
+    $.getJSON("alert-event-chart", (data) => {
+        if (data.error == false) {
+            var arrName = [];
+            var arrEvent = [];
+            var arrConfirmedEvent = [];
+
+            for (k = 0; k < data.chart.length; k++) {
+                arrName.push(data.chart[k].name);
+                arrEvent.push(data.chart[k].number_of_events)
+                arrConfirmedEvent.push(data.chart[k].confirmed_events)
+            }
+
+            $('#alert-event-chart').highcharts({
+                chart: {
+                    type: 'column',
+                    backgroundColor: '#FAFAFA'
+                },
+                title: {
+                    text: null
+                },
+                xAxis: {
+                    categories: arrName,
+                    crosshair: true
+                },
+                yAxis: {
+                    title: {
+                        text: null
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:12px; font-weight: bold;">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="padding:0;"> <i>{series.name}:</i> </td>' +
+                        '<td style="padding:0"><b> {point.y:,.0f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Number of Events',
+                    color: "#1565C0",
+                    data: arrEvent
+                },
+                {
+                    name: 'Confirmed Events',
+                    color: "#2E7D32",
+                    data: arrConfirmedEvent
+                }],
+                credits: {
+                    enabled: false
+                }
+            });
+        }//error false
+    });
+
 
     //signal percentage rates
     $.getJSON("percent-rate-chart", (data) => {
