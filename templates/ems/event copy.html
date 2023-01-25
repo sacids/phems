@@ -7,26 +7,15 @@
 
 
 
-<div class="bg-gray-50 border-b flex justify-between"  x-init="setEvent({{event.id}});" defer>
-    <div class="w-3/5 px-10">
-        <div class="h-6 flex space-x-3 text-sm text-gray-500 pt-2"> 
-            
+<div class="px-10 mt-5 flex w-full  space-x-2">
+    <div class=" flex w-full justify-between">
+        <div class="flex space-x-3 text-sm text-gray-500">
             <p class=""> Alert </p>
             <p> / </p>
             <p class=""> {{ event.alert.reference }} - {{ event.alert.label}} </p>
             <p> / </p>
             <p class=""> {{ event.id}} </p>
-
         </div>
-        <div class="h-10 flex m-0 p-0"> 
-            <p class="text-3xl text-emerald-900 font-light" x-text="cur_event.title"></p>
-        </div>
-        <div class="h-4 text-xs flex space-x-3 text-gray-400">
-            <p class="" x-text="cur_event.location"></p>
-            <p class="" x-text="cur_event.sectors"></p>
-        </div>
-    </div>
-    <div class="w-2/5"> 
         <div class="flex space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
@@ -45,10 +34,18 @@
 </div>
 
 
-<div class="flex h-full overflow-hidden" x-init="setEvent({{event.id}}); fetchWF();" defer>
-    <div class="w-3/5 h-full overflow-y-auto px-10">    
+
+
+
+<div class="flex h-full overflow-hidden px-10" x-init="setEvent({{event.id}}); fetchWF();" defer>
+    <div class="w-7/12 h-full overflow-y-auto">    
         <div class="h-full overflow-y-auto" @scroll="sideScrolled = ($el.scrollTop > 5 ? false : true)">
             
+            <p class="text-2xl font-semibold" x-text="cur_event.title"></p>
+            <div class="flex space-x-3">
+                <p class="text-xs text-gray-400" x-text="cur_event.location"></p>
+                <p class="text-xs text-gray-400" x-text="cur_event.sectors"></p>
+            </div>
             <div class="flex space-x-2 my-5 text-sm">
                 <button class="bg-gray-100 p-1 rounded-sm hover:bg-gray-300" @click="$refs.attachment.click()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -142,7 +139,7 @@
             
         </div>
     </div>
-    <div class="bg-gray-50 border-l w-2/5 h-full flex flex-col overflow-y-hidden px-5">
+    <div class="w-5/12 h-full flex flex-col overflow-y-hidden ml-5">
         
         <div class="">
             <p class="text-sm font-semibold mt-5 mb-3">Notes</p>
@@ -188,7 +185,7 @@
     </div>
 </div>
 
-<div class="h-12 bg-gray-200"> footer </div>
+
 
 
   <!--Overlay-->
