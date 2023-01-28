@@ -50,17 +50,21 @@ class Signal(models.Model):
         
     def __str__(self):
         return self.channel if self.channel else self.pk
+    
+    @property
+    def doy(self):
+        return (self.created_on).timetuple().tm_yday
 
     @property
     def css_icon(self):
         if self.channel == 'SMS':
             return 'bx bx-message-alt-dots text-primary '
         if self.channel == 'WHATSAPP':
-            return 'bx bxl-whatsapp text-success '
+            return 'text-green-800 bx bxl-whatsapp text-success '
         if self.channel == 'TELEGRAM':
             return 'bx bxl-telegram text-info '
         if self.channel == 'TWITTER':
-            return 'bx bxl-twitter text-info '
+            return 'text-blue-400 bx bxl-twitter text-info '
         if self.channel == 'WEB':
             return 'bx bxl-html5 text-warning '
         if self.channel == 'APP':

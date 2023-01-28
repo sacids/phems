@@ -20,6 +20,7 @@ urlpatterns = [
     path('event/<int:eid>', EventView.as_view(), name='event'),
     #path('oevents', EventListView2.as_view(), name='oevents'),
     path('signals', SignalListView.as_view(), name='signals'),
+    path('rumor', RumorListView.as_view(), name='rumor'),
     path('overview', SignalListView.as_view(), name='overview'),
     # path('dashboard', SignalListView.as_view(), name='dashboard'),
     path('files', SignalListView.as_view(), name='files'),
@@ -48,6 +49,7 @@ urlpatterns = [
     path('utils/cwf', change_wf, name='change_wf'),
     path('utils/uwf', update_wf, name='update_wf'),
     path('utils/su', search_users, name='search_users'),
+    path('utils/mr', manage_rumor, name='manage_rumor'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
 
@@ -56,5 +58,6 @@ urlpatterns = [
     
     path('ajax_datatable/permissions/', ajax_datatable_views.PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
     path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="e_list"),
+    path('ajax_datatable/rumor_list/', ajax_datatable_views.RumorList.as_view(), name="r_list"),
     
 ]

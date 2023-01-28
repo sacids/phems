@@ -116,9 +116,33 @@ class SignalListView(generic.TemplateView):
         context['sectors']      = Sector.objects.all()
         context['events']       = Event.objects.all()
         context['alerts']       = Alert.objects.all()
+        context['t_doy']        = date.today().timetuple().tm_yday
+        context['w_doy']        = date.today().timetuple().tm_yday - 7
         return context
 
 
+
+   
+
+class RumorListView(generic.TemplateView):
+    template_name       = "ems/rumor.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/auth/login/')
+        return super(RumorListView, self).dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+
+        context = super(RumorListView, self).get_context_data(**kwargs)
+        #context['signals']      = Signal.objects.filter(status='NEW').value_list('contents__text','created_on','relevance','channel','status','id').order_by('-created_on')[:200]
+        context['profession']   = Event.PROFESSION
+        context['sectors']      = Sector.objects.all()
+        context['events']       = Event.objects.all()
+        context['alerts']       = Alert.objects.all()
+        context['t_doy']        = date.today().timetuple().tm_yday
+        context['w_doy']        = date.today().timetuple().tm_yday - 7
+        return context
 
 
 
@@ -163,7 +187,18 @@ def delete_item(request):
            
     return JsonResponse(1,safe=False)
     
+def manage_rumor(request):
+    sig_id              = request.GET.get('sid',0)
+    
+    context             = {}
+    context['signal']   = Signal.objects.get(pk=sig_id)
+    context['events']   = Event.objects.all()
+    context['sectors']  = Sector.objects.all()
+    context['profession']   = Event.PROFESSION
+    context['alerts']       = Alert.objects.all()
 
+    template            = 'ems/async/manage_signal.html'
+    return TemplateResponse(request,template,context)
 
 def promote_signal(request):
     

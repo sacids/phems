@@ -1,0 +1,162 @@
+{% load filters %}
+
+<div class="border-b pb-2">
+    <div class="flex justify-between px-5">
+        <div class="">
+            Details
+        </div>
+        <div class="flex space-x-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5  hover:bg-gray-100" @click="eModal='setEvent'">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5  hover:bg-gray-100"  @click="eModal='attachEvent'">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+            </svg>
+            
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hover:bg-gray-100" viewBox="0 0 20 20" fill="currentColor" @click="sidebarOpen = false">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </div>
+    </div>
+</div>
+<div class="h-full overflow-y-auto px-5 text-sm">
+
+    <template x-if="eModal=='showRumor'">
+        <div class="pr-5">
+           
+            <p class="mt-4 text-green-800 text-xs">Contents</p>
+            <div class="">
+            {% for k, v in signal.contents.items %}
+                <div class="flex">
+                    <p class="font-semibold">{{k}}</p>
+                    <p class="">: {{v}}</p>
+                </div>
+            {% endfor %}
+            </div>
+
+            <p class="mt-4 text-green-800 text-xs">Received On</p>
+            <p class="">{{signal.created_on}}</p>
+
+            <p class="mt-4 text-green-800 text-xs">Contact </p>
+            <p class="">{{signal.contact}}</p>
+
+            <p class="mt-4 text-green-800 text-xs">Channel </p>
+            <p class="">{{signal.channel}}</p>
+
+            <p class="mt-4 text-green-800 text-xs">Relevance </p>
+            <p class="">{{signal.relevance}}</p>
+
+
+        </div>
+    </template>
+
+    <template x-if="eModal=='setEvent'">
+        <div class="flex flex-col text-xs pr-5" x-init="initjq()">
+
+            <p class="mt-5 mb-1">Title</p>
+            <input type="text" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="new_event.title" required/>
+
+            <p class="mt-5 mb-1">Description</p>
+            <textarea id="textarea" name="description" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" maxlength="225" rows="3" placeholder="" x-model="new_event.description" required></textarea>
+    
+            <p class="mt-5 mb-1">Alert Type</p>
+            <select class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" id="alert_id" name="alert" aria-label="Alert"  x-model="new_event.alert" required>
+                {% for alert in alerts %}
+                    <option value="{{alert.id}}">{{alert.reference}} : {{alert.title}}</option>
+                {% endfor %}
+            </select>
+
+            <p class="mt-5 mb-1">Location</p>
+            <select x-ref="location" class="get_location text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 md:w-1/2" id="location" name="location" x-model="new_event.location"></select>
+
+            <p class="mt-5 mb-1">Primary Sector</p>
+            <select x-ref="pri_sector" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  name="pri_sector" id="pri_sector" data-placeholder="Choose ..."  x-model="new_event.pri_sector" required>
+                {% for sector in sectors %}
+                    <option value="{{sector.id}}">{{sector.title}}</option>
+                {% endfor %}
+            </select>
+
+            <p class="mt-5 mb-1">Involved Sectors</p>
+            <select x-ref="sectors" class="select2 select2-multiple text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 multiple"  name="sector" id="sectors" multiple="multiple" data-placeholder="Choose ..."  x-model="new_event.sector" required>
+                {% for sector in sectors %}
+                    <option value="{{sector.id}}">{{sector.title}}</option>
+                {% endfor %}
+            </select>
+
+            <p class="mt-5 mb-1">Contact Person</p>
+            <input type="text" class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100"  x-model="new_event.contact_name" required/>
+
+            <p class="mt-5 mb-1">Profession</p>
+            <select class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" id="profession" name="contact_prof" aria-label="Profession"  x-model="new_event.contact_prof">
+                <option selected="">Open this select menu</option>
+                {% for v, t in profession %}
+                    <option value="{{v}}">{{t}}</option>
+                {% endfor %}
+            </select>
+            
+            <p class="mt-5 mb-1">Phone Number</p>
+            <input class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 input-mask" data-inputmask="'mask': '+255-999-999-999'" im-insert="true" type="text"  x-model="new_event.contact_phone" />
+                
+            <p class="mt-5 mb-1">Email</p>
+            <input class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100" type="email" class=""  x-model="new_event.contact_email"/>
+                
+
+            <p x-text="eventFormEl.message"></p>
+
+            <!--Footer-->
+            <div class="flex space-x-3 justify-end pt-2">
+                <button class="text-white text-xs p-2 rounded-md bg-red-600 hover:bg-red-500 " @click="eModal = 'showRumor'">Cancel</button>
+                <button 
+                    class="text-white text-xs p-2 rounded-md bg-emerald-600 hover:bg-emerald-500 " 
+                    @click="addEvent()"
+                    x-text="eventFormEl.label" :disabled="eventFormEl.loading"></button>
+            </div>
+
+        </div>
+    </template>
+
+    <template x-if="eModal=='attachEvent'">
+        <div>
+            <div class="flex rounded p-1 bg-gray-100 border border-gray-300 hover:bg-gray-200 my-4">
+                <input  
+                    x-ref="searchEvent"
+                    x-model="searchEvent"
+                    x-on:keydown.window.prevent.slash="$refs.searchEvent.focus()"
+                    placeholder="Search events"
+                    type="text"
+                    class="bg-transparent w-full border-0 text-sm py-1 px-2 outline-none mr-2 border-transparent focus:border-transparent focus:ring-0" 
+                    />
+                <div class="pt-1 px-2">
+                    <div x-show="searchEvent.length == 0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <div x-show="searchEvent.length > 0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hover:bg-gray-300" viewBox="0 0 20 20" fill="currentColor" @click="searchEvent=''">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="divide-y border text-base">
+                <template x-for="(event, index) in filteredEvents" :key="index">
+                    <li class="p-2 flex justify-between hover:bg-gray-100 space-x-3">
+                        <div class="flex flex-col text-xs">
+                            <p class="hover:cursor-pointer" x-text="event.title"></p>
+                            <p class="font-light" x-text="event.status+' '+event.location+' '+event.created_on"></p>
+                        </div>
+                        <button class="bg-gray-200 text-gray-400 hover:bg-emerald-800 hover:text-white  text-sm p-2 rounded-md" @click="attachSignal(event)">Attach</button>
+                    </li>
+                </template>
+            </ul>
+
+            <!--Footer-->
+            <div class="flex justify-end pt-2">
+                <button class="text-white text-xs py-2 px-3 mr-2 rounded-md bg-red-600 hover:bg-red-500 " @click="eModal='showRumor'">Close</button>
+            </div>
+        </div>
+    </template>
+</div>

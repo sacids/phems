@@ -6,14 +6,27 @@
 {% block contents %}
 
 
-<div class="my-5 px-10">
-    <p class="text-2xl">Alerts</p>
+<div class="bg-gray-50 border-b flex justify-between">
+    <div class="w-3/5 px-10">
+        <div class="h-6 text-sm">  </div>
+        <div class="h-10 flex"> 
+            <p class="text-3xl text-emerald-900 font-light"> Alerts </p>
+            <input class="flex-1 ml-5 my-1 border border-gray-300 rounded-sm focus:ring-green-800 focus:border-green-800 " type="text" id="myInputTextField">
+        </div>
+        <div class="h-4 text-xs">  </div>
+    </div>
+    <div class="w-2/5"> 
+        <div> jemba </div>
+    </div>
+
 </div>
 
-<div class="table-responsive px-10">
+<div class="table-responsive px-10 py-3 h-full overflow-hidden">
     <table id="datatable" width="100%" class="table border=1 table-striped table-bordered dt-responsive compact nowrap text-sm">
     </table>
 </div>
+
+<div class="h-12 bg-gray-200"> footer </div>
 
 <script language="javascript">
 
@@ -48,25 +61,65 @@
 {% block extrastyle %}
 
     <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
-    <link href="//cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+    <link href="http://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 
     <style>
         table.dataTable {
             /*table-layout: fixed;*/
             font-size: 14px;
-            border-bottom:rgb(203 213 225) solid 1px;
+            border-bottom:#e5e7eb  solid 1px;
         }
 
         table.dataTable th {
-            border-bottom: 1px solid rgb(203 213 225);
+            border-bottom: 1px solid #e5e7eb ;
         }
 
         table.dataTable tbody tr:hover{
             background-color: rgb(240 253 244);
         }
 
+
+        table.dataTable tbody tr{
+            border-right:#e5e7eb  solid 1px;
+            border-left:#e5e7eb  solid 1px;
+        }
+
         .table.dataTable.compact td, .table.dataTable.compact th {
-            padding: 3 4px;
+            padding: 10px 10px;
+            border-bottom:#e5e7eb solid 1px;
+
+        }
+
+        .dataTables_paginate{
+            margin-top: 10px;
+        }
+
+        .paginate_button{
+            padding: 7px 10px;
+            background-color: #ffffff; 
+            color: #6B7280; 
+            border-right: 0px;
+            border-width: 1px; 
+            border-color: #D1D5DB;     
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            cursor: pointer;
+        }
+        
+        .previous{
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem; 
+        }
+
+        .next{
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem; 
+            border-right: 1px solid #D1D5DB; ;
+
+        }
+        
+        .current{
+            background-color: #D1FAE5; 
         }
 
     </style>

@@ -1,0 +1,284 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block contents %}
+
+
+<div class="bg-gray-50 border-b flex justify-between">
+    <div class="w-3/5 px-10">
+        <div class="h-6 text-sm">  </div>
+        <div class="h-10 flex"> 
+            <p class="text-3xl text-emerald-900 font-light"> Community Data </p>
+            <input class="flex-1 ml-5 my-1 border border-gray-300 rounded-sm focus:ring-green-800 focus:border-green-800 " type="text" id="myInputTextField">
+        </div>
+        <div class="h-4 text-xs">  </div>
+    </div>
+    <div class="w-2/5"> 
+        <div> jemba </div>
+    </div>
+</div>
+
+<div class="flex h-full overflow-hidden"  x-init="fetchEvents();">
+    <div class="flex-1 table-responsive pl-10 py-3 pr-5 h-full overflow-hidden">
+        <table id="datatable" width="100%" class="table border=1 table-striped table-bordered dt-responsive compact nowrap text-sm">
+        </table>
+    </div>
+    <div class="bg-gray-50 py-3 flex-shrink-0 w-[570px] h-full flex flex-col overflow-hidden transition-all duration-500" :class="{ '-mr-[570px]': !sidebarOpen }">
+        <div id="detail-div" class="h-full overflow-hidden pb-8"></div>
+    </div>
+</div>
+
+<div class="h-12 bg-gray-200"> footer </div>
+
+<script language="javascript">
+
+    $(document).ready(function() {
+        AjaxDatatableViewUtils.initialize_table(
+            $('#datatable'),
+            "{% url 'r_list' %}",
+            {
+                // extra_options (example)
+                processing: false,
+                autoWidth: false,
+                full_row_select: false,
+                scrollX: false,
+                dom: 'rtip'
+            }, {
+                // extra_data
+                status: 'NEW',
+            },
+        );
+
+        $('#myInputTextField').keyup(function(){
+            tt = $('#datatable').DataTable();
+            tt.search($(this).val()).draw()
+        })
+    });
+
+</script>
+
+{% endblock %}
+
+{% block extrajs %}
+
+    <script type="text/javascript" src="{% static 'ajax_datatable/js/utils.js' %}"></script>
+
+{% endblock %}
+
+{% block extrastyle %}
+
+    <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
+    <link href="http://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
+    <style>
+        table.dataTable {
+            /*table-layout: fixed;*/
+            font-size: 14px;
+            border-bottom:#e5e7eb  solid 1px;
+        }
+
+        table.dataTable th {
+            border-bottom: 1px solid #e5e7eb ;
+        }
+
+        table.dataTable tbody tr:hover{
+            background-color: rgb(240 253 244);
+        }
+
+
+        table.dataTable tbody tr{
+            border-right:#e5e7eb  solid 1px;
+            border-left:#e5e7eb  solid 1px;
+        }
+
+        .table.dataTable.compact td, .table.dataTable.compact th {
+            padding: 10px 10px;
+            border-bottom:#e5e7eb solid 1px;
+
+        }
+
+        .dataTables_paginate{
+            margin-top: 10px;
+        }
+
+        .paginate_button{
+            padding: 7px 10px;
+            background-color: #ffffff; 
+            color: #6B7280; 
+            border-right: 0px;
+            border-width: 1px; 
+            border-color: #D1D5DB;     
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            cursor: pointer;
+        }
+        
+        .previous{
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem; 
+        }
+
+        .next{
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem; 
+            border-right: 1px solid #D1D5DB; ;
+
+        }
+        
+        .current{
+            background-color: #D1FAE5; 
+        }
+
+    </style>
+
+{% endblock extrastyle %}
+
+
+{% block get_contents %}
+
+
+<script src="{% static 'libs/popper/popper.min.js' %}"></script>
+<link href="{% static 'libs/select2/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+<script src="{% static 'libs/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'libs/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
+
+<script>
+
+
+    function getContents() {
+        return {
+            search:         "",
+            searchEvent:    "",
+            sidebarOpen:    false,
+            signals:        [],
+            events:         [],
+            relevanceOver4: false,
+            receivedToday:  false,
+            receivedWeek:   false,
+            activeSignal:   -1,
+            showModal:      false,
+            eModal:         "showRumor",
+
+
+            eventFormEl: {
+                label:     "Add Event",
+                loading:    false,
+                message:    "" 
+            },
+
+            cur_signal: {
+                id              : "",
+                channel         : "", 
+                contact         : "",
+                contents        : "",
+                relevance       : "",
+                status          : "",
+                created_on      : "",
+            },
+
+            new_event: {
+                location        : "",
+                alert           : "",
+                contact_name    : "",
+                title           : "",
+                description     : "",
+                pri_sector      : "",
+                sector          : "",
+                contact_prof    : "",
+                contact_phone   : "",
+                contact_email   : "",
+                signal          : "",
+            },
+
+            manageRumor(id){
+                this.eModal="showRumor";
+
+                var url     = window.location.origin + '/ems/utils/mr?sid='+id;
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        $('#detail-div').html(data)
+                    })
+            },
+
+            setSignal(e){
+                this.cur_signal = e;
+                this.new_event.signal = e.id;
+            },
+
+            discardSignal(s){
+
+                var url     = window.location.origin + '/ems/utils/di?ii='+s.id+'&it=si';
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data == 1){
+                            this.showModal = false;
+                            this.signals.splice(this.signals.indexOf(this.cur_signal), 1);
+                            this.signals = this.signals.filter(t => t.id !== this.cur_signal.id);
+                            document.getElementById(s.id).remove();
+
+                            console.log('discard signal success')
+
+                        }else{
+                            console.log('failed to discard signal')
+                        }
+                    })
+            },
+
+
+            get filteredEvents() {
+
+                if (this.searchEvent === "") {
+                    return this.events;
+                }
+
+                return this.events.filter((item) => {
+                    return item.description
+                        .toLowerCase()
+                        .includes(this.searchEvent.toLowerCase());
+                });
+            },
+
+
+            fetchEvents(){
+                this.events = [
+                    {% for event in events %}
+                        {
+                            id              : "{{ event.id }}",
+                            title           : "{{ event.title }}",
+                            description     : "{{ event.description }}",
+                            location        : "{{ event.location.title }}",
+                            status          : "{{ event.status }}",
+                            created_on      : "{{ event.created_on }}",
+                        },
+                    {% endfor %}
+                ]
+            },
+
+
+            
+        }
+    }
+
+    function initjq() {
+
+        $(".select2").select2();
+        $(".input-mask").inputmask();
+
+        $('.get_location').select2({
+            minimumInputLength: 3,
+            ajax: {
+            url: window.location.origin + '/ems/utils/sl',
+            dataType: 'json',
+            // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        });
+
+    };
+
+
+</script>
+{% endblock %}
