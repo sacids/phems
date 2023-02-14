@@ -16,7 +16,7 @@
         <div class="h-4 text-xs">  </div>
     </div>
     <div class="w-2/5"> 
-        <div> jemba </div>
+        <div>  </div>
     </div>
 </div>
 
@@ -25,7 +25,7 @@
         <table id="datatable" width="100%" class="table border=1 table-striped table-bordered dt-responsive compact nowrap text-sm">
         </table>
     </div>
-    <div class="bg-gray-50 py-3 flex-shrink-0 w-[570px] h-full flex flex-col overflow-hidden transition-all duration-500" :class="{ '-mr-[570px]': !sidebarOpen }">
+    <div class="bg-white border-l shadow-md py-3 flex-shrink-0 w-[570px] h-full flex flex-col overflow-hidden transition-all duration-500" :class="{ '-mr-[570px]': !sidebarOpen }">
         <div id="detail-div" class="h-full overflow-hidden pb-8"></div>
     </div>
 </div>
@@ -131,6 +131,7 @@
             background-color: #D1FAE5; 
         }
 
+
     </style>
 
 {% endblock extrastyle %}
@@ -193,14 +194,27 @@
             },
 
             manageRumor(id){
+
                 this.eModal="showRumor";
 
+                const all_tr = document.querySelectorAll('.odd, .even');
+                all_tr.forEach(tr => {
+                    tr.classList.remove('bg-emerald-100');
+                });
+                document.getElementById('row-'+id).classList.add("bg-emerald-100");
+
                 var url     = window.location.origin + '/ems/utils/mr?sid='+id;
+
+                this.new_event.signal = id;
+
                 fetch(url)
                     .then(response => response.text())
                     .then(data => {
                         $('#detail-div').html(data)
+                        htmx.process('#detail-div');
                     })
+
+
             },
 
             setSignal(e){
@@ -259,6 +273,70 @@
             },
 
 
+            addEvent(){
+
+                // set values
+                const selected  = document.querySelectorAll('#sectors option:checked');
+                const values    = Array.from(selected).map(el => el.value);
+
+                this.new_event.location = this.$refs.location.value
+                this.new_event.sector   = values
+
+
+                var data = new FormData();
+                data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                Object.entries(this.new_event).forEach(([key, value]) => {
+                    data.append(key,value)
+                });
+
+                this.eventFormEl.label      = 'Submitting...'
+                this.eventFormEl.loading    = true;
+                this.eventFormEl.message    = ''
+
+                var url     = window.location.origin + '/ems/utils/ae'
+
+                fetch(url, {
+                    method: 'POST',
+                    body: data,
+                    credentials : 'same-origin',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    
+
+                    // clean up
+                    this.eventFormEl.message = 'Form sucessfully submitted!';
+                    this.eventFormEl.loading = false;
+                    this.eventFormEl.label = 'Add Event';
+
+                    Object.keys(this.new_event).forEach(key => {
+                        this.new_event[key] = "";
+                    });
+
+                    this.$refs.location.value = "";
+
+                    const elements  = document.querySelectorAll('#sectors').options;
+                    for(var i = 0; i < elements.length; i++){
+                      elements[i].selected = false;
+                    } 
+
+                    // set notification
+                    //$('#setEvent_wrp').html('<p class="text-xl text-emerald-600">Alert added succesfully</p>')
+
+                
+                })
+                .catch(() => {
+                    this.eventFormEl.message = 'Ooops! Something went wrong!';
+                    this.eventFormEl.loading = false;
+                    this.eventFormEl.label = 'Add Event';
+                })
+                .finally(() => {
+                })
+
+
+
+            }
+
             
         }
     }
@@ -276,6 +354,9 @@
             // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
             }
         });
+
+
+        htmx.process('#detail-div');
 
     };
 

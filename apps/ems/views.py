@@ -189,6 +189,7 @@ def manage_rumor(request):
     
     context             = {}
     context['signal']   = Signal.objects.get(pk=sig_id)
+    context['sig_id']   = sig_id
     context['events']   = Event.objects.all()
     context['sectors']  = Sector.objects.all()
     context['profession']   = Event.PROFESSION
@@ -215,15 +216,22 @@ def promote_signal(request):
 def add_event(request):
     
     form                = EventForm(request.POST or None, request.FILES or None)
-
-
+    response            = 0
     if form.is_valid():
         # save the form data to model
         form.save()
+        
+        # update status of signal
+        sObj            = Signal.objects.get(pk=request.POST.get('signal'))
+        sObj.status     = 'ADDED'
+        sObj.save()
+        response        = 1
+        
     else:
         print('invalid form')
         print(form.errors)
-    return JsonResponse(1,safe=False)
+        
+    return JsonResponse(response,safe=False)
 
 
 

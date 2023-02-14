@@ -58,7 +58,14 @@
     {% endblock %}
 
     <!--./alpine js -->
+    <script defer src="https://unpkg.com/@colinaut/alpinejs-plugin-simple-validate@1/dist/alpine.validate.min.js"></script>
     <script src="{% static 'js/alpine.min.js'%}"></script>
+
+    <script>
+        document.body.addEventListener('htmx:configRequest', (event) => {
+        event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+    </script>
     {% block extrajs %}{% endblock %}
     
 
