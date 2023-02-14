@@ -160,11 +160,14 @@ class RumorListView(generic.TemplateView):
 
 
 def delete_signal(request):
+    """change rumor status to DISCARDED"""
     sig_id              = request.GET.get('sid',0)
     sig_obj             = Signal.objects.get(pk=sig_id)
     sig_obj.status      = 'DISCARDED'
     sig_obj.save()
-    return JsonResponse(1,safe=False)
+
+    """return response"""
+    return JsonResponse({"error": False, "success_msg": "Rumor discarded"}, safe=False)
     
 
 
