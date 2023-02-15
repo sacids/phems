@@ -38,5 +38,5 @@ urlpatterns = [
     path('chatbot/', include('apps.chatbot.urls')),
     path('ems/', include('apps.ems.urls')),
     path('notification/', include('apps.notification.urls')),
-     path('api/', include('apps.api.urls')), 
+    path('api/', include('apps.api.urls')), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

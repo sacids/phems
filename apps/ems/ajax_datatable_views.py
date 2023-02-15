@@ -70,7 +70,7 @@ class RumorList(AjaxDatatableView):
     
     column_defs = [
         {'name': 'id', 'visible': False, },
-        {'name': 'contents', 'title':'Contents','visible': True, 'className':'text-left flex-1'  },
+        {'name': 'contents', 'title':'Contents','visible': True, 'className':'text-left flex-1 cursor-pointer'  },
         #{'name': 'contents', 'title':'Contents','visible': True, 'className':' text-left'  },
         {'name': 'css_icon', 'title':'','visible': True, 'className':'w-4 text-left','searchable': False,  },
         {'name': 'relevance', 'title':'#','visible': True, 'className':'w-4 text-left'  },
