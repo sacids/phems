@@ -39,4 +39,4 @@ urlpatterns = [
     path('ems/', include('apps.ems.urls')),
     path('notification/', include('apps.notification.urls')),
     path('api/', include('apps.api.urls')), 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

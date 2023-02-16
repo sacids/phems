@@ -72,6 +72,9 @@ class AlertList(APIView):
         return Response(arr_data, status = status.HTTP_200_OK)
 
     def post(self, request, format=None):
+        print("reached hapa")
+        print(request.data)
+
         serializer = AlertSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
