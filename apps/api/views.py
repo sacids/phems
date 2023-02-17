@@ -28,6 +28,24 @@ class AlertTypesList(APIView):
 
         return Response(arr_data, status = status.HTTP_200_OK)
 
+class LocationList(APIView):
+    """API to fetch location"""
+    def get(self, request, format=None):
+        location = Location.objects.filter(depth=2).order_by('title')
+
+        arr_data = []
+        for val in location:
+            """create dict"""
+            chart = {
+                'id': val.id,
+                'code': val.code,
+                'title': val.title,
+            } 
+            """append to arr_data"""
+            arr_data.append(chart)
+
+        return Response(arr_data, status = status.HTTP_200_OK)
+
 class SectorsList(APIView):
     """API to fetch sectors"""
     def get(self, request, format=None):
@@ -72,18 +90,19 @@ class AlertList(APIView):
         return Response(arr_data, status = status.HTTP_200_OK)
 
     def post(self, request, format=None):
-        print("reached hapa")
-        print(request.data)
+        """create new alert"""
+        new_alert = Event()
+        new_alert.title         = request.POST.get('title')
+        new_alert.description   = request.POST.get('description')
+        new_alert.alert_id      = request.POST.get('alert_type_id')
+        new_alert.location_id   = request.POST.get('location_id')
+        new_alert.pri_sector_id = request.POST.get('primary_sector_id')
+        new_alert.save()
 
-        serializer = AlertSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST) 
-
-
-
-
+        if new_alert:
+            return Response({"error": False, "success_msg": "Alert created!"}, status = status.HTTP_201_CREATED)
+        else:
+            return Response({"error": True, "error_msg": "Failed to create alert!"}, status = status.HTTP_400_BAD_REQUEST) 
 
 
 class RumorList(APIView):

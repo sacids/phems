@@ -9,6 +9,7 @@ urlpatterns = [
     path('rumors/attach2alert', views.attach_rumor2alert, name='attach2alert'),
     path('rumors/discard', views.discard_rumor, name='discard_rumor'),
 
+    path('location', views.LocationList.as_view()),
     path('sectors', views.SectorsList.as_view()),
     path('alert_types', views.AlertTypesList.as_view()),
     path('alerts', views.AlertList.as_view()),
