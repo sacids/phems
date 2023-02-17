@@ -19,14 +19,14 @@
 </div>
 
 <div class="flex h-full overflow-hidden">
-    <div class="flex-1 pl-10 py-3 pr-5 h-full overflow-y-auto">
+    <div class="flex-1 pl-10 py-3 pr-5 h-full overflow-y-auto" x-init="initjq()">
         <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium" autocomplete="off">
             {% csrf_token %}
 
             <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-1/2 px-2">
                     <label>Category</label>
-                    <select name="thread_id" id="thread_id"
+                    <select name="category" id="category"
                         class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
                         required>
                         <option value="">Select</option>
@@ -50,7 +50,7 @@
             <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-full px-2">
                     <label>Description</label>
-                    <textarea rows="3" placeholder="Write rumor description..."
+                    <textarea rows="3" placeholder="Write rumor description..." name="description"
                         class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"></textarea>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-1/2 px-2">
                     <label>Full Name</label>
-                    <input type="text" name="name" id="name" placeholder="Write name of reporter..."
+                    <input type="text" name="name" id="name" placeholder="Write full name ..."
                         class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
                         required>
                 </div>
@@ -73,17 +73,36 @@
 
             <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-full px-2">
-                    <label>Location</label>
-                    <select name="thread_id" id="thread_id"
-                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
-                        required>
-                        <option value="">Select</option>
-                        
+                    <label>Location</label><br/>
+                    <select name="location" id="location"
+                        class="get_location w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
                     </select>
                 </div>
             </div>
 
-            <!-- <div class="flex flex-wrap mb-2">
+            <div class="flex flex-wrap mb-2">
+                <div class="w-full md:w-full px-2">
+                    <label>Street / Hamlet</label>
+                    <textarea rows="3" placeholder="Write street / hamlet..." name="street_name"
+                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"></textarea>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap mb-3">
+                <div class="w-full md:w-full px-2">
+                    <label class="mb-2">Is it Rumor or Alert?</label><br/>
+                    <input id="rumor_alert" type="radio" value="Rumor" name="rumor_alert"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                    <label class="ml-2 text-sm font-medium text-gray-600">Rumor</label><br />
+
+                    <input id="rumor_alert" type="radio" value="Alert" name="rumor_alert"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+                    <label class="ml-2 text-sm font-medium text-gray-600">Alert</label>
+                </div>
+            </div>
+
+
+            <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-full px-2">
                     <label>Alert</label>
                     <select name="thread_id" id="thread_id"
@@ -95,10 +114,9 @@
                         {% endfor %}
                     </select>
                 </div>
-            </div> -->
+            </div>
 
-
-            <!-- <div class="flex flex-wrap mb-2">
+            <div class="flex flex-wrap mb-2">
                 <div class="w-full md:w-full px-2">
                     <label>Primary Sector</label>
                     <select name="thread_id" id="thread_id"
@@ -110,7 +128,7 @@
                         {% endfor %}
                     </select>
                 </div>
-            </div> -->
+            </div>
 
             <div class="flex items-start">
                 <a href="{% url 'rumors' %}"
@@ -137,6 +155,23 @@
 <script src="{% static 'libs/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
 
 <script>
+    function getContents() {
+        return {
+            new_event: {
+                location: "",
+                alert: "",
+                contact_name: "",
+                title: "",
+                description: "",
+                pri_sector: "",
+                sector: "",
+                contact_prof: "",
+                contact_phone: "",
+                contact_email: "",
+                signal: "",
+            },
+        }
+    }
 
     function initjq() {
         $(".select2").select2();
