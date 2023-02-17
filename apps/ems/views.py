@@ -4,11 +4,15 @@ from rest_framework import permissions
 from .serializers import *
 from .models import *
 from django.views import generic
-from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db.models import Q
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
 
 from django.contrib.auth import get_user_model
 User    = get_user_model()
@@ -125,17 +129,19 @@ class SignalListView(generic.TemplateView):
    
 
 class RumorListView(generic.TemplateView):
-    template_name       = "ems/rumor.html"
+    template_name       = "rumors/lists.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('/auth/login/')
-        return super(RumorListView, self).dispatch(request, *args, **kwargs)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RumorListView, self).dispatch( *args, **kwargs)
+
+    # def dispatch(self, request, *args, **kwargs):
+    #     if not request.user.is_authenticated:
+    #         return redirect('/auth/login/')
+    #     return super(RumorListView, self).dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
-
         context = super(RumorListView, self).get_context_data(**kwargs)
-        #context['signals']      = Signal.objects.filter(status='NEW').value_list('contents__text','created_on','relevance','channel','status','id').order_by('-created_on')[:200]
         context['profession']   = Event.PROFESSION
         context['sectors']      = Sector.objects.all()
         context['events']       = Event.objects.all()
@@ -144,6 +150,35 @@ class RumorListView(generic.TemplateView):
         context['w_doy']        = date.today().timetuple().tm_yday - 7
         return context
 
+
+class RumorCreateView(generic.CreateView):
+    """Create new rumor"""
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RumorCreateView, self).dispatch( *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        alert_types = Alert.objects.all()
+        sectors = Sector.objects.all()
+
+
+        context = {'alert_types': alert_types, "sectors": sectors}
+        return render(request, 'rumors/create.html', context)
+
+    def post(self, request, *args, **kwargs):
+        # form = MenuForm(request.POST)
+        # if form.is_valid():
+        #     print("reached 2")
+        #     dt_menu = form.save(commit=False)
+        #     dt_menu.created_by = request.user
+        #     dt_menu.save()
+
+        #     #message
+        #     messages.success(request, 'New rumor created!')
+
+        #     #redirect
+        #     return HttpResponseRedirect(reverse_lazy('rumors'))
+        return render(request, 'rumors/create.html', {})  
 
 
 

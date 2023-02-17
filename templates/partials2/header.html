@@ -46,8 +46,8 @@
                             </a>
                         </div>
 
-                        <div class="pt-3 pb-2 {% if url_name == 'rumor' %} border-b-4 border-green-700 {% endif %}">
-                            <a href="{% url 'rumor' %}"
+                        <div class="pt-3 pb-2 {% if url_name == 'rumors' %} border-b-4 border-green-700 {% endif %}">
+                            <a href="{% url 'rumors' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Rumors
                             </a>
@@ -95,9 +95,9 @@
                         </div>
                         {% endwith %}
                         <div class="pt-3 pb-2 ">
-                            <a href="#"
+                            <a href="{% url 'create-rumor' %}"
                                 class="p-2 rounded-sm text-white bg-green-700 hover:bg-green-900 text-sm font-medium">
-                                <i class="mdi mdi-add-circle-outline"></i> Create Alert
+                                <i class="mdi mdi-add-circle-outline"></i> Create Rumor
                             </a>
                         </div>
                     </div>
