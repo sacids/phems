@@ -5,38 +5,40 @@ from .models import Event
   
 # create a ModelForm
 class EventForm(forms.ModelForm):
-    # specify the name of model to use
-    class Meta:
-        model   = Event
-        fields  = ('title','description','alert', 'sector', 'contact_name', 'contact_email', 'contact_prof','contact_phone', 'location', 'signal')
-
-
-class RumorForm(forms.Form):
     """
-    A class to create rumor form
+    A class to create Event form
     """
     def __init__(self, *args, **kwargs):
-        super(RumorForm, self).__init__(*args, **kwargs)
+        super(EventForm, self).__init__(*args, **kwargs)
+        self.fields['pri_sector'].empty_label = 'Select'
+        self.fields['alert'].empty_label      = 'Select'
+    
 
     class Meta:
-        widgets = {
-            'category': forms.TextInput(attrs={'class': 'form-control', 'id': 'step', 'placeholder': 'Write step...',}),
-            'title': forms.Textarea(attrs={'class': 'form-control', 'id': 'title', 'placeholder': 'Write title...', 'rows': 2 }),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'id': 'title', 'placeholder': 'Write description...', 'rows': 3 }),
-            'alert_type_id': forms.TextInput(attrs={'class': 'form-control', 'id': 'flag', 'placeholder': 'Write flag...', }),
-            'loca': forms.TextInput(attrs={'class': 'form-control', 'id': 'label', 'placeholder': 'Write label...', }),
-            'pull': forms.NumberInput(attrs={'class': 'form-control', 'id': 'pull', 'placeholder': 'Write pull...', }),
-            'url': forms.TextInput(attrs={'class': 'form-control', 'id': 'url', 'placeholder': 'Write pull url...', }),
-            'action': forms.TextInput(attrs={'class': 'form-control', 'id': 'action', 'placeholder': 'Write action...', }),
-        } 
+        model   = Event
+        fields  = ('title', 'description', 'contact_name','contact_phone', 'location', 'pri_sector', 'alert')
 
-    #     labels = {
-    #         'step': "Menu Step",
-    #         'keyword': 'Keyword',
-    #         'title': 'Title',
-    #         'flag': 'Flag',
-    #         'label': 'Label',
-    #         'pull': 'Pull',
-    #         'url': 'Pull URL',
-    #         'action': 'Action',
-    #     }      
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'title', 'placeholder': 'Write title...' }),
+            'description': forms.Textarea(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'title', 'placeholder': 'Write description...', 'rows': 3 }),
+            'contact_name': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'contact_name', 'placeholder': 'Write full name...' }),
+            'contact_phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'contact_phone', 'placeholder': 'Write phone...' }),
+            'location': forms.Select(attrs={'class': 'get_location w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'location' }),
+            'pri_sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'pri_sector' }),
+            'alert': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'alert' }),
+            # 'sector': forms.Select(attrs={'class': 'select2 select2-multiple multiple w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'sector', 'data-placeholder': 'Select sector ...', 'multiple': 'multiple' }),
+        }
+
+        labels = {
+            'title': 'Alert Title',
+            'description': 'Description',
+            'contact_name': 'Full name',
+            'contact_phone': 'Phone',
+            'location': 'Location',
+            'pri_sector': 'Primary Sector',
+            'alert': 'Alert Type',
+            # 'sector': 'Involved Sectors'
+        }
+
+
+    
