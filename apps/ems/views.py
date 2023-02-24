@@ -80,6 +80,9 @@ class EventView(generic.TemplateView):
         context['workflows']    = workflow_config.objects.all()
         context['alerts']       = Alert.objects.filter(event__id=eid)
         context['e_col_u']      = event_obj.user_access.all()
+        context['sitrep_cfg']   = sitrep_config.objects.all()
+        context['sitrep_data']  = sitrep_data.objects.filter(event__id=eid)
+        
         
         ''' 
         user_perms              = event_obj.user_access.all()
@@ -237,6 +240,22 @@ def add_event(request):
     return JsonResponse(response,safe=False)
 
 
+def SitrepForm(request, *args, **kwargs):
+    
+    form_id                 = kwargs.get('form_id')
+    alert_id                = kwargs.get('alert_id')
+    
+    context                 = {}
+    context['multiple']     = sitrep_config.objects.filter(form_id=form_id)[0].multiple
+    context['form_details'] = Form_config.objects.filter(form_id=form_id)
+    context['alert_id']     = alert_id
+    
+    #fc = Form_config.objects.filter(form_id=form_id)
+    #for a in fc:
+    #    print(a.form.sitrep_form.get().multiple)
+    
+    
+    return TemplateResponse(request, "ems/async/sitrep_form.html", context=context)
 
 def get_event_data(request):
     
@@ -389,6 +408,14 @@ def manage_event(request):
     template            = 'events/async/manage_event.html'
     
     return TemplateResponse(request,template,context)
+
+
+def submit_sitreps(request):
+    
+    print(list(request.POST.items()))
+    return JsonResponse(1,safe=False)
+
+
 
 def attach_sig2event(request):
     
