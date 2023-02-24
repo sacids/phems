@@ -15,12 +15,18 @@ urlpatterns = [
     path('api/', include(router.urls)),
 
     path('', SignalListView.as_view(), name='signals'),
-    path('events', EventListView.as_view(), name='events'),
-    path('event_list', EventList1View.as_view(), name='event_list'),
-    path('event/<int:eid>', EventView.as_view(), name='event'),
-    #path('oevents', EventListView2.as_view(), name='oevents'),
     path('signals', SignalListView.as_view(), name='signals'),
-    path('rumor', RumorListView.as_view(), name='rumor'),
+    path('event_list', EventList2View.as_view(), name='event_list'),
+
+    #events
+    path('events', EventListView.as_view(), name='events'),
+    path('event/<int:eid>', EventView.as_view(), name='event'),
+    path('events/create', EventCreateView.as_view(), name='create-event'),
+    path('events/<int:pk>/edit', EventUpdateView.as_view(), name='edit-event'),
+
+    #rumors
+    path('rumors', RumorListView.as_view(), name='rumors'),
+
     path('overview', SignalListView.as_view(), name='overview'),
     # path('dashboard', SignalListView.as_view(), name='dashboard'),
     path('files', SignalListView.as_view(), name='files'),

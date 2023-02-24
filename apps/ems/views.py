@@ -4,16 +4,19 @@ from rest_framework import permissions
 from .serializers import *
 from .models import *
 from django.views import generic
-from django.http import HttpResponse, JsonResponse
+from django.contrib import messages
+from django.urls import reverse_lazy
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db.models import Q
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from .forms import EventForm
 
 from django.contrib.auth import get_user_model
 User    = get_user_model()
 
-from .forms import *
 
 # Create your views here.
 
@@ -23,17 +26,17 @@ class EventListView2(generic.ListView):
     template_name       = "events/list.html"
 
 
-class EventListView(generic.TemplateView):
+class EventList2View(generic.TemplateView):
     template_name       = "ems/events.html"
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('/auth/login/')
-        return super(EventListView, self).dispatch(request, *args, **kwargs)
+        return super(EventList2View, self).dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs):
 
-        context = super(EventListView, self).get_context_data(**kwargs)
+        context = super(EventList2View, self).get_context_data(**kwargs)
         context['signals']      = Signal.objects.filter(status='NEW')
         context['events']       = Event.objects.all().order_by('-pk')
         context['sectors']      = Sector.objects.all()
@@ -43,24 +46,22 @@ class EventListView(generic.TemplateView):
         
         return context
     
-class EventList1View(generic.TemplateView):
-    template_name       = "ems/event_list.html"
+class EventListView(generic.TemplateView):
+    template_name       = "events/lists.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('/auth/login/')
-        return super(EventList1View, self).dispatch(request, *args, **kwargs)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(EventListView, self).dispatch( *args, **kwargs)
     
     def get_context_data(self, **kwargs):
-
-        context = super(EventList1View, self).get_context_data(**kwargs)
+        context = super(EventListView, self).get_context_data(**kwargs)
         context['events']       = Event.objects.all().order_by('-pk')
         context['sectors']      = Sector.objects.all()
         context['workflows']    = workflow_config.objects.all()
         context['profession']   = Event.PROFESSION
         context['alerts']       = Alert.objects.all().order_by('reference')
-        
         return context
+
     
 class EventView(generic.TemplateView):
     template_name       = "ems/event.html"
@@ -102,6 +103,57 @@ class EventView(generic.TemplateView):
         return context
     
     
+class EventCreateView(generic.CreateView):
+    """Create new event"""
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(EventCreateView, self).dispatch( *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        sectors = Sector.objects.all()
+
+        context = {'form': EventForm(), 'sectors': sectors}
+        return render(request, 'events/create.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = EventForm(request.POST)
+        if form.is_valid():
+            new_event = form.save(commit=False)
+            new_event.save()
+
+            """insert sector"""
+            sector_ids = request.POST.getlist('sector_ids')
+
+            for sector_id in sector_ids:
+                new_event.sector.add(sector_id)
+
+            """message"""
+            messages.success(request, 'New event created!')
+
+            """redirect"""
+            return HttpResponseRedirect(reverse_lazy('events'))
+        return render(request, 'events/create.html', {'form': form})  
+    
+
+class EventUpdateView(generic.UpdateView):
+    """View to update"""
+    model = Event
+    context_object_name = 'event'
+    form_class = EventForm
+    template_name = 'events/edit.html'
+
+    def form_valid(self, form):
+        response = form.save(commit=False)
+        response.updated_by = self.request.user
+        response.save()
+
+        """message"""
+        messages.success(self.request, 'Event information updated!')
+
+        """redirect"""
+        return HttpResponseRedirect(reverse_lazy('events')) 
+
+
 
 class SignalListView(generic.TemplateView):
     template_name       = "ems/signals.html"
@@ -128,17 +180,14 @@ class SignalListView(generic.TemplateView):
    
 
 class RumorListView(generic.TemplateView):
-    template_name       = "ems/rumor.html"
+    template_name       = "rumors/lists.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('/auth/login/')
-        return super(RumorListView, self).dispatch(request, *args, **kwargs)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RumorListView, self).dispatch( *args, **kwargs)
     
     def get_context_data(self, **kwargs):
-
         context = super(RumorListView, self).get_context_data(**kwargs)
-        #context['signals']      = Signal.objects.filter(status='NEW').value_list('contents__text','created_on','relevance','channel','status','id').order_by('-created_on')[:200]
         context['profession']   = Event.PROFESSION
         context['sectors']      = Sector.objects.all()
         context['events']       = Event.objects.all()
@@ -146,13 +195,6 @@ class RumorListView(generic.TemplateView):
         context['t_doy']        = date.today().timetuple().tm_yday
         context['w_doy']        = date.today().timetuple().tm_yday - 7
         return context
-
-
-
-
-
-
-
 
 
 
@@ -201,7 +243,7 @@ def manage_rumor(request):
     context['profession']   = Event.PROFESSION
     context['alerts']       = Alert.objects.all()
 
-    template            = 'ems/async/manage_signal.html'
+    template            = 'rumors/async/manage_signal.html'
     return TemplateResponse(request,template,context)
 
 def promote_signal(request):
@@ -219,24 +261,29 @@ def promote_signal(request):
     
     return TemplateResponse(request,template,context)
 
-def add_event(request):
-    
+
+def add_event(request): 
+    """create new event from the signal"""   
     form                = EventForm(request.POST or None, request.FILES or None)
     response            = 0
     if form.is_valid():
-        # save the form data to model
         form.save()
         
-        # update status of signal
+        """change status of rumor"""
         sObj            = Signal.objects.get(pk=request.POST.get('signal'))
         sObj.status     = 'ADDED'
         sObj.save()
-        response        = 1
-        
+
+        """TODO: send notification to manager to attach sector ministries to act"""
+
+
+        """response"""
+        response        = 'New alert created' 
     else:
         print('invalid form')
         print(form.errors)
         
+    """return response"""   
     return JsonResponse(response,safe=False)
 
 
@@ -254,8 +301,33 @@ def SitrepForm(request, *args, **kwargs):
     #for a in fc:
     #    print(a.form.sitrep_form.get().multiple)
     
-    
+    def attach_sig2event(request):
+    """attach rumor to alert"""
+    sig_id              = request.GET.get('sid',0) 
+    evt_id              = request.GET.get('eid',0)
+
     return TemplateResponse(request, "ems/async/sitrep_form.html", context=context)
+
+    print("reached here")
+    
+    """query for event and signal"""
+    event   = Event.objects.get(pk=evt_id)
+    signal  = Signal.objects.get(pk=sig_id)
+    event.signal.add(signal)
+    
+    """change status of rumor"""
+    signal.status = 'ADDED'
+    signal.save()
+
+    """TODO: send notification to manager to attach sector ministries to act"""
+
+    """response"""
+    response        = 'New alert created' 
+    
+    """return response"""   
+    return JsonResponse(response,safe=False)
+
+
 
 def get_event_data(request):
     
@@ -408,14 +480,6 @@ def manage_event(request):
     template            = 'events/async/manage_event.html'
     
     return TemplateResponse(request,template,context)
-
-
-def submit_sitreps(request):
-    
-    print(list(request.POST.items()))
-    return JsonResponse(1,safe=False)
-
-
 
 def attach_sig2event(request):
     

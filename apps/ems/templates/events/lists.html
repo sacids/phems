@@ -1,0 +1,81 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block contents %}
+
+<main class="bg-white h-full relative">
+    <div class="bg-gray-100 py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
+        <div>
+            <h1 class="text-xl font-medium tracking-tight text-gray-600">Reported Alerts</h1>
+        </div>
+
+        <div>
+            <input
+                class="h-9 w-80 py-2 bg-white text-gray-600 border border-gray-300 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
+                type="text" id="myInputTextField" placeholder="Search here...">
+        </div>
+    </div>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="bg-teal-100 rounded-b text-teal-900 px-4 py-3 mx-12 mb-4" role="alert">
+        <div class="flex">
+            <div>
+                <p class="text-sm font-normal">{{ message }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="table-responsive px-10 py-3 h-full overflow-hidden">
+        <table id="datatable" width="100%"
+            class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
+        </table>
+    </div>
+
+</main>
+
+<script language="javascript">
+    $(document).ready(function () {
+        AjaxDatatableViewUtils.initialize_table(
+            $('#datatable'),
+            "{% url 'e_list' %}",
+            {
+                // extra_options (example)
+                processing: false,
+                autoWidth: false,
+                full_row_select: false,
+                scrollX: false,
+                dom: 'rtip'
+            }, {
+            // extra_data
+            // ...
+        },
+        );
+
+        $('#myInputTextField').keyup(function () {
+            tt = $('#datatable').DataTable();
+            tt.search($(this).val()).draw()
+        });
+    });
+
+</script>
+
+{% endblock %}
+
+{% block extrajs %}
+
+<script type="text/javascript" src="{% static 'ajax_datatable/js/utils.js' %}"></script>
+
+{% endblock %}
+
+{% block extrastyle %}
+
+<link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
+<link href="http://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+<link href="{% static 'css/table.css' %}" rel="stylesheet" type="text/css" />
+
+{% endblock extrastyle %}
