@@ -1,0 +1,64 @@
+<div class="overflow-y-scroll">
+    <div class="flex mb-3">
+        <h4 class="text-sm font-medium py-1 uppercase text-gray-600">Confirm Alert</h4>
+    </div>
+
+    <div id="setEvent_wrp">
+        <form enctype="multipart/form-data" class="w-full text-sm font-medium" autocomplete="off"
+            hx-post="{% url 'update-event-confirmation' %}" hx-target="#setEvent_wrp">
+            {% csrf_token %}
+
+            <input type="hidden" name="event_id" value="{{event.id}}" />
+            <input type="hidden" name="action" value="CONFIRMED" />
+
+            <div class="flex flex-wrap mb-4">
+                <div class="w-full md:w-full">
+                    <label class="mb-1">Is Alert valid?</label><br />
+
+                    <div class="mt-0">
+                        <input id="yes" type="radio" name="confirmation" value="Yes" class="ml-1 bg-gray-100 border-gray-300 focus:ring-neutral-100">
+                        <label for="yes" class="ml-0 mr-2 text-sm font-normal text-gray-600">Yes</label>
+                    
+                        <input id="no" type="radio" name="confirmation" value="No" class="ml-1 bg-gray-100 border-gray-300 focus:ring-neutral-100">
+                        <label for="no" class="ml-0 text-sm font-normal text-gray-600">No</label>
+                    </div>
+                   
+                </div>
+            </div>
+
+            <div class="flex flex-wrap mb-0">
+                <div class="w-full md:w-full">
+                    <label class="mb-1">Severity</label>
+                    <textarea name="severity" id="severity"
+                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
+                        placeholder="Write severity here..." rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap mb-0">
+                <div class="w-full md:w-full">
+                    <label class="mb-1">Comments</label>
+                    <textarea name="comments" id="coments"
+                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
+                        placeholder="Write your comment here..." rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap mb-0">
+                <div class="w-full md:w-full">
+                    <label class="mb-1">Attachment (upload if any..)</label>
+                    <input
+                        class="w-full min-w-0 flex-auto cursor-pointer rounded border border-gray-300 px-3 py-2 my-1 mb-3 file:-mx-3 file:-my-1 file:cursor-pointer file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-4 file:py-1 file:text-neutral-900 file:transition file:duration-150 file:ease-in-out file:[margin-inline-end:0.75rem] file:[border-inline-end-width:1px]"
+                        type="file" name="attachment" />
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <a href="#"
+                    class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Close</a>
+                <button type="submit"
+                    class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

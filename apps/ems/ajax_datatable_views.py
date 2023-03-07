@@ -47,7 +47,7 @@ class EventList(AjaxDatatableView):
         {'name': 'status', 'visible': True, 'className': 'w-24 text-left border-r'},
         {'name': 'created_on', 'title': 'Created', 'visible': True,
             'className': 'w-[100px] text-left border-r'},
-        {'name': 'd', 'title': '', 'visible': True, 'className': 'w-8 text-left',
+        {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-8 text-left',
             'placeholder': 'True', 'searchable': False, },
     ]
 
@@ -58,20 +58,39 @@ class EventList(AjaxDatatableView):
         # 'row' is a dictionary representing the current row, and 'obj' is the current object.
         row['title'] = '<a class="text-emerald-800 font-medium" href="%s">%s</a>' % (reverse('event', args=(obj.id,)), obj.title)
         row['created_on'] = naturalday(obj.created_on)
-        row['d'] = '<div class="flex">'\
+
+        
+        if obj.status == 'NEW':
+            row['status'] = '<span class="bg-blue-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">New</span>'
+            row['actions'] = '<div class="flex">'\
                         '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500 hover:text-slate-600 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" @click="">'\
                         '<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />'\
                         '</svg>'\
-                    '</div>'
+                    '</div>'  
 
-        if obj.status == 'NEW':
-            row['status'] = '<span class="bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-normal">New</span>'
-        elif obj.status == 'ON_PROGRESS':
-            row['status'] = '<span class="bg-orange-500 text-white rounded-full px-2 py-1 text-xs font-normal">On Progress</span>'
-        elif obj.status == 'CONFIRM':
-            row['status'] = '<span class="bg-green-500 text-white rounded-full px-2 py-1 text-xs font-normal">Confirmed</span>'
+        elif obj.status == 'WAITING_APPROVAL':
+            row['status'] = '<span class="bg-yellow-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">Waiting</span>'
+            row['actions'] = ''   
+
+        elif obj.status == 'PROGRESS':
+            row['status'] = '<span class="bg-orange-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">On Progress</span>'
+            row['actions'] = ''
+            
+        elif obj.status == 'CONFIRMED':
+            row['status'] = '<span class="bg-green-600 text-white rounded-full px-2 py-0.5 text-xs font-medium">Confirmed</span>'
+            row['actions'] = ''
+
+        elif obj.status == 'DISCARDED':
+            row['status'] = '<span class="bg-red-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">Discarded</span>'
+            row['actions'] = '' 
+
+        elif obj.status == 'CLOSED':
+            row['status'] = '<span class="bg-green-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">Closed</span>'
+            row['actions'] = ''
+
         else:
             row['status'] = row['status']
+            row['actions'] = ''
 
 
 class RumorList(AjaxDatatableView):

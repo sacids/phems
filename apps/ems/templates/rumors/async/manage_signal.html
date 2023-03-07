@@ -91,37 +91,37 @@
 
                 <p class="mt-3 mb-1 font-medium">Alert Type</p>
                 <select class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" id="alert_id"
-                    name="alert" aria-label="Alert" required>
+                    name="alert_id" aria-label="Alert" required>
                     <option value="">Select</option>
                     {% for alert in alerts %}
-                    <option value="{{alert.id}}">{{alert.reference}} : {{alert.title}}</option>
+                        <option value="{{alert.id}}">{{alert.reference}} : {{alert.label}}</option>
                     {% endfor %}
                 </select>
 
                 <p class="mt-3 mb-1 font-medium">Location</p>
                 <select x-ref="location"
                     class="get_location text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"
-                    id="location" name="location" required></select>
+                    id="location_id" name="location_id" required></select>
 
                 <p class="mt-3 mb-1 font-medium">Primary Sector</p>
                 <select x-ref="pri_sector"
-                    class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" name="pri_sector"
-                    id="pri_sector" data-placeholder="Choose ..." required>
+                    class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" name="pri_sector_id"
+                    id="pri_sector_id" data-placeholder="Choose ..." required>
                     <option value="">Select</option>
                     {% for sector in sectors %}
                     <option value="{{sector.id}}">{{sector.title}}</option>
                     {% endfor %}
                 </select>
 
-                <p class="mt-3 mb-1 font-medium">Involved Sectors</p>
+                <!-- <p class="mt-3 mb-1 font-medium">Involved Sectors</p>
                 <select x-ref="sectors"
                     class="select2 select2-multiple text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100 multiple"
-                    name="sector" id="sectors" multiple="multiple" data-placeholder="Choose sectors..."
+                    name="sector_ids" id="sector_ids" multiple="multiple" data-placeholder="Choose sectors..."
                     x-model="new_event.sector" required>
                     {% for sector in sectors %}
                     <option value="{{sector.id}}">{{sector.title}}</option>
                     {% endfor %}
-                </select>
+                </select> -->
 
                 <!-- <p class="mt-3 mb-1 font-medium">Contact Person</p>
                 <input type="text" class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"  name="contact_name" required/> -->
@@ -184,8 +184,7 @@
                             <p class="hover:cursor-pointer" x-text="event.title"></p>
                             <p class="font-light" x-text="event.status+' '+event.location+' '+event.created_on"></p>
                         </div>
-                        <button hx-get="/ems/utils/as/sid=1&eid=7" hx-target="#attachEvent_wrp"
-                            class="bg-gray-100 border text-gray-600 hover:bg-emerald-800 hover:text-white  text-xs font-medium px-2 py-1 rounded-sm">Attach</button>
+                        <button class="bg-gray-100 border text-gray-600 hover:bg-emerald-800 hover:text-white  text-xs font-medium px-2 py-0 rounded-sm" @click="attachSignal(event)">Attach</button>
                     </li>
                 </template>
             </ul>

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # installed apps
     'crispy_forms',
+    # "crispy_tailwind",
     'rest_framework',
     'corsheaders',
     'django.contrib.humanize',
@@ -191,3 +192,6 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Africa/Nairobi'
 #CELERY_RESULT_BACKEND = 'django-db'
+
+# CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+# CRISPY_TEMPLATE_PACK = "tailwind"

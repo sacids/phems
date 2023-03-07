@@ -6,7 +6,7 @@
 {% block contents %}
 
 <main class="bg-white h-full relative">
-    <div class="bg-gray-100 py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
+    <div class="bg-gray-100 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
             <h1 class="text-xl font-medium tracking-tight text-gray-600">Reported Alerts</h1>
         </div>
@@ -20,7 +20,7 @@
 
     {% if messages %}
     {% for message in messages %}
-    <div class="bg-teal-100 rounded-b text-teal-900 px-4 py-3 mx-12 mb-4" role="alert">
+    <div class="bg-teal-100 rounded-b text-teal-900 px-4 sm:px-4 lg:px-4 py-3 mt-3 mb-3" role="alert">
         <div class="flex">
             <div>
                 <p class="text-sm font-normal">{{ message }}</p>
@@ -30,7 +30,7 @@
     {% endfor %}
     {% endif %}
 
-    <div class="table-responsive px-10 py-3 h-full overflow-hidden">
+    <div class="table-responsive px-4 sm:px-4 lg:px-4 py-3 h-full overflow-hidden">
         <table id="datatable" width="100%"
             class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
         </table>
@@ -73,9 +73,13 @@
 {% endblock %}
 
 {% block extrastyle %}
-
 <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
 <link href="http://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
 <link href="{% static 'css/table.css' %}" rel="stylesheet" type="text/css" />
-
 {% endblock extrastyle %}
+
+{% block get_contents %}
+<script>
+    function getContents() {}
+</script>
+{% endblock %}

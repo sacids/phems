@@ -20,9 +20,20 @@ urlpatterns = [
 
     #events
     path('events', EventListView.as_view(), name='events'),
-    path('event/<int:eid>', EventView.as_view(), name='event'),
+    path('event/<int:eid>', EventDetailView.as_view(), name='event'),
     path('events/create', EventCreateView.as_view(), name='create-event'),
     path('events/<int:pk>/edit', EventUpdateView.as_view(), name='edit-event'),
+    
+    path('events/<int:pk>/activities', event_activities, name='event-activities'),
+
+    path('events/<int:pk>/initiate', initiate_event, name='initiate-event'),
+    path('events/request_confirmation', request_event_confirmation, name='request-event-confirmation'),
+
+    path('events/<int:pk>/confirm', confirm_event, name='confirm-event'),
+    path('events/update-confirmation', update_event_confirmation, name='update-event-confirmation'),
+
+    path('events/<int:pk>/report-progress', report_event_progress, name='report-event-progress'),
+    path('events/update-report-progress', update_report_progress, name='update-report-progress'),
 
     #rumors
     path('rumors', RumorListView.as_view(), name='rumors'),
@@ -42,6 +53,7 @@ urlpatterns = [
     path('utils/as', attach_sig2event, name='attach_sig2event'),
     path('utils/me', manage_event, name='manage_event'),
     path('utils/sl', search_location, name='search_location'),
+    path('utils/lse', listing_events, name='listing_events'),
     path('utils/ae', add_event, name='add_event'),
     path('utils/uf', upload_file, name='upload_file'),
     path('utils/gf', get_files, name='get_files'),

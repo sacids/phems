@@ -1,0 +1,43 @@
+<div class="overflow-y-scroll">
+    <div class="flex mb-0">
+        <h4 class="text-sm font-medium py-1 uppercase text-gray-600">Alert Activities</h4>
+    </div>
+
+    {% if activities.count > 0%}
+    <ul role="list" class="divide-y divide-gray-200">
+        {% for val in activities %}
+        <li class="py-3 sm:py-4">
+            <div class="flex justify-between">
+                <div class="">
+                    <p class="text-sm font-medium text-gray-700 truncate">
+                        {% if val.action == 'WAITING_APPROVAL' %}
+                        <span>Waiting Approval</span>
+                        {% elif val.action == 'PROGRESS' %}
+                        <span>On Progress</span>
+                        {% elif val.action == 'CONFIRMED' %}
+                        <span>Confirmed</span>
+                        {% endif %}
+                    </p>
+
+                    <p class="text-sm text-gray-500 truncate">
+                        {{ val.remarks }}
+                    </p>
+                </div>
+
+                <div class="">
+                    <p class="text-xs font-medium text-gray-600">
+                        {{ val.created_on|date:"d-m-Y" }}
+                    </p>
+
+                    <p class="text-xs  text-gray-500">
+                        {{ val.created_by.first_name }} {{ val.created_by.last_name }}
+                    </p>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    No any activity
+    {% endif %}
+</div>
