@@ -4,6 +4,8 @@ import uuid
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from apps.ems.models import Sector, Location
+
 
 # Create your models here.
 class Profile(models.Model):
@@ -12,7 +14,9 @@ class Profile(models.Model):
     organization    = models.CharField(max_length=120, blank=True, null=True)
     photo           = models.ImageField("Photo", upload_to="uploads/profile/", null=True, blank=True)
     email_verified  = models.BooleanField("Email verified", default=False)
-    
+    sector          = models.ForeignKey(Sector, blank=True, null=True, on_delete=models.SET_NULL)
+    location        = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL)
+
 
     @receiver(post_save, sender=User)
     def update_user_profile(sender, instance, created, **kwargs):
