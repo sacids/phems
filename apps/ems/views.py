@@ -74,7 +74,7 @@ class EventDetailView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
 
-        context = super(EventView, self).get_context_data(**kwargs)
+        context = super(EventDetailView, self).get_context_data(**kwargs)
         
         eid                     = self.kwargs['eid']
         event_obj               = Event.objects.get(pk=eid)
@@ -501,7 +501,8 @@ def SitrepForm(request, *args, **kwargs):
     #for a in fc:
     #    print(a.form.sitrep_form.get().multiple)
     
-    def attach_sig2event(request):
+
+def attach_sig2event(request):
     """attach rumor to alert"""
     sig_id              = request.GET.get('sid',0) 
     evt_id              = request.GET.get('eid',0)
