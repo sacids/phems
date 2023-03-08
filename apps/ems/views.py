@@ -74,17 +74,30 @@ class EventDetailView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
 
-        eid = self.kwargs['eid']
-        event_obj = Event.objects.get(pk=eid)
-        context['event'] = event_obj
-        context['workflows'] = workflow_config.objects.all()
-        context['alerts'] = Alert.objects.filter(event__id=eid)
-        context['e_col_u'] = event_obj.user_access.all()
+        context = super(EventView, self).get_context_data(**kwargs)
+        
+        eid                     = self.kwargs['eid']
+        event_obj               = Event.objects.get(pk=eid)
+        context['event']        = event_obj
+        context['workflows']    = workflow_config.objects.all()
+        context['alerts']       = Alert.objects.filter(event__id=eid)
+        context['e_col_u']      = event_obj.user_access.all()
+        
+        ''' 
+        user_perms              = event_obj.user_access.all()
+        plist                   = []
+        for perm in user_perms:
+            plist.append(perm.user.id)
+        context['user_perms']   = plist
+        context['users']        = User.objects.all()
 
-        """activities"""
-        activities = Activity.objects.filter(event_id= event_obj.id).order_by('created_on')
-        context['activities'] = activities
-
+        group_perms               = event_obj.group_access.all()
+        plist                   = []
+        for perm in group_perms:
+            plist.append(perm.group.id)
+        context['group_perms']   = plist
+        context['groups']        = Group.objects.all()
+        '''
         return context
 
 
@@ -474,11 +487,27 @@ def add_event(request):
     return JsonResponse(response, safe=False)
 
 
-def attach_sig2event(request):
+def SitrepForm(request, *args, **kwargs):
+    
+    form_id                 = kwargs.get('form_id')
+    alert_id                = kwargs.get('alert_id')
+    
+    context                 = {}
+    context['multiple']     = sitrep_config.objects.filter(form_id=form_id)[0].multiple
+    context['form_details'] = Form_config.objects.filter(form_id=form_id)
+    context['alert_id']     = alert_id
+    
+    #fc = Form_config.objects.filter(form_id=form_id)
+    #for a in fc:
+    #    print(a.form.sitrep_form.get().multiple)
+    
+    def attach_sig2event(request):
     """attach rumor to alert"""
-    sig_id = request.GET.get('sid', 0)
-    evt_id = request.GET.get('eid', 0)
+    sig_id              = request.GET.get('sid',0) 
+    evt_id              = request.GET.get('eid',0)
 
+    print("reached here")
+    
     """query for event and signal"""
     event = Event.objects.get(pk=evt_id)
     signal = Signal.objects.get(pk=sig_id)
@@ -654,6 +683,21 @@ def manage_event(request):
     template = 'events/async/manage_event.html'
 
     return TemplateResponse(request, template, context)
+
+def attach_sig2event(request):
+    
+    sig_id              = request.GET.get('sid',0) 
+    evt_id              = request.GET.get('eid',0)
+    
+    event   = Event.objects.get(pk=evt_id)
+    signal  = Signal.objects.get(pk=sig_id)
+    event.signal.add(signal)
+    
+    # if attache success
+    signal.status = 'ADDED'
+    signal.save()
+    
+    return JsonResponse(1,safe=False)
 
 
 def upload_file(request):

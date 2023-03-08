@@ -45,6 +45,8 @@ urlpatterns = [
     path('reports', SignalListView.as_view(), name='reports'),
     path('calendar', SignalListView.as_view(), name='calendar'),
     
+    path('utils/sitrep_form/<int:alert_id>/<int:form_id>', SitrepForm, name='sitrep_form'),
+    
     
     
     path('utils/ps', promote_signal, name='promote_signal'),
@@ -70,6 +72,7 @@ urlpatterns = [
     path('utils/mr', manage_rumor, name='manage_rumor'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
+    path('utils/ssr', submit_sitreps, name='submit_sitreps'),
 
     #path('build', build_location_db)
     

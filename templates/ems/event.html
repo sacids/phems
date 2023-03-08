@@ -33,121 +33,41 @@
 
 <div class="flex h-full overflow-hidden" x-init="setEvent({{event.id}}); fetchWF();" defer>
     
-    <div class="w-7/12 h-full shadow-md overflow-y-hidden px-5 flex">
+    <div class="w-1/2 h-full shadow-md overflow-y-hidden flex">
 
-        <div class="border-r w-12 h-full space-y-1 py-3 flex flex-col justify-between">
+        <div class="border-r w-16 h-full space-y-4 py-3 pl-5 flex flex-col">
 
 
             <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
                 <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>                  
                 </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Settings</span>
+                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-emerald-800 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-emerald-800">Settings</span>
             </a>
 
+            {% for act in sitrep_cfg %}
+                <span 
+                    hx-get="{% url 'sitrep_form' alert_id=event.id form_id=act.form.id  %}" hx-target="#sitrep-detail"
+                    class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
+                    
+                    <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
+                        {{ act.icon_svg | safe }}                                     
+                    </div>
+                    <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-emerald-800 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-emerald-800">{{act.title}}</span>
+                </span>
+            {% endfor %}
 
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                      </svg>                                        
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Activites</span>
-            </a>
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                      </svg>                                       
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Messages</span>
-            </a>
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
-                      </svg>                                       
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Tasks</span>
-            </a>
-
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                      </svg>                                       
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Requests</span>
-            </a>
-
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                      </svg>                                        
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Gaps</span>
-            </a>
-
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
-                      </svg>                                       
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Needs</span>
-            </a>
-
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-                    </svg>                                        
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Actions</span>
-            </a>
-
-
-
-            <a href="#" class="group relative inline-block text-blue-500 underline hover:text-red-500 duration-300">
-                <div class="text-gray-400 hover:text-emerald-800 cursor-pointer pr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.303m5.304 0a3.75 3.75 0 010 5.303m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.789m13.788 0c3.808 3.808 3.808 9.981 0 13.79M12 12h.008v.007H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                      </svg>                                        
-                </div>
-                <span class="absolute hidden group-hover:flex top-0 -right-1 translate-x-full w-20 px-2 py-1 bg-gray-700 rounded-lg text-center text-white text-sm before:content-[''] before:absolute before:top-1/2  before:right-[100%] before:-translate-y-1/2 before:border-8 before:border-y-transparent before:border-l-transparent before:border-r-gray-700">Status</span>
-            </a>
-
-        
         </div>
 
-
-
-        
-
-        <div class="w-full h-full overflow-hidden">
-
-
-
+        <div class="w-full h-full px-5 overflow-y-scroll" id="sitrep-detail">
         </div>
+
     </div>
 
-    <div class="w-5/12 h-full overflow-y-auto px-10">    
+    <div class="w-1/2 h-full overflow-y-auto px-10">    
         <div class="h-full overflow-y-auto" @scroll="sideScrolled = ($el.scrollTop > 5 ? false : true)">
             
             <div class="flex space-x-2 my-5 text-sm">

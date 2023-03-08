@@ -1,0 +1,142 @@
+{% load filters %}
+
+<div class="flex flex-col text-xs">
+
+    <p class="text-3xl pt-3">Manage </p>
+
+    <form hx-post="" id="form-main" x-data="{ count: 1 }">
+        <div id="form-block">
+            {% for element in form_details %}
+
+                <p class="mt-5 mb-1">{{element.label}}</p>
+
+                {% if element.col_type == 'select' %}
+                    <select     class="form-select px-4 py-2 text-xs rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full"  
+                                name=data[count].[{{element.col_name}}]
+                                multiple 
+                                {% if element.requred %} required {% endif %}>
+                        {% with element.options|split:"," as options %}
+                            {% for option in options %}
+                                <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        {% endwith %}
+                    </select>
+                {% elif element.col_type == 'select1' %}
+                    <select     class="form-select px-4 py-3 text-xs rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full" 
+                                name=data[count].{{element.col_name}}
+                                {% if element.requred %} required {% endif %}>
+                        {% with element.options|split:"," as options %}
+                            {% for option in options %}
+                                <option value="{{option}}">{{option}}</option>
+                            {% endfor %}
+                        {% endwith %}
+                    </select>
+                {% elif element.col_type == 'radio' %}
+                    {% with element.options|split:"," as options %}
+                        {% for option in options %}
+                            <div class="flex items-center mb-1">
+                                <input  type="radio"
+                                        name=data[count].[{{element.col_name}}]
+                                        class="form-checkbox rounded text-emerald-500 w-full"  
+                                        {% if element.requred %} required {% endif %}>
+                                <label class="ml-2">{{option}}</label>
+                            </div>
+                        {% endfor %}
+                    {% endwith %}
+                {% elif element.col_type == 'checkbox' %}
+                    {% with element.options|split:"," as options %}
+                        {% for option in options %}
+                            <div class="flex items-center mb-1">
+                                <input  type="checkbox" 
+                                        name=data[count].[{{element.col_name}}]
+                                        class="form-checkbox rounded text-emerald-500 w-full" 
+                                        {% if element.requred %} required {% endif %}>
+                                <label for="default-checkbox" class="ml-2">{{option}}</label>
+                            </div>
+                        {% endfor %}
+                    {% endwith %}
+                {% elif element.col_type == 'textarea' %}
+                    <textarea   class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full"                               
+                                name=data[count][{{element.col_name}}]
+                                {% if element.requred %} required {% endif %}></textarea>
+                {% elif element.col_type == 'label' %}
+                    <!-- label -->
+                {% else %}
+                    <input  type="{{element.col_type}}" 
+                            class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full"  
+                            name=data[count].[{{element.col_name}}]
+                            {% if element.required %} required {% endif %}/>
+                {% endif %}
+
+            {% endfor %}
+        </div>
+        
+    </form>
+    <div class="flex space-x-2 mt-5">
+        {% if multiple %} <button class="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-sm" id="addMore">Add another row</button>{% endif %}
+        <button class="bg-green-700 hover:bg-green-800 text-white px-3 py-2 rounded-sm" id="save_btn">Save</button>
+        <button class="bg-gray-100 hover:bg-gray-300 px-3 py-2 rounded-sm" >Cancel</button>
+    </div>
+    
+</div>
+
+<script>
+
+    function formActions() {
+        return {
+            count: 1,
+
+            addMore(c){
+
+            },
+
+        }
+    }
+
+    $(document).ready(function() {
+
+        var template = $("#form-block").clone();
+        var form = $("#form-main");
+
+        $('#addMore').on('click',function() {
+            var newFormBlock = template.clone(); // Clone again here, to be able to append more than once.
+            form.append(newFormBlock);
+        });
+
+        $('#save_btn').on('click',function() {
+
+            // Get form
+            var form = $('#form-main')[0];
+            // Create an FormData object 
+            var data = new FormData(form);
+            var jdata = JSON.stringify(data)
+            console.log(jdata)
+
+            data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            data.append('form', jdata);
+
+            
+            var url     = window.location.origin + '/ems/utils/ssr'
+            
+            fetch(url, {
+                method: 'POST',
+                body: data,
+                credentials : 'same-origin',
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+            })
+            .catch(() => {
+                
+            })
+            .finally(() => {
+               
+            })
+
+
+        });
+    
+    });
+
+</script>

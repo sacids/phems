@@ -343,6 +343,36 @@ class workflow_data(models.Model):
         db_table = 'ph_workflow_data'
         verbose_name_plural = 'Workflow Data'
         
+
+
+class sitrep_config(models.Model):
+    
+    
+    title       = models.CharField(max_length=100)
+    form        = models.ForeignKey('Form', related_name="sitrep_form", on_delete=models.CASCADE)
+    multiple    = models.BooleanField(default=True)
+    icon_svg    = models.TextField(blank=True, null=True)
+    sort_order  = models.IntegerField(default=1)  
+    
+    def __str__(self):
+        return 'SITREP: '+self.title
+
+    class Meta:
+        db_table = 'ph_sitrep_config'
+        verbose_name_plural = 'Sitrep Config'
+
+class sitrep_data(models.Model):
+    event           = models.ForeignKey('Event', on_delete=models.CASCADE)
+    data            = models.JSONField(null=False, blank=False)
+    created_at      = models.DateTimeField(auto_now_add=True, null=True)
+    created_by      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT)
+      
+    def __str__(self):
+        return 'WF: '+self.event.title
+
+    class Meta:
+        db_table = 'ph_sitrep_data'
+        verbose_name_plural = 'Sitrep Data'
         
         
 class Form(models.Model):
