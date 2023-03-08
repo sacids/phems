@@ -60,3 +60,8 @@ table.dataTable tbody tr {
 .current {
     background-color: #D1FAE5;
 }
+
+
+span.asteriskField{
+    color: #D32F2F;
+}
