@@ -53,21 +53,6 @@
                             </a>
                         </div>
 
-                        <!-- <div class="pt-3 pb-2 {% if url_name == 'signals' %} border-b-4 border-green-700 {% endif %}">
-                            <a href="{% url 'signals' %}"
-                                class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
-                                Signal
-                            </a>
-                        </div> -->
-
-                        <!-- <div class="pt-3 pb-2 {% if url_name == 'events' or url_name == 'event' %} border-b-4 border-green-700 {% endif %}">
-                            <a href="{% url 'events' %}"
-                                class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
-                                Alerts
-                            </a>
-                        </div> -->
-
-
                         <div class="pt-3 pb-2 {% if url_name == 'events' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'events' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
@@ -82,17 +67,21 @@
                             </a>
                         </div>
 
-                        <!-- <a href="#"
-                            class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
-                            Files
-                        </a> -->
-
                         <div class="pt-3 pb-2 {% if url_name == 'reports' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'reports' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Reports
                             </a>
                         </div>
+
+                        <div class="pt-3 pb-2 {% if url_name == 'list-users' %} border-b-4 border-green-700 {% endif %}">
+                            <a href="{% url 'list-users' %}"
+                                class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
+                                Manage Users
+                            </a>
+                        </div>
+
+
                         {% endwith %}
                         <div class="pt-3 pb-2 ">
                             <a href="{% url 'create-event' %}"

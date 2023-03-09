@@ -5,23 +5,7 @@ from datetime import timedelta
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-
-# User registration
-class RegistrationForm(UserCreationForm):
-    """
-    A class fro user registration
-    """
-    first_name = forms.CharField(max_length=30, required=True, label=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Write first name...'}))
-    last_name = forms.CharField(max_length=30, required=True, label=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Write surname...'}))
-    username = forms.CharField(max_length=30, required=True, label=False, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Write username...'}))
-    email = forms.EmailField(max_length=50, required=True, label=False, widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Write email...'}))
-    password1 = forms.CharField(max_length=20, required=True, label=False, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password...'}))
-    password2 = forms.CharField(max_length=20, required=True, label=False, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm password...'}))
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email', 'username', 'password1', 'password2', )
-
+from .models import Profile
 
 class LoginForm(forms.Form):
     """Login form"""
@@ -54,3 +38,59 @@ class ChangePasswordForm(PasswordChangeForm):
 
     class Meta: 
         fields = ('old_password', 'new_password1', 'new_password2')
+
+
+class UserForm(UserCreationForm):
+    """User Form"""
+    first_name = forms.CharField(max_length=50, label="Firstname", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'placeholder': 'Write first name...'}))
+    last_name = forms.CharField(max_length=50, label="Lastname", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'placeholder': 'Write surname...'}))
+    username = forms.CharField(max_length=100, label="Username", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'placeholder': 'Write username...'}))
+    email = forms.EmailField(max_length=100, label="Email", widget=forms.EmailInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'placeholder': 'Write email...'}))
+    password1 = forms.CharField(max_length=20, label="Password", widget=forms.PasswordInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'placeholder': 'Password...'}))
+    password2 = forms.CharField(max_length=20, label="Confirm Password", widget=forms.PasswordInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'placeholder': 'Confirm password...'}))
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['username'].required = True
+        self.fields['email'].required = True
+        self.fields['password1'].required = True
+        self.fields['password2'].required = True
+
+        if self.instance.pk:
+            self.fields['username'].required = False
+            self.fields['username'].widget.attrs['readonly'] = True
+            self.fields['email'].required = False
+            self.fields['email'].widget.attrs['readonly'] = True
+            self.fields['password1'].required = False
+            self.fields['password2'].required = False
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'username', 'password1', 'password2',)
+
+
+class UserProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['sector'].empty_label = 'Select'
+        self.fields['location'].empty_label = 'Select'
+
+
+    class Meta:
+        model = Profile
+        fields = ('sector', 'organization', 'location')
+
+        widgets = {
+            'sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'sector' }),
+            'organization': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'organization', 'placeholder': 'Write organization...' }),
+            'location': forms.Select(attrs={'class': 'get_location w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'location' }),
+        }
+
+        labels = {
+            'sector': 'Primary Sector',
+            'organization': 'Organization',
+            'location': 'location',
+        }

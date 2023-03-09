@@ -72,7 +72,7 @@ urlpatterns = [
     path('utils/mr', manage_rumor, name='manage_rumor'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
-    path('utils/ssr', submit_sitreps, name='submit_sitreps'),
+    # path('utils/ssr', submit_sitreps, name='submit_sitreps'),
 
     #path('build', build_location_db)
     
@@ -80,5 +80,8 @@ urlpatterns = [
     path('ajax_datatable/permissions/', ajax_datatable_views.PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
     path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="e_list"),
     path('ajax_datatable/rumor_list/', ajax_datatable_views.RumorList.as_view(), name="r_list"),
+
+    #users
+    path('ajax_datatable/users_list/', ajax_datatable_views.UserList.as_view(), name="u_list"),
     
 ]

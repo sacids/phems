@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
-from .forms import RegistrationForm, LoginForm, ChangePasswordForm, ProfileForm
+from .forms import LoginForm, ChangePasswordForm, ProfileForm, UserForm
 from django.contrib.auth.models import User
 from .models import Profile
 from apps.ems.models import Sector
@@ -28,7 +28,7 @@ from django.http import HttpResponseRedirect
 
 class RegistrationView(View):
     """registration view"""
-    form_class = RegistrationForm
+    form_class = UserForm
     template_name = 'register.html'
 
     def get(self, request, *args, **kwargs):

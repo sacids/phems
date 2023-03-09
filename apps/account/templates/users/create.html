@@ -1,0 +1,133 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+{% load crispy_forms_field %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %} Register User {% endblock %}
+
+{% block contents %}
+
+<main class="bg-white h-full relative">
+    <div class="bg-gray-100 py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
+        <div>
+            <h1 class="text-xl font-medium tracking-tight text-gray-600">Register User</h1>
+        </div>
+
+        <div></div>
+    </div>
+
+    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
+        <div class="flex-1 h-full overflow-y-scroll">
+            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                <div class="" x-init="initjq()">
+                    {% for message in messages %}
+                    {% if message.tags == 'success' %}
+                    <div class="w-1/2 bg-teal-100 rounded-b text-teal-900 px-4 py-3 mb-4">
+                        {{ message }}
+                    </div>
+                    {% elif message.tags == 'error' %}
+                    <div class="w-1/2 bg-red-100 rounded-b text-teal-900 px-4 py-3 mb-4">
+                        {{ message }}
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+
+                    <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium mb-4"
+                        autocomplete="off">
+                        {% csrf_token %}
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ profile_form.organization|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full px-2">
+                                {{ profile_form.sector|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full px-2">
+                                <h6 class="uppercase font-medium py-2">Login Credentials</h6>
+                                <hr />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-4">
+                            <div class="w-full md:w-full px-2">
+                                <label>Roles <span class="text-red-600">*</span></label><br />
+                                {% for role in roles %}
+                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-none focus:border-none"
+                                    type="checkbox" id="{{ role.id}}" value="{{ role.id}}" name="role_ids">
+                                <label class="form-check-label" for="{{ role.id}}">
+                                    {{ role.name }}
+                                </label>&nbsp;&nbsp;&nbsp;
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full px-2">
+                                {{ form.username|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-0">
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.password1|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.password2|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex items-start px-2 mb-6">
+                            <a href="{% url 'list-users' %}"
+                                class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Cancel</a>
+                            <button type="submit"
+                                class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+
+{% block get_contents %}
+<script src="{% static 'libs/popper/popper.min.js' %}"></script>
+<link href="{% static 'libs/select2/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+<script src="{% static 'libs/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'libs/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
+
+<script>
+    function getContents() { }
+
+    function initjq() {
+        $(".select2").select2();
+        $(".input-mask").inputmask();
+    };
+</script>
+{% endblock %}
