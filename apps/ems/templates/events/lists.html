@@ -6,7 +6,7 @@
 {% block contents %}
 
 <main class="bg-white h-full relative">
-    <div class="bg-gray-100 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
+    <div class="bg-gray-100 h-16 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
             <h1 class="text-xl font-medium tracking-tight text-gray-600">Reported Alerts</h1>
         </div>
@@ -18,24 +18,29 @@
         </div>
     </div>
 
-    {% if messages %}
-    {% for message in messages %}
-    <div class="bg-teal-100 rounded-b text-teal-900 px-4 sm:px-4 lg:px-4 py-3 mt-3 mb-3" role="alert">
-        <div class="flex">
-            <div>
-                <p class="text-sm font-normal">{{ message }}</p>
+    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
+        <div class="flex-1 h-full overflow-y-scroll">
+            <div class="mx-auto py-4 px-4 sm:px-4 lg:px-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="bg-teal-100 rounded-b text-teal-900 py-3 px-3 mb-2" role="alert">
+                            <div class="flex">
+                                <div>
+                                    <p class="text-sm font-normal">{{ message }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="table-responsive h-full overflow-hidden">
+                    <table id="datatable" width="100%"
+                        class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    {% endfor %}
-    {% endif %}
-
-    <div class="table-responsive px-4 sm:px-4 lg:px-4 py-3 h-full overflow-hidden">
-        <table id="datatable" width="100%"
-            class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
-        </table>
-    </div>
-
 </main>
 
 <script language="javascript">

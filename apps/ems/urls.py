@@ -20,20 +20,24 @@ urlpatterns = [
 
     #events
     path('events', EventListView.as_view(), name='events'),
-    path('event/<int:eid>', EventDetailView.as_view(), name='event'),
+    path('events/<int:pk>/show', EventDetailView.as_view(), name='show-event'),
     path('events/create', EventCreateView.as_view(), name='create-event'),
     path('events/<int:pk>/edit', EventUpdateView.as_view(), name='edit-event'),
+    path('events/<int:pk>/delete', EventDeleteView.as_view(), name='delete-event'),
     
     path('events/<int:pk>/activities', event_activities, name='event-activities'),
 
     path('events/<int:pk>/initiate', initiate_event, name='initiate-event'),
     path('events/request_confirmation', request_event_confirmation, name='request-event-confirmation'),
 
-    path('events/<int:pk>/confirm', confirm_event, name='confirm-event'),
-    path('events/update-confirmation', update_event_confirmation, name='update-event-confirmation'),
+    path('events/<int:pk>/sector-confirmation', event_sector_confirmation, name='event-sector-confirmation'),
+    path('events/update-sector-confirmation', update_event_sector_confirmation, name='update-event-sector-confirmation'),
 
-    path('events/<int:pk>/report-progress', report_event_progress, name='report-event-progress'),
-    path('events/update-report-progress', update_report_progress, name='update-report-progress'),
+    path('events/<int:pk>/confirmation', event_confirmation, name='event-confirmation'),
+     path('events/update-confirmation', update_event_confirmation, name='update-event-confirmation'),
+
+    path('events/<int:pk>/progress-report', event_progress_report, name='event-progress-report'),
+    path('events/update-progress-report', update_progress_report, name='update-progress-report'),
 
     #rumors
     path('rumors', RumorListView.as_view(), name='rumors'),

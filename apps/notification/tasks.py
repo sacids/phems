@@ -1,21 +1,17 @@
 from celery import shared_task
+from django.core.mail import EmailMessage
+from django.core.mail import BadHeaderError
+from django.http import JsonResponse, HttpResponse
 
 
 @shared_task
-def notification():
-    for _ in range(10):
-        print('it is running')
-    return 'Done !'
-
-
-@shared_task
-def send_email(subject, message, from_email, to_email):
+def send_email(subject, message, to_email):
     if subject and message:
         try:
             email = EmailMessage(
                 subject,
                 message,
-                from_email,
+                "renfrid.ngolongolo@sacids.org",
                 to_email
             )
             email.content_subtype = "html"

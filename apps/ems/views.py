@@ -13,13 +13,16 @@ from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from .forms import EventForm
+from apps.notification.classes import NotificationWrapper
+from apps.notification.tasks import send_email
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+from apps.account.models import Profile
+
 
 # Create your views here.
-
 class EventListView2(generic.ListView):
     model = Event
     context_object_name = 'events'
@@ -65,7 +68,10 @@ class EventListView(generic.TemplateView):
 
 
 class EventDetailView(generic.TemplateView):
-    template_name = "events/details.html"
+    """View to update a details"""
+    model = Event
+    context_object_name = 'event'
+    template_name = "events/show.html"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -73,31 +79,15 @@ class EventDetailView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
+        context['title'] = "Alert Information"
 
-        context = super(EventDetailView, self).get_context_data(**kwargs)
-        
-        eid                     = self.kwargs['eid']
-        event_obj               = Event.objects.get(pk=eid)
-        context['event']        = event_obj
-        context['workflows']    = workflow_config.objects.all()
-        context['alerts']       = Alert.objects.filter(event__id=eid)
-        context['e_col_u']      = event_obj.user_access.all()
-        
-        ''' 
-        user_perms              = event_obj.user_access.all()
-        plist                   = []
-        for perm in user_perms:
-            plist.append(perm.user.id)
-        context['user_perms']   = plist
-        context['users']        = User.objects.all()
+        event = Event.objects.get(id=self.kwargs['pk'])
+        context['event'] = event
 
-        group_perms               = event_obj.group_access.all()
-        plist                   = []
-        for perm in group_perms:
-            plist.append(perm.group.id)
-        context['group_perms']   = plist
-        context['groups']        = Group.objects.all()
-        '''
+        """activities"""
+        activities = Activity.objects.filter(event_id= event.id).order_by('created_on')
+        context['activities'] = activities
+
         return context
 
 
@@ -117,17 +107,33 @@ class EventCreateView(generic.CreateView):
         form = EventForm(request.POST)
         if form.is_valid():
             new_event = form.save(commit=False)
+            new_event.location_id = request.POST.get('location_id')
             new_event.created_by = self.request.user
             new_event.save()
 
-            # """insert sector"""
-            # sector_ids = request.POST.getlist('sector_ids')
+            """wrapper"""
+            notify = NotificationWrapper()
 
-            # for sector_id in sector_ids:
-            #     new_event.sector.add(sector_id)
+            """Send Notification to EOC Manager"""
+            users = User.objects.filter(groups__name='EOC Manager')
+
+            """create message to EOC Manager"""
+            message_to_eoc = "New alert created, Please have a look on it!"
+
+            if users.count() > 0:
+                arr_managers = []
+                for user in users:
+                    """create notification"""
+                    response = notify.create_notification(user_id=user.id, message=message_to_eoc)
+
+                    """assign to array"""
+                    arr_managers.append(user.email)
+
+                """send email in background"""
+                response = send_email("New Alert" , message_to_eoc, arr_managers)     
 
             """message"""
-            messages.success(request, 'New event created!')
+            messages.success(request, 'New alert created!')
 
             """redirect"""
             return HttpResponseRedirect(reverse_lazy('events'))
@@ -143,14 +149,25 @@ class EventUpdateView(generic.UpdateView):
 
     def form_valid(self, form):
         response = form.save(commit=False)
+        response.location_id = self.request.POST.get('location_id')
         response.updated_by = self.request.user
         response.save()
 
         """message"""
-        messages.success(self.request, 'Event Updated!')
+        messages.success(self.request, 'Alert Updated!')
 
         """redirect to events"""
         return HttpResponseRedirect(reverse_lazy('events'))
+    
+
+class EventDeleteView(generic.DeleteView):
+    """Delete event""" 
+    model = Event
+    template_name = "events/confirm_delete.html"
+
+    def get_success_url(self):
+        messages.success(self.request, "Alert deleted successfully")
+        return reverse_lazy('events') 
 
 
 def event_activities(request, **kwargs):
@@ -174,17 +191,21 @@ def initiate_event(request, **kwargs):
     """Initiate event"""
     event = Event.objects.get(pk=kwargs['pk'])
 
-    """sectors"""
-    sectors = Sector.objects.all()
+    if event.status != 'NEW':
+        html = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Request for confirmation already established</div>"
+        return HttpResponse(html)
+    else:
+        """sectors"""
+        sectors = Sector.objects.all()
 
-    """context"""
-    context = {
-        'event': event,
-        'sectors': sectors
-    }
+        """context"""
+        context = {
+            'event': event,
+            'sectors': sectors
+        }
 
-    """render view"""
-    return render(request, 'events/async/initiate.html', context=context)
+        """render view"""
+        return render(request, 'events/async/initiate.html', context=context)
 
 
 def request_event_confirmation(request):
@@ -196,15 +217,15 @@ def request_event_confirmation(request):
         """event"""
         event = Event.objects.get(pk=ev_id)
 
-        """ update event status to WAITING_APPROVAL """
-        event.status = "WAITING_APPROVAL"
+        """ update event status to WAITING_CONFIRMATION """
+        event.status = "WAITING_CONFIRMATION"
         event.save()
 
         """create or update activities logs based on event and action"""
         activity, created = Activity.objects.update_or_create(event_id=ev_id, action=request.POST.get("action"), defaults={"remarks": request.POST.get("remarks"), "created_by": request.user})
 
         """upload attachment attachment"""
-        if request.FILES['attachment']:
+        if 'attachment' in request.FILES:
             new_attachment = ActivityAttachment()
             new_attachment.activity_id = activity.id
             new_attachment.attachment = request.FILES['attachment']
@@ -213,70 +234,185 @@ def request_event_confirmation(request):
         """attach event to sectors"""
         sector_ids = request.POST.getlist('sector_ids')
 
+        """notification wrapper"""
+        notify = NotificationWrapper()
+
         for sector_id in sector_ids:
             event.sector.add(sector_id)
+            profile = Profile.objects.filter(sector_id=sector_id)
 
-        """TODO: send notification tagged sectors"""
+            """create message"""
+            message_to_users = "New request for alert confirmation, Please have a look on it and respond."
+
+            if profile.count() > 0:
+                arr_sector_users = []
+                for val in profile:
+                    """create notification"""
+                    response = notify.create_notification(user_id=val.user.id, message=message_to_users)
+
+                    """assign to array"""
+                    arr_sector_users.append(val.user.email)
+
+                """send email in background"""
+                #response = send_email("Request For Alert Confirmation" , message_to_users, arr_sector_users)    
 
         """response"""
-        response = 'Successfully requested confirmation to sectors.'
+        response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New request for confirmation created.</div>"
     else:
-        response = "Failed to request confirmation to sectors."
+        response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to create new request for confirmation.</div>"
 
     """return response"""
-    return JsonResponse(response, safe=False)
+    return HttpResponse(response)
 
 
-def confirm_event(request, **kwargs):
+def event_sector_confirmation(request, **kwargs):
     """Confirm event"""
     event = Event.objects.get(pk=kwargs['pk'])
 
-    """context"""
-    context = {
-        'event': event,
-    }
+    if event.status != 'WAITING_CONFIRMATION':
+        html = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Alert is not in this stage.</div>"
+        return HttpResponse(html)
+    else:
+        context = {
+            'event': event,
+        }
 
-    """render view"""
-    return render(request, 'events/async/confirm.html', context=context)
+        """render view"""
+        return render(request, 'events/async/sector_confirmation.html', context=context)
 
 
-def update_event_confirmation(request):
+def update_event_sector_confirmation(request):
     """updated event confirmation"""
     if request.method == 'POST':
         ev_id = request.POST.get("event_id")
-        action = request.POST.get("action")
 
         """event"""
         event = Event.objects.get(pk=ev_id)
 
         """update event status"""
-        event.status = "CONFIRMED"
+        event.status = "WAITING_CONFIRMATION"
         event.save()
 
-        """create or update activities logs based on event and action"""
-        activity, created = Activity.objects.update_or_create(event_id=ev_id, action=request.POST.get("action"), defaults={"remarks": request.POST.get("remarks"), "created_by": request.user})
+        """create activities logs based on event and action"""
+        activity = Activity()
+        activity.event_id = ev_id
+        activity.created_by = request.user
+        activity.action = request.POST.get("action")
+        activity.confirmed = request.POST.get("confirmed")
+        activity.severity  = request.POST.get("severity")
+        activity.remarks   = request.POST.get("remarks")
+        activity.save()
 
         """upload attachment attachment"""
-        if request.FILES['attachment']:
+        if 'attachment' in request.FILES:
             new_attachment = ActivityAttachment()
             new_attachment.activity_id = activity.id
             new_attachment.attachment = request.FILES['attachment']
             new_attachment.save()
 
+        """wrapper"""
+        notify = NotificationWrapper()
 
-        """TODO: send notification tagged sectors"""
+        """Send Notification to EOC Manager"""
+        users = User.objects.filter(groups__name='EOC Manager')
+
+        """create message to EOC Manager"""
+        message_to_eoc = "Alert confirmed by tagged sector, Waiting for your approval for progress report!"
+
+        if users.count() > 0:
+            arr_managers = []
+            for user in users:
+                """create notification"""
+                response = notify.create_notification(user_id=user.id, message=message_to_eoc)
+
+                """assign to array"""
+                arr_managers.append(user.email)
+
+            """send email in background"""
+            #response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
 
         """response"""
-        response = 'Alert confirmed.'
+        response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Alert confirmed.</div>"
     else:
-        response = "Failed to confirm alert."
+        response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to confirm alert.</div>"
 
     """return response"""
-    return JsonResponse(response, safe=False)
+    return HttpResponse(response)
 
 
-def report_event_progress(request, **kwargs):
-    """Initiate event"""
+def event_confirmation(request, **kwargs):
+    """Confirm event"""
+    event = Event.objects.get(pk=kwargs['pk'])
+
+    if event.status != 'WAITING_CONFIRMATION':
+        html = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Alert is not on in this stage</div>"
+        return HttpResponse(html)
+    else:
+        context = {
+            'event': event,
+        }
+
+        """render view"""
+        return render(request, 'events/async/confirmation.html', context=context)
+    
+def update_event_confirmation(request):
+    """updated event confirmation"""
+    if request.method == 'POST':
+        ev_id  = request.POST.get("event_id")
+        status = request.POST.get("status")
+
+        """event"""
+        event = Event.objects.get(pk=ev_id)
+
+        """update event status"""
+        event.status = request.POST.get("status")
+        event.save()
+
+        """create activities logs based on event and action"""
+        activity = Activity()
+        activity.event_id   = ev_id
+        activity.created_by = request.user
+        activity.action     = request.POST.get("status")
+        activity.remarks    = request.POST.get("remarks")
+        activity.save()
+
+        """notification wrapper"""
+        notify = NotificationWrapper()
+
+        """send notification to sector users"""
+        for sector in event.sector.all():
+            profile = Profile.objects.filter(sector_id=sector.id)
+
+            """create message"""
+            if status == "CONFIRMED":
+                message_to_users = f"{event.title} has been confirmed by the EOC Manager."
+            elif status == "DISCARDED":
+                message_to_users = f"{event.title} has been discarded by the EOC Manager."  
+
+            if profile.count() > 0:
+                arr_sector_users = []
+                for val in profile:
+                    """create notification"""
+                    response = notify.create_notification(user_id=val.user.id, message=message_to_users)
+
+                    """assign to array"""
+                    arr_sector_users.append(val.user.email)
+
+                """send email in background"""
+                #response = send_email("Request For Alert Confirmation" , message_to_users, arr_sector_users) 
+
+        """response"""
+        response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Alert successfully processed.</div>"
+    else:
+        response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to confirm/discard alert.</div>"
+
+    """return response"""
+    return HttpResponse(response)
+
+
+    
+def event_progress_report(request, **kwargs):
+    """Event progress report"""
     event = Event.objects.get(pk=kwargs['pk'])
 
     """context"""
@@ -285,47 +421,60 @@ def report_event_progress(request, **kwargs):
     }
 
     """render view"""
-    return render(request, 'events/async/report_progress.html', context=context)
+    return render(request, 'events/async/progress_report.html', context=context)
 
 
-def update_report_progress(request):
-    """updated report progress"""
+def update_progress_report(request):
+    """updated  progress report"""
     if request.method == 'POST':
         ev_id = request.POST.get("event_id")
-        action = request.POST.get("action")
 
         """event"""
         event = Event.objects.get(pk=ev_id)
-
-        """update event status"""
-        event.status = "PROGRESS"
-        event.save()
 
         """create or update activities logs based on event and action"""
         activity = Activity()
         activity.event_id = event.id
+        activity.action  = "PROGRESS_REPORT"
         activity.remarks = request.POST.get("remarks")
-        activity.action  = request.POST.get("action")
         activity.created_by = request.user
         activity.save()
 
         """upload attachment attachment"""
-        if request.FILES['attachment']:
+        if 'attachment' in request.FILES:
             new_attachment = ActivityAttachment()
             new_attachment.activity_id = activity.id
             new_attachment.attachment = request.FILES['attachment']
             new_attachment.save()
 
+        """wrapper"""
+        notify = NotificationWrapper()
 
-        """TODO: send notification tagged sectors"""
+        """Send Notification to EOC Manager"""
+        users = User.objects.filter(groups__name='EOC Manager')
+
+        """create message to EOC Manager"""
+        message_to_eoc = f"New progress report for alert {event.title} uploaded. Please review it."
+
+        if users.count() > 0:
+            arr_managers = []
+            for user in users:
+                """create notification"""
+                response = notify.create_notification(user_id=user.id, message=message_to_eoc)
+
+                """assign to array"""
+                arr_managers.append(user.email)
+
+            """send email in background"""
+            #response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
 
         """response"""
-        response = 'Alert progress updated.'
+        response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Alert progress report uploaded.</div>"
     else:
-        response = "Failed to update alert progress."
+        response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to upload progress report.</div>"
 
     """return response"""
-    return JsonResponse(response, safe=False)
+    return HttpResponse(response)
 
 
 class SignalListView(generic.TemplateView):

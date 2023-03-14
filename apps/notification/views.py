@@ -2,12 +2,9 @@ from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.core.mail import BadHeaderError
 from django.http import JsonResponse, HttpResponse
-from .tasks import notification
 
 def test(request):
-    notification.delay()
     return HttpResponse("django home")
-
 
 # Create your views here.
 def send_email(subject, message, from_email, to_email):

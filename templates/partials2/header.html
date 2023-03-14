@@ -1,8 +1,10 @@
 {% load static %}
 
+{% load custom_tags %}
+
 <!-- This example requires Tailwind CSS v2.0+ -->
 <nav class="bg-white border-b">
-    <div class="mx-auto px-4">
+    <div class="mx-auto px-4 sm:px-4 lg:px-4">
         <div class="relative flex h-12 items-center justify-between">
             <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 <!-- Mobile menu button-->
@@ -63,7 +65,10 @@
                         <div class="pt-3 pb-2 {% if url_name == 'messages' %} border-b-4 border-green-700 {% endif %}">
                             <a href="{% url 'messages' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
-                                Messages
+                                Messages 
+                                {% if user.id|show_notification > 0 %}
+                                    <span class="rounded-full bg-red-600 text-sm text-white font-medium px-1">{{ user.id|show_notification }}</span>
+                                {% endif %}
                             </a>
                         </div>
 

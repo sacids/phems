@@ -1,5 +1,5 @@
 from django import template
-
+from apps.notification.models import Notification
 
 register = template.Library()
 
@@ -8,14 +8,14 @@ def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
 
 
-# @register.filter
-# def show_task_notification(user_id):
-#     tasks = Task.objects.filter(user_id=user_id, status='NEW')
+@register.filter
+def show_notification(user_id):
+    tasks = Notification.objects.filter(user_id=user_id, app_status='PENDING')
 
-#     if tasks.count() > 0:
-#         return tasks.count()
-#     else:
-#         return ''
+    if tasks.count() > 0:
+        return tasks.count()
+    else:
+        return 0
     
     
 

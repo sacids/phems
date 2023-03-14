@@ -17,64 +17,79 @@
         <div></div>
     </div>
 
-    <div class="h-full py-4 px-4 sm:px-6 lg:px-8">
-        <div class="overflow-y-scroll" x-init="initjq()">
-            <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium" autocomplete="off">
-                {% csrf_token %}
-
-                <div class="flex flex-wrap mb-2">
-                    <div class="w-full md:w-full px-2">
-                        {{ form.title|as_crispy_field }}
-                    </div>
+    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
+        <div class="flex-1 h-full overflow-y-scroll">
+            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
+                <div x-init="initjq()">
+                    <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium" autocomplete="off">
+                        {% csrf_token %}
+        
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full px-2">
+                                {{ form.title|as_crispy_field }}
+                            </div>
+                        </div>
+        
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full px-2">
+                                {{ form.description|as_crispy_field }}
+                            </div>
+                        </div>
+        
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.alert|as_crispy_field }}
+                            </div>
+        
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.pri_sector|as_crispy_field }}
+                            </div>
+                        </div>
+        
+                        <div class="flex flex-wrap mb-4">
+                            <div class="w-full md:w-full px-2">
+                                <div class="control-group">
+                                    <label class="control-label">Location <span class="text-red-600">*</span></label>
+                                    <select class="get_location w-full" data-placeholder="Search location ..."
+                                        id="location_id" name="location_id" required></select>
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full px-2">
+                                <h6 class="uppercase font-medium py-2">Reporter Information</h6>
+                                <hr />
+                            </div>
+                        </div>
+        
+                        <div class="flex flex-wrap mb-0">
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.contact_name|as_crispy_field }}
+                            </div>
+        
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ form.contact_phone|as_crispy_field }}
+                            </div>
+                        </div>
+        
+                        <div class="flex items-start px-2 mb-6">
+                            <a href="{% url 'events' %}"
+                                class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Cancel</a>
+                            <button type="submit"
+                                class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Submit</button>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="flex flex-wrap mb-2">
-                    <div class="w-full md:w-full px-2">
-                        {{ form.description|as_crispy_field }}
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap mb-2">
-                    <div class="w-full md:w-1/2 px-2">
-                        {{ form.contact_name|as_crispy_field }}
-                    </div>
-
-                    <div class="w-full md:w-1/2 px-2">
-                        {{ form.contact_phone|as_crispy_field }}
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap mb-3">
-                    <div class="w-full md:w-full px-2">
-                        {{ form.location|as_crispy_field }}
-                    </div>
-                </div>
-
-                <div class="flex flex-wrap mb-2">
-                    <div class="w-full md:w-1/2 px-2">
-                        {{ form.alert|as_crispy_field }}
-                    </div>
-
-                    <div class="w-full md:w-1/2 px-2">
-                        {{ form.pri_sector|as_crispy_field }}
-                    </div>
-                </div>
-
-                <div class="flex items-start px-2 mb-6">
-                    <a href="{% url 'events' %}"
-                        class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Cancel</a>
-                    <button type="submit"
-                        class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Submit</button>
-                </div>
-            </form>
+            </div>
         </div>
-
     </div>
 </main>
-
-
 {% endblock %}
 
+{% block extrastyle %}
+    <link href="{% static 'css/table.css' %}" rel="stylesheet" type="text/css" />
+{% endblock extrastyle %}
 
 {% block get_contents %}
 <script src="{% static 'libs/popper/popper.min.js' %}"></script>

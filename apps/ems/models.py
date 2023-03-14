@@ -152,7 +152,7 @@ class Location(MP_Node):
 class Event(models.Model):
     STATUS  = (
         ('NEW', 'New'),
-        ('WAITING_APPROVAL', 'Waiting Approval'),
+        ('WAITING_CONFIRMATION', 'Waiting Confirmation'),
         ('DISCARDED', 'Discarded'),
         ('CONFIRMED', 'Confirmed'),
         ('PROGRESS', 'On Progress'),
@@ -167,12 +167,12 @@ class Event(models.Model):
 
     title           = models.CharField(max_length=150,blank=True, null=True)
     description     = models.TextField(blank=True, null=True)
-    alert           = models.ForeignKey('Alert', on_delete=DO_NOTHING,default=1) 
+    alert           = models.ForeignKey('Alert', on_delete=DO_NOTHING) 
     signal          = models.ManyToManyField("Signal")
-    status          = models.CharField(max_length=40,choices=STATUS,default='NEW')
+    status          = models.CharField(max_length=40,choices=STATUS, default='NEW')
     stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True,default=1) 
     location        = models.ForeignKey('location', on_delete=DO_NOTHING)
-    pri_sector      = models.ForeignKey('Sector', related_name="pri_sector",on_delete=DO_NOTHING,blank=True, null=True,default=1)
+    pri_sector      = models.ForeignKey('Sector', related_name="pri_sector",on_delete=models.SET_NULL,blank=True, null=True)
     sector          = models.ManyToManyField(Sector)
  
     contact_name    = models.CharField(max_length=150, blank=True, null=True)
@@ -448,9 +448,10 @@ class Activity(models.Model):
     ACTION  = (
         ('NEW', 'New'),
         ('INITIATED', 'Initiated'),
-        ('WAITING_APPROVAL', 'Waiting Approval'),
-        ('PROGRESS', 'On Progress'),
+        ('WAITING_CONFIRMATION', 'Waiting for Confirmation'),
         ('CONFIRMED', 'Confirmed'),
+        ('PROGRESS_REPORT', 'Progress Report'),
+        ('SITUATION_REPORT', 'Situation Report'),
     )
 
     event       = models.ForeignKey('Event', on_delete=models.CASCADE)
@@ -471,7 +472,7 @@ class Activity(models.Model):
 
 class ActivityAttachment(models.Model):
     activity    = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    attachment  = models.FileField(upload_to='assets/library', max_length=100)
+    attachment  = models.FileField(upload_to='library', max_length=100)
 
     class Meta:
         db_table = 'ph_activity_attachments'
