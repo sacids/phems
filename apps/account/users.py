@@ -55,6 +55,7 @@ class UserCreateView(generic.CreateView):
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
+            user.location_id = request.POST.get("location_id")
             user.save()
 
             if user:
@@ -119,6 +120,7 @@ class UserUpdateView(generic.UpdateView):
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
             user.is_active  = request.POST.get("status_id")
+            user.location = request.POST.get("location_id")
             user.save()
 
             """update profile"""

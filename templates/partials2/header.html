@@ -66,8 +66,8 @@
                             <a href="{% url 'messages' %}"
                                 class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                 Notifications
-                                {% if user.id|show_notification > 0 %}
-                                    <span class="rounded-full bg-red-600 text-sm text-white font-medium px-1">{{ user.id|show_notification }}</span>
+                                {% if request.user|show_notification > 0 %}
+                                    <span class="rounded-full bg-red-600 text-sm text-white font-medium px-1">{{ request.user|show_notification }}</span>
                                 {% endif %}
                             </a>
                         </div>
@@ -123,7 +123,7 @@
                             id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                             <span class="sr-only">Open user menu</span>
                             <div class="p-1 text-white text-xs">
-                                {{user.first_name|make_list|first}}{{user.last_name|make_list|first}}
+                                {{request.user.first_name|make_list|first}}{{request.user.last_name|make_list|first}}
                             </div>
                         </button>
                     </div>

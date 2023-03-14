@@ -65,6 +65,16 @@
                             </div>
                         </div>
 
+                        <div class="flex flex-wrap mb-4">
+                            <div class="w-full md:w-full px-2">
+                                <div class="control-group">
+                                    <label class="control-label">Location <span class="text-red-600">*</span></label>
+                                    <select class="get_location w-full" data-placeholder="Search location ..."
+                                        id="location_id" name="location_id"></select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex flex-wrap mb-2">
                             <div class="w-full md:w-full px-2">
                                 <h6 class="uppercase font-medium py-2">Login Credentials</h6>
@@ -128,6 +138,15 @@
     function initjq() {
         $(".select2").select2();
         $(".input-mask").inputmask();
+
+        $('.get_location').select2({
+            minimumInputLength: 3,
+            ajax: {
+                url: window.location.origin + '/ems/utils/sl',
+                dataType: 'json',
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        });
     };
 </script>
 {% endblock %}
