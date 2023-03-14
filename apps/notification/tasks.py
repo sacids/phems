@@ -6,6 +6,7 @@ from django.http import JsonResponse, HttpResponse
 
 @shared_task
 def send_email(subject, message, to_email):
+    """Sending Email in background"""
     if subject and message:
         try:
             email = EmailMessage(
