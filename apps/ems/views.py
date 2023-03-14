@@ -118,7 +118,7 @@ class EventCreateView(generic.CreateView):
             users = User.objects.filter(groups__name='EOC Manager')
 
             """create message to EOC Manager"""
-            message_to_eoc = "New alert created, Please have a look on it!"
+            message_to_eoc = f"New alert created!"
 
             if users.count() > 0:
                 arr_managers = []
@@ -434,17 +434,17 @@ def update_progress_report(request):
 
         """create or update activities logs based on event and action"""
         activity = Activity()
-        activity.event_id = event.id
-        activity.action  = "PROGRESS_REPORT"
-        activity.remarks = request.POST.get("remarks")
+        activity.event_id   = event.id
+        activity.action     = "PROGRESS_REPORT"
+        activity.remarks    = request.POST.get("remarks")
         activity.created_by = request.user
         activity.save()
 
         """upload attachment attachment"""
         if 'attachment' in request.FILES:
-            new_attachment = ActivityAttachment()
-            new_attachment.activity_id = activity.id
-            new_attachment.attachment = request.FILES['attachment']
+            new_attachment              = ActivityAttachment()
+            new_attachment.activity_id  = activity.id
+            new_attachment.attachment   = request.FILES['attachment']
             new_attachment.save()
 
         """wrapper"""
@@ -608,12 +608,6 @@ def add_event(request):
         new_event.pri_sector_id = request.POST.get('pri_sector_id')
         new_event.save()
 
-        # """insert sector"""
-        # sector_ids = request.POST.getlist('sector_ids')
-
-        # for sector_id in sector_ids:
-        #     new_event.sector.add(sector_id)
-
         """signal"""
         signal = Signal.objects.get(pk=request.POST.get('signal'))
 
@@ -624,16 +618,36 @@ def add_event(request):
         signal.status = "ADDED"
         signal.save()
 
-        """TODO: send notification to manager to attach sector ministries to act"""
+        """wrapper"""
+        notify = NotificationWrapper()
+
+        """Send Notification to EOC Manager"""
+        users = User.objects.filter(groups__name='EOC Manager')
+
+        """create message to EOC Manager"""
+        message_to_eoc = f"New alert created!"
+
+        if users.count() > 0:
+            arr_managers = []
+            for user in users:
+                """create notification"""
+                response = notify.create_notification(user_id=user.id, message=message_to_eoc)
+
+                """assign to array"""
+                arr_managers.append(user.email)
+
+            """send email in background"""
+            #response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
 
         """response"""
-        response = 'New alert created'
-
+        response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New alert created.</div>"
     else:
+        response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to create new alert.</div>"
         response = "Failed to create alert!"
 
     """return response"""
-    return JsonResponse(response, safe=False)
+    return HttpResponse(response)
+
 
 
 def SitrepForm(request, *args, **kwargs):

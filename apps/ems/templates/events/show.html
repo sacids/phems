@@ -17,142 +17,149 @@
     </div>
 
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
-        <div class="flex-1 h-full overflow-hidden">
-            <div class="mx-auto px-4 sm:px-4 lg:px-4">
-                <div class="flex h-full overflow-hidden">
-                    
-                    <div class="w-6/12 overflow-y-hidden flex py-4 pr-4">
-                        <div class="w-full h-full overflow-hidden my-1">
-                            <div class="flex flex-col mb-4">
-                                <p class="text-gray-500 text-sm font-normal">Title: </p>
+        <div class="flex-1 h-full overflow-y-scroll">
+            <div class="mx-auto flex px-4 sm:px-4 lg:px-4">
+                <div class="w-6/12">
+                    <div class="w-full my-1 py-4 pr-4">
+                        <div class="flex flex-col mb-4">
+                            <p class="text-gray-500 text-sm font-normal">Title: </p>
+                            <p class="font-normal text-gray-600 text-sm py-0">
+                                {{event.title}}
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col mt-3 mb-4">
+                            <p class="text-gray-500 text-sm font-normal">Description: </p>
+                            <p class="font-normal text-gray-600 text-sm py-0">
+                                {{event.description}}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between mb-4">
+                            <div class="flex flex-col">
+                                <p class="text-gray-500 text-sm font-normal">Location: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
-                                    {{event.title}}
+                                    {{event.location}}
                                 </p>
                             </div>
-            
-                            <div class="flex flex-col mt-3 mb-4">
-                                <p class="text-gray-500 text-sm font-normal">Description: </p>
+
+                            <div>
+                                <p class="text-gray-500 text-sm font-normal">Status: </p>
+                                {% if event.status == 'NEW' %}
+                                <span
+                                    class="bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-medium">New</span>
+                                {% elif event.status == 'WAITING_CONFIRMATION' %}
+                                <span class="bg-yellow-500 text-white rounded-full px-2 py-1 text-xs font-medium">
+                                    Waiting Confirmation
+                                </span>
+                                {% elif event.status == 'CONFIRMED' %}
+                                <span
+                                    class="bg-green-600 text-white rounded-full px-2 py-1 text-xs font-medium">Confirmed</span>
+                                {% elif event.status == 'DISCARDED' %}
+                                <span
+                                    class="bg-red-400 text-white rounded-full px-2 py-1 text-xs font-medium">Discarded</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col mb-4">
+                            <p class="text-gray-500 text-sm font-normal">Alert Type: </p>
+                            <p class="font-normal text-gray-600 text-sm py-0">
+                                {{ event.alert.reference }} - {{ event.alert.title}}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between mb-4">
+                            <div class="flex flex-col">
+                                <p class="text-gray-500 text-sm font-normal">Primary Sector: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
-                                    {{event.description}}
+                                    {{ event.pri_sector.title}}
                                 </p>
                             </div>
-            
-                            <div class="flex justify-between mb-4">
-                                <div class="flex flex-col">
-                                    <p class="text-gray-500 text-sm font-normal">Location: </p>
-                                    <p class="font-normal text-gray-600 text-sm py-0">
-                                        {{event.location}}
-                                    </p>
-                                </div>
-            
-                                <div>
-                                    <p class="text-gray-500 text-sm font-normal">Status: </p>
-                                    {% if event.status == 'NEW' %}
-                                    <span class="bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-medium">New</span>
-                                    {% elif event.status == 'WAITING_CONFIRMATION' %}
-                                    <span class="bg-yellow-500 text-white rounded-full px-2 py-1 text-xs font-medium">
-                                        Waiting Confirmation
-                                    </span>
-                                    {% elif event.status == 'CONFIRMED' %}
-                                    <span
-                                        class="bg-green-600 text-white rounded-full px-2 py-1 text-xs font-medium">Confirmed</span>
-                                    {% elif event.status == 'DISCARDED' %}
-                                    <span class="bg-red-400 text-white rounded-full px-2 py-1 text-xs font-medium">Discarded</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-            
-                            <div class="flex flex-col mb-4">
-                                <p class="text-gray-500 text-sm font-normal">Alert Type: </p>
+
+                            <div class="flex flex-col">
+                                <p class="text-gray-500 text-sm font-normal">Tagged Sectors: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
-                                    {{ event.alert.reference }} - {{ event.alert.title}}
+                                    {% for val in event.sector.all %}
+                                    {{val}},
+                                    {% endfor %}
                                 </p>
                             </div>
-            
-                            <div class="flex justify-between mb-4">
-                                <div class="flex flex-col">
-                                    <p class="text-gray-500 text-sm font-normal">Primary Sector: </p>
-                                    <p class="font-normal text-gray-600 text-sm py-0">
-                                        {{ event.pri_sector.title}}
-                                    </p>
-                                </div>
-            
-                                <div class="flex flex-col">
-                                    <p class="text-gray-500 text-sm font-normal">Tagged Sectors: </p>
-                                    <p class="font-normal text-gray-600 text-sm py-0">
-                                        {% for val in event.sector.all %}
-                                            {{val}},
-                                        {% endfor %}
-                                    </p>
-                                </div>
+                        </div>
+
+                        <div class="flex justify-between mb-4">
+                            <div class="flex flex-col">
+                                <p class="text-gray-500 text-sm font-normal">Created On: </p>
+                                <p class="font-normal text-gray-600 text-sm py-0">
+                                    {{ event.created_on}}
+                                </p>
                             </div>
-            
-                            <div class="flex justify-between mb-4">
-                                <div class="flex flex-col">
-                                    <p class="text-gray-500 text-sm font-normal">Created On: </p>
-                                    <p class="font-normal text-gray-600 text-sm py-0">
-                                        {{ event.created_on}}
-                                    </p>
-                                </div>
-            
-                                <div>
-                                    <p class="text-gray-500 text-sm font-normal">Created By: </p>
-                                    <p class="font-normal text-gray-600 text-sm py-0">
-                                        {{ event.created_by.first_name}} {{ event.created_by.last_name}}
-                                    </p>
-                                </div>
+
+                            <div>
+                                <p class="text-gray-500 text-sm font-normal">Created By: </p>
+                                <p class="font-normal text-gray-600 text-sm py-0">
+                                    {{ event.created_by.first_name}} {{ event.created_by.last_name}}
+                                </p>
                             </div>
                         </div>
                     </div>
-            
-                    <div class="w-6/12 overflow-hidden bg-gray-50 px-4 py-4">
+                </div>
+
+                <div class="w-6/12">
+                    <div class="bg-gray-50 px-4 py-4">
                         <div class="flex space-x-2">
-                            <button hx-get="{% url 'event-activities' event.id %}" hx-target="#parentDiv" hx-swap="innerHTML"
+                            <button hx-get="{% url 'event-activities' event.id %}" hx-target="#parentDiv"
+                                hx-swap="innerHTML"
                                 class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
                                 Activities
                             </button>
-            
+
                             {% if event.status == 'NEW' %}
-                            <button hx-get="{% url 'initiate-event' event.id %}" hx-target="#parentDiv" hx-swap="innerHTML"
+                            <button hx-get="{% url 'initiate-event' event.id %}" hx-target="#parentDiv"
+                                hx-swap="innerHTML"
                                 class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
                                 Request For Confirmation
                             </button>
                             {% endif %}
-            
+
                             {% if event.status == 'WAITING_CONFIRMATION' %}
-                            <button hx-get="{% url 'event-sector-confirmation' event.id %}" hx-target="#parentDiv" hx-swap="innerHTML"
+                            <button hx-get="{% url 'event-sector-confirmation' event.id %}" hx-target="#parentDiv"
+                                hx-swap="innerHTML"
                                 class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
                                 Alert Confirmation
                             </button>
                             {% endif %}
 
                             {% if event.status == 'WAITING_CONFIRMATION' %}
-                            <button hx-get="{% url 'event-confirmation' event.id %}" hx-target="#parentDiv" hx-swap="innerHTML"
+                            <button hx-get="{% url 'event-confirmation' event.id %}" hx-target="#parentDiv"
+                                hx-swap="innerHTML"
                                 class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
                                 Confirm/Discard Alert
                             </button>
                             {% endif %}
-            
+
                             {% if event.status == 'CONFIRMED' %}
-                            <button hx-get="{% url 'event-progress-report' event.id %}" hx-target="#parentDiv" hx-swap="innerHTML"
+                            <button hx-get="{% url 'event-progress-report' event.id %}" hx-target="#parentDiv"
+                                hx-swap="innerHTML"
                                 class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
                                 Progress Reports
                             </button>
                             {% endif %}
-            
+
                             {% if event.status == 'CONFIRMED' %}
-                            <button class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
+                            <button
+                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
                                 Situation Reports
                             </button>
                             {% endif %}
                         </div>
-            
-                        <div class="py-2 overflow-hidden" id="parentDiv">
-                            <div class="overflow-y-scroll">
+
+                        <div id="parentDiv" class="py-2">
+                            <div class="">
                                 <div class="flex mb-0">
                                     <h4 class="text-sm font-medium py-1 uppercase text-gray-600">Alert Activities</h4>
                                 </div>
-            
+
                                 {% if activities.count > 0%}
                                 <ul role="list" class="divide-y divide-gray-200">
                                     {% for val in activities %}
@@ -162,39 +169,66 @@
                                                 <p class="text-sm font-medium text-gray-700 truncate">
                                                     {% if val.action == 'WAITING_CONFIRMATION' %}
                                                     <span>Waiting Confirmation</span>
-                                                    {% elif val.action == 'PROGRESS' %}
-                                                    <span>On Progress</span>
                                                     {% elif val.action == 'CONFIRMED' %}
-                                                    <span>Confirmed</span>
+                                                    <span>Confirmation</span>
+                                                    {% elif val.action == 'PROGRESS_REPORT' %}
+                                                    <span>Progress Report</span>
+                                                    {% elif val.action == 'SITUATION_REPORT' %}
+                                                    <span>Situational Report</span>
                                                     {% endif %}
                                                 </p>
-            
-                                                <p class="text-sm text-gray-500 truncate">
-                                                    {{ val.remarks }}
+
+                                                <p class="text-sm font-normal text-gray-600">
+                                                    {% if val.action == 'WAITING_CONFIRMATION' %}
+                                                    {% if val.confirmed == 1 %}
+                                                    Confirmed: <span class="text-green-600 font-medium">Yes</span>
+                                                    {% elif val.confirmed == 0 %}
+                                                    Confirmed: <span class="text-red-600 font-medium">No</span>
+                                                    {% endif %}
+                                                    {% elif val.action == 'CONFIRMED' or val.action == 'DISCARDED' %}
+                                                    {% if val.action == "CONFIRMED" %}
+                                                    Confirmed: <span class="text-green-600 font-medium">Yes</span>
+                                                    {% elif val.action == 'DISCARDED' %}
+                                                    Confirmed: <span class="text-red-600 font-medium">No</span>
+                                                    {% endif %}
+                                                    {% endif %}
                                                 </p>
                                             </div>
-            
+
                                             <div class="">
                                                 <p class="text-xs font-medium text-gray-600">
-                                                    {{ val.created_on|date:"d-m-Y" }}
-                                                </p>
-            
-                                                <p class="text-xs  text-gray-500">
                                                     {{ val.created_by.first_name }} {{ val.created_by.last_name }}
                                                 </p>
+
+                                                <p class="text-xs  text-gray-500">
+                                                    {{ val.created_on|date:"d-m-Y" }}
+                                                </p>
                                             </div>
+                                        </div>
+
+                                        <div class="py-1">
+                                            {% if val.action == 'WAITING_CONFIRMATION' %}
+                                            {% if val.severity is not None %}
+                                            <p class="text-sm text-gray-500 truncate py-1">
+                                                Severity: {{ val.severity }}
+                                            </p>
+                                            {% endif %}
+                                            {% endif %}
+
+                                            <p class="text-sm text-gray-500 truncate py-1">
+                                                {{ val.remarks }}
+                                            </p>
                                         </div>
                                     </li>
                                     {% endfor %}
                                 </ul>
                                 {% else %}
-                                    <p class="text-sm font-normal text-gray-600">No any activity</p>
+                                <p class="text-sm font-normal text-gray-600">No any activity</p>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

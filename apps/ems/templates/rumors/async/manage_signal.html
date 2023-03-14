@@ -101,7 +101,7 @@
                 <p class="mt-3 mb-1 font-medium">Location</p>
                 <select x-ref="location"
                     class="get_location text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"
-                    id="location_id" name="location_id" required></select>
+                    id="location_id" name="location_id" data-placeholder="Search Location..." required></select>
 
                 <p class="mt-3 mb-1 font-medium">Primary Sector</p>
                 <select x-ref="pri_sector"
@@ -113,34 +113,7 @@
                     {% endfor %}
                 </select>
 
-                <!-- <p class="mt-3 mb-1 font-medium">Involved Sectors</p>
-                <select x-ref="sectors"
-                    class="select2 select2-multiple text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100 multiple"
-                    name="sector_ids" id="sector_ids" multiple="multiple" data-placeholder="Choose sectors..."
-                    x-model="new_event.sector" required>
-                    {% for sector in sectors %}
-                    <option value="{{sector.id}}">{{sector.title}}</option>
-                    {% endfor %}
-                </select> -->
-
-                <!-- <p class="mt-3 mb-1 font-medium">Contact Person</p>
-                <input type="text" class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"  name="contact_name" required/> -->
-
-                <!-- <p class="mt-3 mb-1 font-medium">Profession</p>
-                <select class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" id="profession" name="contact_prof" aria-label="Profession"  name="contact_prof" required>
-                    <option value="">Select</option>
-                    {% for v, t in profession %}
-                        <option value="{{v}}">{{t}}</option>
-                    {% endfor %}
-                </select> -->
-
-                <!-- <p class="mt-3 mb-1 font-medium">Phone Number</p>
-                <input class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100 input-mask" data-inputmask="'mask': '+255-999-999-999'" im-insert="true" type="text"  name="contact_phone" />
-                    
-                <p class="mt-3 mb-1 font-medium">Email</p>
-                <input class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" type="email" class=""  name="contact_email"/>      -->
-
-                <div class="flex space-x-3 justify-end mt-3 mb-6">
+                <div class="flex space-x-3 justify-start mt-3 mb-6">
                     <button class="text-white text-sm font-medium px-4 py-2 rounded-sm bg-red-600 hover:bg-red-500"
                         @click="eModal = 'showRumor'">Cancel</button>
                     <button type="submit"

@@ -5,8 +5,8 @@
 
 {% block contents %}
 
-<main class="bg-white">
-    <div class="bg-gray-100 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
+<main class="bg-white h-full relative">
+    <div class="bg-gray-100 h-16 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
             <h1 class="text-xl font-medium tracking-tight text-gray-600">Reported Rumors</h1>
         </div>
@@ -18,7 +18,8 @@
         </div>
     </div>
 
-    <div class="flex h-full overflow-hidden" x-init="fetchEvents();">
+
+    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative" x-init="fetchEvents();">
         <div class="flex-1 table-responsive py-4 px-4 sm:px-4 lg:px-4 h-full overflow-hidden">
             <table id="datatable" width="100%"
                 class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
