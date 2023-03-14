@@ -643,7 +643,6 @@ def add_event(request):
         response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New alert created.</div>"
     else:
         response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to create new alert.</div>"
-        response = "Failed to create alert!"
 
     """return response"""
     return HttpResponse(response)
