@@ -104,12 +104,11 @@
                     id="location_id" name="location_id" data-placeholder="Search Location..." required></select>
 
                 <p class="mt-3 mb-1 font-medium">Primary Sector</p>
-                <select x-ref="pri_sector"
-                    class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" name="pri_sector_id"
-                    id="pri_sector_id" data-placeholder="Choose ..." required>
+                <select class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" name="pri_sector_id"
+                    id="pri_sector_id" required>
                     <option value="">Select</option>
                     {% for sector in sectors %}
-                    <option value="{{sector.id}}">{{sector.title}}</option>
+                        <option value="{{sector.id}}">{{sector.title}}</option>
                     {% endfor %}
                 </select>
 

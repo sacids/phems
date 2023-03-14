@@ -669,8 +669,6 @@ def attach_sig2event(request):
     sig_id              = request.GET.get('sid',0) 
     evt_id              = request.GET.get('eid',0)
 
-    print("reached here")
-    
     """query for event and signal"""
     event = Event.objects.get(pk=evt_id)
     signal = Signal.objects.get(pk=sig_id)
@@ -680,13 +678,12 @@ def attach_sig2event(request):
     signal.status = 'ADDED'
     signal.save()
 
-    """TODO: send notification to manager to attach sector ministries to act"""
-
     """response"""
-    response = 'New alert created'
+    response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Rumor attached to a alert.</div>"
+
 
     """return response"""
-    return JsonResponse(1, safe=False)
+    return JsonResponse({"error": False, "success_msg": response})
 
 
 def get_event_data(request):
@@ -846,21 +843,6 @@ def manage_event(request):
     template = 'events/async/manage_event.html'
 
     return TemplateResponse(request, template, context)
-
-def attach_sig2event(request):
-    
-    sig_id              = request.GET.get('sid',0) 
-    evt_id              = request.GET.get('eid',0)
-    
-    event   = Event.objects.get(pk=evt_id)
-    signal  = Signal.objects.get(pk=sig_id)
-    event.signal.add(signal)
-    
-    # if attache success
-    signal.status = 'ADDED'
-    signal.save()
-    
-    return JsonResponse(1,safe=False)
 
 
 def upload_file(request):

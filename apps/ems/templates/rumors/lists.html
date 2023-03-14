@@ -126,14 +126,13 @@
                 document.getElementById('row-' + id).classList.add("bg-emerald-100");
 
                 var url = window.location.origin + '/ems/utils/mr?sid=' + id;
-
                 this.new_event.signal = id;
 
                 fetch(url)
                     .then(response => response.text())
                     .then(data => {
                         $('#detail-div').html(data)
-                        htmx.process('#detail-div');
+                        //htmx.process('#detail-div');
                     })
             },
 
@@ -151,7 +150,6 @@
                     .then(data => {
                         if (data == 1) {
                             this.showModal = false;
-
                             // this.signals.splice(this.signals.indexOf(this.cur_signal), 1);
                             // this.signals = this.signals.filter(t => t.id !== this.cur_signal.id);
                             //document.getElementById(s_id).remove();
@@ -169,20 +167,13 @@
                 e_id = e.id
 
                 var url = window.location.origin + '/ems/utils/as?sid=' + s_id + '&eid=' + e_id;
-                console.log(url);
 
                 fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data == 1) {
-                            this.showModal = false;
-                            // this.signals.splice(this.signals.indexOf(this.cur_signal), 1);
-                            // this.signals = this.signals.filter(t => t.id !== this.cur_signal.id);
-
-                            console.log("signal attached")
-                        } else {
-                            console.log("Failed to attach signal")
-                        }
+                    .then((response) => response.json())
+                    .then((json) => {
+                        console.log("reached hapa")
+                        console.log(json.success_msg)
+                        $('#attachEvent_wrp').html(json.success_msg)
                     })
             },
 
@@ -200,21 +191,21 @@
                 });
             },
 
-
+            //fetch events
             fetchEvents() {
                 this.events = [
                     {% for event in events %}
                     {
-                        id: "{{ event.id }}",
-                        title           : "{{ event.title }}",
-                        description     : "{{ event.description }}",
+            id: "{{ event.id }}",
+                title           : "{{ event.title }}",
+                    description     : "{{ event.description }}",
                         location        : "{{ event.location.title }}",
-                        status          : "{{ event.status }}",
-                        created_on      : "{{ event.created_on }}",
+                            status          : "{{ event.status }}",
+                                created_on      : "{{ event.created_on }}",
                     },
-                    {% endfor %}
+        {% endfor %}
                 ]
-            },
+    },
         }
     }
 
