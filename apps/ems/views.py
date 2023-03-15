@@ -254,7 +254,7 @@ def request_event_confirmation(request):
                     arr_sector_users.append(val.user.email)
 
                 """send email in background"""
-                #response = send_email("Request For Alert Confirmation" , message_to_users, arr_sector_users)    
+                response = send_email("Request For Alert Confirmation" , message_to_users, arr_sector_users)    
 
         """response"""
         response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New request for confirmation created.</div>"
@@ -329,7 +329,7 @@ def update_event_sector_confirmation(request):
                 arr_managers.append(user.email)
 
             """send email in background"""
-            #response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
+            response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
 
         """response"""
         response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Alert confirmed.</div>"
@@ -399,7 +399,7 @@ def update_event_confirmation(request):
                     arr_sector_users.append(val.user.email)
 
                 """send email in background"""
-                #response = send_email("Request For Alert Confirmation" , message_to_users, arr_sector_users) 
+                response = send_email("Request For Alert Confirmation" , message_to_users, arr_sector_users) 
 
         """response"""
         response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Alert successfully processed.</div>"
@@ -410,7 +410,6 @@ def update_event_confirmation(request):
     return HttpResponse(response)
 
 
-    
 def event_progress_report(request, **kwargs):
     """Event progress report"""
     event = Event.objects.get(pk=kwargs['pk'])
@@ -466,7 +465,7 @@ def update_progress_report(request):
                 arr_managers.append(user.email)
 
             """send email in background"""
-            #response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
+            response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
 
         """response"""
         response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Alert progress report uploaded.</div>"
