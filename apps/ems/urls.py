@@ -60,7 +60,7 @@ urlpatterns = [
     path('utils/mr', manage_rumor, name='manage_rumor'),
     
     path('utils/mea', manage_event_act, name='manage_event_act'),
-    path('utils/ssr', submit_sitreps, name='submit_sitreps'),
+    #path('utils/ssr', submit_sitreps, name='submit_sitreps'),
 
     #path('build', build_location_db)
     
