@@ -20,9 +20,24 @@ urlpatterns = [
 
     #events
     path('events', EventListView.as_view(), name='events'),
-    path('event/<int:eid>', EventView.as_view(), name='event'),
+    path('events/<int:pk>/show', EventDetailView.as_view(), name='show-event'),
     path('events/create', EventCreateView.as_view(), name='create-event'),
     path('events/<int:pk>/edit', EventUpdateView.as_view(), name='edit-event'),
+    path('events/<int:pk>/delete', EventDeleteView.as_view(), name='delete-event'),
+    
+    path('events/<int:pk>/activities', event_activities, name='event-activities'),
+
+    path('events/<int:pk>/initiate', initiate_event, name='initiate-event'),
+    path('events/request_confirmation', request_event_confirmation, name='request-event-confirmation'),
+
+    path('events/<int:pk>/sector-confirmation', event_sector_confirmation, name='event-sector-confirmation'),
+    path('events/update-sector-confirmation', update_event_sector_confirmation, name='update-event-sector-confirmation'),
+
+    path('events/<int:pk>/confirmation', event_confirmation, name='event-confirmation'),
+     path('events/update-confirmation', update_event_confirmation, name='update-event-confirmation'),
+
+    path('events/<int:pk>/progress-report', event_progress_report, name='event-progress-report'),
+    path('events/update-progress-report', update_progress_report, name='update-progress-report'),
 
     #rumors
     path('rumors', RumorListView.as_view(), name='rumors'),
@@ -44,6 +59,7 @@ urlpatterns = [
     path('utils/as', attach_sig2event, name='attach_sig2event'),
     path('utils/me', manage_event, name='manage_event'),
     path('utils/sl', search_location, name='search_location'),
+    path('utils/lse', listing_events, name='listing_events'),
     path('utils/ae', add_event, name='add_event'),
     path('utils/uf', upload_file, name='upload_file'),
     path('utils/gf', get_files, name='get_files'),
@@ -68,5 +84,11 @@ urlpatterns = [
     path('ajax_datatable/permissions/', ajax_datatable_views.PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
     path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="e_list"),
     path('ajax_datatable/rumor_list/', ajax_datatable_views.RumorList.as_view(), name="r_list"),
+
+    #messages
+    path('ajax_datatable/message_list/', ajax_datatable_views.MessageList.as_view(), name="m_list"),
+
+    #users
+    path('ajax_datatable/users_list/', ajax_datatable_views.UserList.as_view(), name="u_list"),
     
 ]

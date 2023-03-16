@@ -1,0 +1,71 @@
+<div class="overflow-y-scroll">
+    <div class="flex mb-0">
+        <h4 class="text-sm font-medium py-1 uppercase text-gray-600">Alert Activities</h4>
+    </div>
+
+    {% if activities.count > 0%}
+    <ul role="list" class="divide-y divide-gray-200">
+        {% for val in activities %}
+        <li class="py-3 sm:py-4">
+            <div class="flex justify-between">
+                <div class="">
+                    <p class="text-sm font-medium text-gray-700 truncate">
+                        {% if val.action == 'WAITING_CONFIRMATION' %}
+                        <span>Waiting Confirmation</span>
+                        {% elif val.action == 'CONFIRMED' %}
+                        <span>Confirmation</span>
+                        {% elif val.action == 'PROGRESS_REPORT' %}
+                        <span>Progress Report</span>
+                        {% elif val.action == 'SITUATION_REPORT' %}
+                        <span>Situational Report</span>
+                        {% endif %}
+                    </p>
+
+                    <p class="text-sm font-normal text-gray-600">
+                        {% if val.action == 'WAITING_CONFIRMATION' %}
+                        {% if val.confirmed == 1 %}
+                        Confirmed: <span class="text-green-600 font-medium">Yes</span>
+                        {% elif val.confirmed == 0 %}
+                        Confirmed: <span class="text-red-600 font-medium">No</span>
+                        {% endif %}
+                        {% elif val.action == 'CONFIRMED' or val.action == 'DISCARDED' %}
+                        {% if val.action == "CONFIRMED" %}
+                        Confirmed: <span class="text-green-600 font-medium">Yes</span>
+                        {% elif val.action == 'DISCARDED' %}
+                        Confirmed: <span class="text-red-600 font-medium">No</span>
+                        {% endif %}
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="">
+                    <p class="text-xs font-medium text-gray-600">
+                        {{ val.created_by.first_name }} {{ val.created_by.last_name }}
+                    </p>
+
+                    <p class="text-xs  text-gray-500">
+                        {{ val.created_on|date:"d-m-Y" }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="py-1">
+                {% if val.action == 'WAITING_CONFIRMATION' %}
+                {% if val.severity is not None %}
+                <p class="text-sm text-gray-500 truncate py-1">
+                    Severity: {{ val.severity }}
+                </p>
+                {% endif %}
+                {% endif %}
+
+                <p class="text-sm text-gray-500 truncate py-1">
+                    {{ val.remarks }}
+                </p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm font-normal text-gray-600">No any activity</p>
+    {% endif %}
+</div>

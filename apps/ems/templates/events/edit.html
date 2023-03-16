@@ -11,7 +11,7 @@
 <main class="bg-white">
     <div class="bg-gray-100 py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
         <div>
-            <h1 class="text-xl font-medium tracking-tight text-gray-600">Create New Alert</h1>
+            <h1 class="text-xl font-medium tracking-tight text-gray-600">Edit Alert</h1>
         </div>
 
         <div></div>
@@ -20,7 +20,8 @@
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
         <div class="flex-1 h-full overflow-y-scroll">
             <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                <div x-init="initjq()">
+
+                <div  x-init="initjq()">
                     <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium" autocomplete="off">
                         {% csrf_token %}
         
@@ -51,7 +52,9 @@
                                 <div class="control-group">
                                     <label class="control-label">Location <span class="text-red-600">*</span></label>
                                     <select class="get_location w-full" data-placeholder="Search location ..."
-                                        id="location_id" name="location_id" required></select>
+                                        id="location_id" name="location_id" required>
+                                        <option value="{{ event.location.id }}">{{ event.location.title }}</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -77,19 +80,19 @@
                             <a href="{% url 'events' %}"
                                 class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Cancel</a>
                             <button type="submit"
-                                class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Submit</button>
+                                class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Update</button>
                         </div>
                     </form>
                 </div>
+                
             </div>
         </div>
     </div>
 </main>
+
+
 {% endblock %}
 
-{% block extrastyle %}
-    <link href="{% static 'css/table.css' %}" rel="stylesheet" type="text/css" />
-{% endblock extrastyle %}
 
 {% block get_contents %}
 <script src="{% static 'libs/popper/popper.min.js' %}"></script>
@@ -98,23 +101,7 @@
 <script src="{% static 'libs/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
 
 <script>
-    function getContents() {
-        return {
-            new_event: {
-                location: "",
-                alert: "",
-                contact_name: "",
-                title: "",
-                description: "",
-                pri_sector: "",
-                sector: "",
-                contact_prof: "",
-                contact_phone: "",
-                contact_email: "",
-                signal: "",
-            },
-        }
-    }
+    function getContents() {}
 
     function initjq() {
         $(".select2").select2();

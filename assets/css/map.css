@@ -34,3 +34,7 @@ Map
     margin-right: 8px;
     opacity: 0.7;
   }
+
+  span.asteriskField{
+    color: #D32F2F;
+}

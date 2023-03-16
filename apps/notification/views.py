@@ -1,29 +1,37 @@
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.core.mail import BadHeaderError
-from django.http import JsonResponse, HttpResponse
-from .tasks import notification
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse_lazy
+from django.views import generic
+from django.contrib import messages
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
-def test(request):
-    notification.delay()
-    return HttpResponse("django home")
+from .models import *
 
 
-# Create your views here.
-def send_email(subject, message, from_email, to_email):
-    if subject and message:
-        try:
-            email = EmailMessage(
-                subject,
-                message,
-                from_email,
-                to_email
-            )
-            email.content_subtype = "html"
-            email.send(fail_silently=True)
-            # response
-            return JsonResponse({'error': False, 'message': 'Email sent'})
-        except BadHeaderError:
-            return JsonResponse({'error': True, 'message': 'Email failed'})
-    else:
-        return JsonResponse({'error': True, 'message': 'Email failed'})
+class MessageListView(generic.TemplateView):
+    """ Messages Lists """
+    template_name = "messages/lists.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MessageListView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(MessageListView, self).get_context_data(**kwargs)
+        return context
+    
+
+def mark_as_read(request, **kwargs):
+    """mark notification as read"""
+    message = Notification.objects.get(pk=kwargs['pk'])
+
+    """change status"""
+    message.app_status = "DELIVERED"
+    message.save()
+
+    """redirect with message"""
+    messages.success(request, 'Notification marked as read')
+    return HttpResponseRedirect(reverse_lazy('messages')) 

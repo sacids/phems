@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import View, UpdateView
-from .forms import RegistrationForm, LoginForm
+from .forms import LoginForm, ChangePasswordForm, ProfileForm, UserForm
 from django.contrib.auth.models import User
 from .models import Profile
+from apps.ems.models import Sector
 
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
@@ -17,10 +18,17 @@ from django.conf import settings
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 
+from django.contrib.auth import update_session_auth_hash
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
-# Register View
+from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+
+
 class RegistrationView(View):
-    form_class = RegistrationForm
+    """registration view"""
+    form_class = UserForm
     template_name = 'register.html'
 
     def get(self, request, *args, **kwargs):
@@ -55,10 +63,9 @@ class RegistrationView(View):
         # render
         return render(request, self.template_name, {'form': form})
 
-# login
-
 
 class LoginView(View):
+    """Login to the platform"""
     form_class = LoginForm
     template_name = 'login.html'
     success_url = 'dashboard'
@@ -96,16 +103,93 @@ class LoginView(View):
         return render(request, self.template_name, {'form': form})
 
 
-# Logout
+class ProfileView(View):
+    """User Profile"""
+    template_name = 'profile.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProfileView, self).dispatch( *args, **kwargs)
+
+    def get(self, request):
+        user = User.objects.get(pk=request.user.id)
+
+        """form"""
+        form = ProfileForm(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'email': user.email,
+            'organization': user.profile.organization
+            })
+
+        """sectors"""
+        sectors = Sector.objects.all()
+
+        """context"""
+        context = {"sectors": sectors, 'form': form}
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        user = User.objects.get(pk=request.user.id)
+        user.first_name = request.POST.get("first_name")
+        user.last_name  = request.POST.get("last_name")
+        user.email      = request.POST.get("email")
+        user.username   = request.POST.get("username")
+
+        """create or update profile"""
+        profile, created = Profile.objects.update_or_create(user_id=user.id,  
+            defaults={'organization': request.POST.get("organization")},)
+
+        """save user"""
+        user.save()
+
+        """message"""
+        messages.success(request, 'Profile updated!')
+
+        """redirect page"""
+        return HttpResponseRedirect(reverse_lazy('profile'))    
+    
+class ChangePasswordView(View):
+    """Change Password"""
+    template_name = 'change_password.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ChangePasswordView, self).dispatch( *args, **kwargs)
+
+    def get(self, request):
+        form = ChangePasswordForm(request.user)
+        context = {"form": form}
+
+        """render view"""
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        form = ChangePasswordForm(request.user, request.POST)
+
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change-password')
+        else:
+            form = ChangePasswordForm(request.user)
+
+        """render same form"""
+        return render(request, self.template_name, {'form': form})
+
+
 class LogoutView(View):
+    """Logout class"""
     def get(self, request):
         logout(request)
         messages.error(request, 'Log out successfully')
         return redirect('login')
 
 
-# Activate account
 class ActivateAccount(View):
+    """Activate account"""
     def get(self, request, uidb64, token, *args, **kwargs):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))

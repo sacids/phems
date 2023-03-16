@@ -1,0 +1,44 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+
+{% block title %} Manage Users {% endblock %}
+
+{% block contents %}
+
+<main class="bg-white h-full relative">
+    <div class="bg-gray-100 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
+        <div>
+            <h1 class="text-xl font-medium tracking-tight text-gray-600">Delete User</h1>
+        </div>
+
+        <div>
+        </div>
+    </div>
+
+    <div class="py-2 px-4 sm:px-4 lg:px-4">
+        <form method="post">{% csrf_token %}
+            <p class="mb-3">Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" value="Confirm" 
+            class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center" />
+        </form>
+    </div>
+
+</main>
+
+<script language="javascript">
+
+</script>
+
+{% endblock %}
+
+{% block extrastyle %}
+    <link href="{% static 'css/table.css' %}" rel="stylesheet" type="text/css" />
+{% endblock extrastyle %}
+
+{% block get_contents %}
+<script>
+    function getContents() {}
+</script>
+{% endblock %}

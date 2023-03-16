@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views
+from .views import *
 
 urlpatterns = [
-    path("test/", views.test, name="test"),
+    path('messages', MessageListView.as_view(), name='messages'),
+    path('<int:pk>/mark-as-done', mark_as_read, name='mark-as-done'),
 ]

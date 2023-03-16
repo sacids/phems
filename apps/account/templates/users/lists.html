@@ -3,12 +3,14 @@
 {% load humanize %}
 {% load filters %}
 
+{% block title %} Manage Users {% endblock %}
+
 {% block contents %}
 
 <main class="bg-white h-full relative">
-    <div class="bg-gray-100 h-16 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
+    <div class="bg-gray-100 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
-            <h1 class="text-xl font-medium tracking-tight text-gray-600">Reported Alerts</h1>
+            <h1 class="text-xl font-medium tracking-tight text-gray-600">Manage Users</h1>
         </div>
 
         <div>
@@ -18,36 +20,47 @@
         </div>
     </div>
 
-    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
-        <div class="flex-1 h-full overflow-y-scroll">
-            <div class="mx-auto py-4 px-4 sm:px-4 lg:px-4">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="bg-teal-100 rounded-b text-teal-900 py-3 px-3 mb-2" role="alert">
-                            <div class="flex">
-                                <div>
-                                    <p class="text-sm font-normal">{{ message }}</p>
-                                </div>
-                            </div>
+    <div class="py-2 px-4 sm:px-4 lg:px-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="bg-teal-100 rounded-b text-teal-900 px-4 sm:px-4 lg:px-4 py-3 mt-3 mb-3" role="alert">
+                    <div class="flex">
+                        <div>
+                            <p class="text-sm font-normal">{{ message }}</p>
                         </div>
-                    {% endfor %}
-                {% endif %}
-
-                <div class="table-responsive h-full overflow-hidden">
-                    <table id="datatable" width="100%"
-                        class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
-                    </table>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="py-2 px-4 sm:px-4 lg:px-4 flex justify-between">
+        <div>
+            <a href="{% url 'create-user' %}" class="text-white bg-gray-600 hover:bg-slate-800 hover:text-white font-normal rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">
+                <i class="bx bx-user-plus"></i> Register
+            </a>
+        </div>
+
+        <div>
+            <a href="#" class="text-white bg-green-700 hover:bg-green-800 font-normal rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">
+                <i class='bx bxs-file-export'></i> Export
+            </a>
         </div>
     </div>
+
+    <div class="table-responsive px-4 sm:px-4 lg:px-4 py-3 h-full overflow-hidden">
+        <table id="datatable" width="100%"
+            class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
+        </table>
+    </div>
+
 </main>
 
 <script language="javascript">
     $(document).ready(function () {
         AjaxDatatableViewUtils.initialize_table(
             $('#datatable'),
-            "{% url 'e_list' %}",
+            "{% url 'u_list' %}",
             {
                 // extra_options (example)
                 processing: false,

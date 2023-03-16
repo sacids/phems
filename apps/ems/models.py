@@ -19,12 +19,11 @@ from jellyfish import soundex, metaphone
 import os
 
 
-
 # Create your models here.
 class Signal(models.Model):
-    
     CHANNEL = (
         ('SMS', 'SMS'),
+        ('USSD', 'USSD'),
         ('WHATSAPP', 'WhatsApp'),
         ('TELEGRAM', 'Telegram'),
         ('TWITTER', 'Twitter'),
@@ -57,17 +56,19 @@ class Signal(models.Model):
 
     @property
     def css_icon(self):
-        if self.channel == 'SMS':
-            return 'bx bx-message-alt-dots text-primary '
-        if self.channel == 'WHATSAPP':
+        if self.channel == 'USSD':
+            return 'bx bx-message-dots text-primary'
+        elif self.channel == 'SMS':
+            return 'bx bx-message-alt-dots text-primary'
+        elif self.channel == 'WHATSAPP':
             return 'text-green-800 bx bxl-whatsapp text-success '
-        if self.channel == 'TELEGRAM':
+        elif self.channel == 'TELEGRAM':
             return 'bx bxl-telegram text-info '
-        if self.channel == 'TWITTER':
+        elif self.channel == 'TWITTER':
             return 'text-blue-400 bx bxl-twitter text-info '
-        if self.channel == 'WEB':
+        elif self.channel == 'WEB':
             return 'bx bxl-html5 text-warning '
-        if self.channel == 'APP':
+        elif self.channel == 'APP':
             return 'bx bxl-android text-danger '
      
      
@@ -79,12 +80,10 @@ class Signal(models.Model):
 
 
 
-
-
 class Sector(models.Model):
-
     title           = models.CharField(max_length=50)
     linked_group    = models.ForeignKey(Group, on_delete=DO_NOTHING,blank=True, null=True)
+    primary         = models.IntegerField(blank=True, null=True, default=0)
 
     def __str__(self):
         return self.title
@@ -96,7 +95,6 @@ class Sector(models.Model):
         verbose_name_plural = 'Sectors'    
 
 class Contact(models.Model):
-
     CONTACT_SOURCE  = (
         ('ORIGINAL', 'Original'),
         ('SECOND_HAND', 'Second-Hand')
@@ -137,11 +135,9 @@ class Stage(models.Model):
 
 
 class Location(MP_Node):
-
     title           = models.CharField(max_length = 200)
     code            = models.CharField(max_length=10, blank=True, null=True)
     p_id            = models.CharField(max_length = 25)
-    
     
     def __str__(self):
         return self.title
@@ -154,12 +150,13 @@ class Location(MP_Node):
 
 
 class Event(models.Model):
-  
     STATUS  = (
         ('NEW', 'New'),
-        ('DISCARED', 'Discarded'),
+        ('WAITING_CONFIRMATION', 'Waiting Confirmation'),
+        ('DISCARDED', 'Discarded'),
+        ('CONFIRMED', 'Confirmed'),
         ('PROGRESS', 'On Progress'),
-        ('COMPLETE', 'Complete'),
+        ('CLOSED', 'Closed'),
     )
     
     PROFESSION = (
@@ -170,12 +167,12 @@ class Event(models.Model):
 
     title           = models.CharField(max_length=150,blank=True, null=True)
     description     = models.TextField(blank=True, null=True)
-    alert           = models.ForeignKey('Alert', on_delete=DO_NOTHING,default=1) 
+    alert           = models.ForeignKey('Alert', on_delete=DO_NOTHING) 
     signal          = models.ManyToManyField("Signal")
-    status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
+    status          = models.CharField(max_length=40,choices=STATUS, default='NEW')
     stage           = models.ForeignKey('stage', on_delete=DO_NOTHING,blank=True, null=True,default=1) 
     location        = models.ForeignKey('location', on_delete=DO_NOTHING)
-    pri_sector      = models.ForeignKey('Sector', related_name="pri_sector",on_delete=DO_NOTHING,blank=True, null=True,default=1)
+    pri_sector      = models.ForeignKey('Sector', related_name="pri_sector",on_delete=models.SET_NULL,blank=True, null=True)
     sector          = models.ManyToManyField(Sector)
  
     contact_name    = models.CharField(max_length=150, blank=True, null=True)
@@ -185,6 +182,9 @@ class Event(models.Model):
     
     created_on      = models.DateTimeField(auto_now_add=True)
     updated_on      = models.DateTimeField(auto_now=True)
+
+    created_by      = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    updated_by      = models.ForeignKey(User, related_name="updated_by", blank=True, null=True, on_delete=models.SET_NULL)
 
     notes           = GenericRelation('note')    
     files           = GenericRelation('files')   
@@ -201,10 +201,8 @@ class Event(models.Model):
         verbose_name = 'Event'
         verbose_name_plural = 'Events'
     
-
-             
+         
 class SignalKeys(models.Model):
-
     keyword         = models.CharField(max_length=50)
     weight          = models.SmallIntegerField(default=1)
     sector          = models.ForeignKey(Sector, on_delete=models.CASCADE, blank=True, null=True)
@@ -228,7 +226,6 @@ class SignalKeys(models.Model):
         
     
 class files(models.Model):
-
     title       = models.CharField(max_length=50) 
     obj         = models.FileField(upload_to='assets/library', max_length=100)
     created_at  = models.DateTimeField(auto_now_add=True, null=True)
@@ -270,7 +267,6 @@ class files(models.Model):
 
 
 class perms_group(models.Model):
-
     group        = models.ForeignKey(Group, on_delete=CASCADE) 
 
     # Below the mandatory fields for generic relation
@@ -287,7 +283,6 @@ class perms_group(models.Model):
 
 
 class perms_user(models.Model):
-
     user        = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=CASCADE) 
 
     # Below the mandatory fields for generic relation
@@ -447,3 +442,46 @@ class Alert(models.Model):
     class Meta:
         db_table = 'ph_alerts'
         managed = True
+
+
+class Activity(models.Model):
+    ACTION  = (
+        ('NEW', 'New'),
+        ('INITIATED', 'Initiated'),
+        ('WAITING_CONFIRMATION', 'Waiting for Confirmation'),
+        ('CONFIRMED', 'Confirmed'),
+        ('PROGRESS_REPORT', 'Progress Report'),
+        ('SITUATION_REPORT', 'Situation Report'),
+    )
+
+    event       = models.ForeignKey('Event', on_delete=models.CASCADE)
+    confirmed   = models.IntegerField(default=0, blank=True, null=True)
+    severity    = models.TextField(blank=True, null=True)
+    remarks     = models.TextField(blank=True, null=True)
+    created_on  = models.DateTimeField(auto_now_add=True, null=True)
+    created_by  = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    action      = models.CharField(max_length=50, choices=ACTION, default='NEW')
+
+    class Meta:
+        db_table = 'ph_activities'
+        verbose_name_plural = 'Activities'
+
+    def __str__(self):
+        return self.remarks
+    
+
+class ActivityAttachment(models.Model):
+    activity    = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    attachment  = models.FileField(upload_to='library', max_length=100)
+
+    class Meta:
+        db_table = 'ph_activity_attachments'
+        verbose_name_plural = 'Attachments'
+
+    def __str__(self):
+        return self.activity
+    
+    @property
+    def filename(self):
+        return os.path.basename(self.obj.name)
+    
