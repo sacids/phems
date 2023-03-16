@@ -122,6 +122,7 @@ class Contact(models.Model):
 
 class Stage(models.Model):
     title           = models.CharField(max_length=255)
+    css             = models.CharField(max_length=255, default="bg-blue-500")
     form            = models.ForeignKey('Form', on_delete=models.CASCADE,blank=True, null=True)
 
     def __str__(self):
@@ -131,20 +132,6 @@ class Stage(models.Model):
         db_table = 'ph_stage'
         verbose_name_plural = 'Stages'
 
-    @property
-    def css(self):
-        if self.title.upper() == 'NEW':
-            return 'bg-blue-500'
-        elif self.title.upper() == 'WAITING_CONFIRMATION':
-            return 'bg-yellow-500'
-        elif self.title.upper() == 'CONFIRMED':
-            return 'bg-green-500'
-        elif self.title.upper() == 'DISCARDED':
-            return 'bg-red-500'
-        elif self.title.upper() == 'CANCEL':
-            return 'bg-red-500'
-        else:
-            return 'bg-blue-500'
 
 
 class Location(MP_Node):
