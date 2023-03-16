@@ -1,7 +1,10 @@
 {% load filters %}
 
 <div class="flex flex-col text-xs">
-    <form @submit.prevent="submitEventForm" defer>
+    <form @submit.prevent="UpdateWfForm" defer>
+
+
+
         {% for element in form_details %}
             <p class="mt-5 mb-1">{{element.label}}</p>
 
@@ -65,8 +68,10 @@
         {% endfor %}
 
         <div class="flex space-x-2 mt-5">
-            <button class="bg-emerald-500 hover:bg-emerald-700 px-3 py-2 rounded-sm">Save</button>
+            <button class="bg-emerald-500 hover:bg-emerald-700 px-3 py-2 rounded-sm" @click="">Save</button>
             <button class="bg-gray-100 hover:bg-gray-300 px-3 py-2 rounded-sm" @click="">Cancel</button>
         </div>
     </form>
 </div>
+
+

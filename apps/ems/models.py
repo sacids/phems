@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import json
@@ -131,7 +131,20 @@ class Stage(models.Model):
         db_table = 'ph_stage'
         verbose_name_plural = 'Stages'
 
-    pass
+    @property
+    def css(self):
+        if self.title.upper() == 'NEW':
+            return 'bg-blue-500'
+        elif self.title.upper() == 'WAITING_CONFIRMATION':
+            return 'bg-yellow-500'
+        elif self.title.upper() == 'CONFIRMED':
+            return 'bg-green-500'
+        elif self.title.upper() == 'DISCARDED':
+            return 'bg-red-500'
+        elif self.title.upper() == 'CANCEL':
+            return 'bg-red-500'
+        else:
+            return 'bg-blue-500'
 
 
 class Location(MP_Node):
@@ -316,7 +329,8 @@ class note(models.Model):
         
         
 class workflow_config(models.Model):
-    label           = models.CharField(max_length=100,blank=True, null=True) 
+    label           = models.CharField(max_length=100,blank=True, null=True)
+    wf_group        = models.ForeignKey(Group, related_name='wf_group', on_delete=models.CASCADE)
     cur_stage       = models.ForeignKey('Stage', related_name='cur_stage', on_delete=models.CASCADE)
     next_stage      = models.ForeignKey('Stage', related_name='next_stage', on_delete=models.CASCADE)
     

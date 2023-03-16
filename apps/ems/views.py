@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import EventForm
 from apps.notification.classes import NotificationWrapper
 from apps.notification.tasks import send_email
+from django.forms.models import model_to_dict
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -79,14 +80,14 @@ class EventDetailView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventDetailView, self).get_context_data(**kwargs)
-        context['title'] = "Alert Information"
-
-        event = Event.objects.get(id=self.kwargs['pk'])
-        context['event'] = event
-
+        
+        user_groups             = self.request.user.groups.all()
+        event                   = Event.objects.get(id=self.kwargs['pk'])
+        context['event']        = event
+        context['workflows']    = workflow_config.objects.filter(wf_group__in=user_groups)
+        context['title']        = "Alert Information"
         """activities"""
-        activities = Activity.objects.filter(event_id= event.id).order_by('created_on')
-        context['activities'] = activities
+        context['activities']   = Activity.objects.filter(event_id= event.id).order_by('created_on')
 
         return context
 
@@ -695,8 +696,7 @@ def get_event_data(request):
 
 def _get_event_data(eid):
 
-    all_data = workflow_data.objects.filter(
-        event__id=eid).order_by('-created_at')
+    all_data = workflow_data.objects.filter(event__id=eid).order_by('-created_at')
     data = []
 
     for n in all_data:
@@ -916,13 +916,13 @@ def get_list(list_name):
 
 
 def change_wf(request):
-    new_stage = request.GET.get('ns')
-    event_id = request.GET.get('ei')
-    form_id = request.GET.get('fi')
+    new_stage   = request.GET.get('ns')
+    event_id    = request.GET.get('ei')
+    form_id     = request.GET.get('fi')
 
     context = {}
-    context['new_stage'] = new_stage
-    context['event_id'] = event_id
+    context['new_stage']    = new_stage
+    context['event_id']     = event_id
     context['form_details'] = Form_config.objects.filter(form_id=form_id)
 
     # for i in context['form_details']:
@@ -994,10 +994,11 @@ def get_alert_data(request):
 
 
 def update_wf(request):
-    formData = request.POST.get('fda')
-    event_id = request.POST.get('eid')
-    next_stage = request.POST.get('nst')
-
+    
+    formData    = request.POST.get('fi')
+    event_id    = request.POST.get('ei')
+    next_stage  = int(request.POST.get('ns'))
+    
     eventObj = Event.objects.get(pk=event_id)
     stageObj = Stage.objects.get(pk=next_stage)
 
@@ -1017,9 +1018,17 @@ def update_wf(request):
     # UPDATE OBJECT
     eventObj.stage = stageObj
     eventObj.save()
+    
+    cur_event   = {
+        'stage_id':     eventObj.stage.id,
+        'stage_title':  eventObj.stage.title,
+        'stage_class':  eventObj.stage.css,
+    }
 
-    return JsonResponse(1, safe=False)
+    return JsonResponse( cur_event, safe=False)
 
+
+        
 
 def manage_event_act(request):
 

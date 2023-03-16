@@ -5,7 +5,7 @@
 
 {% block contents %}
 
-<main class="bg-white">
+<main class="h-full bg-white" x-init="fetchWF();">
     <div class="bg-gray-100 h-16 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
             <h1 class="text-xl font-medium tracking-tight text-gray-600">
@@ -17,9 +17,9 @@
     </div>
 
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
-        <div class="flex-1 h-full overflow-y-scroll">
-            <div class="mx-auto flex px-4 sm:px-4 lg:px-4">
-                <div class="w-6/12">
+        <div class="flex-1 h-full overflow-hidden">
+            <div class="flex h-full">
+                <div class="w-6/12 h-full overflow-y-scroll px-4 sm:px-4 lg:px-4">
                     <div class="w-full my-1 py-4 pr-4">
                         <div class="flex flex-col mb-4">
                             <p class="text-gray-500 text-sm font-normal">Title: </p>
@@ -45,20 +45,12 @@
 
                             <div>
                                 <p class="text-gray-500 text-sm font-normal">Status: </p>
-                                {% if event.status == 'NEW' %}
-                                <span
-                                    class="bg-blue-500 text-white rounded-full px-2 py-1 text-xs font-medium">New</span>
-                                {% elif event.status == 'WAITING_CONFIRMATION' %}
-                                <span class="bg-yellow-500 text-white rounded-full px-2 py-1 text-xs font-medium">
-                                    Waiting Confirmation
-                                </span>
-                                {% elif event.status == 'CONFIRMED' %}
-                                <span
-                                    class="bg-green-600 text-white rounded-full px-2 py-1 text-xs font-medium">Confirmed</span>
-                                {% elif event.status == 'DISCARDED' %}
-                                <span
-                                    class="bg-red-400 text-white rounded-full px-2 py-1 text-xs font-medium">Discarded</span>
-                                {% endif %}
+                                <p 
+                                    class="text-white rounded-full px-2 py-1 text-xs font-medium"
+                                    :class="cur_event.stage_class"
+                                    x-text="cur_event.stage_title">
+                                </p>
+
                             </div>
                         </div>
 
@@ -105,8 +97,23 @@
                     </div>
                 </div>
 
-                <div class="w-6/12">
-                    <div class="bg-gray-50 px-4 py-4">
+                <div class="w-6/12 h-full shadow-md">
+                    <div class="border-b text-sm py-2 px-5 ">
+                        <template  x-for="(wf, index) in workflow" :key="index">
+                            <template x-if="wf.cur_stage==cur_event.stage_id">
+
+                                <button 
+                                    class="bg-gray-200 p-1 rounded-sm hover:bg-emerald-800 hover:text-white px-3" 
+                                    :hx-get="'{% url 'change_wf' %}?ns='+wf.next_stage+'&ei={{event.id}}&fi='+wf.form_id" 
+                                    hx-target="#parentDiv" 
+                                    @click="cur_workflow = wf" 
+                                    x-text="wf.label">
+                                </button>
+
+                            </template>
+                        </template>
+                    </div>
+                    <div class="px-4 py-4">
                         <div class="flex space-x-2">
                             <button hx-get="{% url 'event-activities' event.id %}" hx-target="#parentDiv"
                                 hx-swap="innerHTML"
@@ -252,7 +259,90 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
 <script>
-    function getContents() { }
+    function getContents() { 
+
+        return{
+
+
+            workflow:           [],
+
+            cur_event:{
+                stage_id:       {{ event.stage.id }},
+                stage_title:    "{{ event.stage.title }}",
+                stage_class:    "{{ event.stage.css }}",
+            },
+
+
+            cur_workflow: {
+                id              : "",
+                wf_group        : "",
+                cur_stage       : "",
+                next_stage      : "",
+                label           : "",
+                form_id         : "",
+            },
+
+
+            fetchWF(){
+                this.workflow = [
+                    {% for workflow in workflows %}
+                        {
+                            id              : "{{ workflow.id }}",
+                            wf_group        : "{{ workflow.wf_group }}",
+                            cur_stage       : "{{ workflow.cur_stage.id }}",
+                            next_stage      : "{{ workflow.next_stage.id }}",
+                            label           : "{{ workflow.label}}",
+                            form_id         : "{{ workflow.next_stage.form.id}}",
+                        },
+                    {% endfor %}
+                ]
+            },
+
+
+            formData: {
+            },
+
+            UpdateWfForm() {
+
+                console.log(JSON.stringify(this.formData)+' '+JSON.stringify(this.cur_workflow));
+
+                // set values
+
+                var data = new FormData();
+                data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                data.append('ei',{{ event.id }})
+                data.append('fi',JSON.stringify(this.formData))
+                data.append('ns',this.cur_workflow.next_stage)
+
+                var url     = window.location.origin + '/ems/utils/uwf'
+
+                fetch(url, {
+                    method: 'POST',
+                    body: data,
+                    credentials : 'same-origin',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    this.cur_event  = data
+                    $('#parentDiv').html('update successfull')
+                })
+                .catch(() => {
+                    console.log('something went wrong')
+                })
+                .finally(() => {
+                    //this.eventFormEl.loading = false;
+                    //this.eventFormEl.Label = 'Add Event'
+                })
+
+
+                //this.cur_stage.stage_id   = this.cur_workflow.next_stage;
+                this.formData       = {};
+            },
+
+        }
+
+    }
 
     function initjq() {
         $('#summernote').summernote();

@@ -58,10 +58,16 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
+
+class WorkflowConfigAdmin(admin.ModelAdmin):
+    list_display    = ['label','wf_group','cur_stage','next_stage']
+    list_filter     = ['wf_group']
+
+
 admin.site.register(Stage)
 admin.site.register(Contact)
 admin.site.register(Sector)
 admin.site.register(note)
 admin.site.register(workflow_data)
-admin.site.register(workflow_config)
+admin.site.register(workflow_config, WorkflowConfigAdmin)
 admin.site.register(sitrep_config)
