@@ -84,6 +84,7 @@ class EventDetailView(generic.TemplateView):
         user_groups             = self.request.user.groups.all()
         event                   = Event.objects.get(id=self.kwargs['pk'])
         context['event']        = event
+        context['notes']        = _get_event_notes(event.id)
         context['workflows']    = workflow_config.objects.filter(wf_group__in=user_groups)
         context['title']        = "Alert Information"
         """activities"""
@@ -995,9 +996,12 @@ def get_alert_data(request):
 
 def update_wf(request):
     
-    formData    = request.POST.get('fi')
-    event_id    = request.POST.get('ei')
-    next_stage  = int(request.POST.get('ns'))
+    if request.method == 'POST': 
+        formData    = request.POST.get('fi')
+        event_id    = request.POST.get('ei')
+        next_stage  = int(request.POST.get('ns'))
+    
+    
     
     eventObj = Event.objects.get(pk=event_id)
     stageObj = Stage.objects.get(pk=next_stage)
@@ -1009,7 +1013,14 @@ def update_wf(request):
     wfObj.data = formData
     wfObj.created_by = request.user
     wfObj.save()
-
+    
+    #{'upload': [<InMemoryUploadedFile: Photo reportage - EB.docx (application/vnd.openxmlformats-officedocument.wordprocessingml.document)>]}>
+    if request.FILES:
+        for k,v in request.FILES.items():
+            print(k,v)
+            wfObj.files.create(obj=v, title=k, created_by=request.user)
+        wfObj.save()
+    
     # ADD COMMENT
     note = request.user.first_name + ' changed stage from ' + \
         eventObj.stage.title+' to '+stageObj.title

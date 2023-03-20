@@ -139,12 +139,12 @@ class EventList(AjaxDatatableView):
         {'name': 'id', 'visible': False, },
         {'name': 'alert', 'title': 'Alert Type', 'foreign_field': 'alert__label',
             'visible': True, 'className': 'w-36 text-left border-r'},
-        {'name': 'title', 'visible': True, 'className': 'text-left border-r'},
+        {'name': 'title', 'visible': True, 'className': 'text-left w-max border-r'},
         {'name': 'pri_sector', 'foreign_field': 'pri_sector__title',
             'title': 'Primary Sector', 'visible': True, 'className': 'w-28 text-left border-r'},
         {'name': 'location', 'foreign_field': 'location__title', 'visible': True,
             'max_length': 15, 'className': 'w-36 text-left border-r'},
-        {'name': 'status', 'visible': True, 'className': 'w-24 text-left border-r'},
+        {'name': 'stage', 'visible': True, 'className': 'text-left whitespace-nowrap w-20 border-r'},
         {'name': 'created_on', 'title': 'Created', 'visible': True,
             'className': 'w-[100px] text-left border-r'},
         {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-10 text-left border-r',
@@ -156,9 +156,9 @@ class EventList(AjaxDatatableView):
 
     def customize_row(self, row, obj):
         # 'row' is a dictionary representing the current row, and 'obj' is the current object.
-        row['title'] = '<a class="text-emerald-800 font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
-        row['created_on'] = naturalday(obj.created_on)
-
+        row['title']        = '<a class="text-emerald-800 font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
+        row['created_on']   = naturalday(obj.created_on)
+        row['stage']        = '<span class="rounded-md py-1 px-3 text-xs '+obj.stage.css+'">'+obj.stage.title+'</span>'
         
         if obj.status == 'NEW':
             row['status'] = '<span class="bg-blue-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">New</span>'

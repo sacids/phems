@@ -5,7 +5,7 @@
 
 {% block contents %}
 
-<main class="h-full bg-white" x-init="fetchWF();">
+<main class="h-full bg-white" id="main" x-init="fetchWF();initEventData();">
     <div class="bg-gray-100 h-16 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
             <h1 class="text-xl font-medium tracking-tight text-gray-600">
@@ -19,7 +19,7 @@
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
         <div class="flex-1 h-full overflow-hidden">
             <div class="flex h-full">
-                <div class="w-6/12 h-full overflow-y-scroll px-4 sm:px-4 lg:px-4">
+                <div class="w-7/12 h-full overflow-y-scroll px-4 sm:px-4 lg:px-4">
                     <div class="w-full my-1 py-4 pr-4">
                         <div class="flex flex-col mb-4">
                             <p class="text-gray-500 text-sm font-normal">Title: </p>
@@ -97,143 +97,135 @@
                     </div>
                 </div>
 
-                <div class="w-6/12 h-full shadow-md">
-                    <div class="border-b text-sm py-2 px-5 ">
-                        <template  x-for="(wf, index) in workflow" :key="index">
-                            <template x-if="wf.cur_stage==cur_event.stage_id">
+                <div class="w-5/12 h-full shadow-md">
+                    <div class="border-b text-sm py-2 px-5 flex justify-between">
+                        <div class="flex">
+                            <template  x-for="(wf, index) in workflow" :key="index">
+                                <template x-if="wf.cur_stage==cur_event.stage_id">
 
-                                <button 
-                                    class="bg-gray-200 p-1 rounded-sm hover:bg-emerald-800 hover:text-white px-3" 
-                                    :hx-get="'{% url 'change_wf' %}?ns='+wf.next_stage+'&ei={{event.id}}&fi='+wf.form_id" 
-                                    hx-target="#parentDiv" 
-                                    @click="cur_workflow = wf" 
-                                    x-text="wf.label">
-                                </button>
+                                    <button 
+                                        class="bg-gray-200 p-1 mr-2 rounded-md hover:bg-emerald-800 hover:text-white px-2"
+                                        @click="doAction(wf)" 
+                                        x-text="wf.label">
+                                    </button>
 
+                                </template>
                             </template>
-                        </template>
-                    </div>
-                    <div class="px-4 py-4">
-                        <div class="flex space-x-2">
-                            <button hx-get="{% url 'event-activities' event.id %}" hx-target="#parentDiv"
-                                hx-swap="innerHTML"
-                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
-                                Activities
+                        </div>
+                        <div class="flex">
+                            <button 
+                                class="flex bg-gray-200 p-1 rounded-md hover:bg-emerald-800 hover:text-white px-1 ml-1" 
+                                :class="{ 'bg-emerald-800 text-white': showFiles == true }" 
+                                @click="hideAllActivities(); showFiles = true;"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 pt-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                                    </svg>
                             </button>
 
-                            {% if event.status == 'NEW' %}
-                            <button hx-get="{% url 'initiate-event' event.id %}" hx-target="#parentDiv"
-                                hx-swap="innerHTML"
-                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
-                                Request For Confirmation
+                            <button 
+                                class="flex bg-gray-200 p-1 rounded-md hover:bg-emerald-800 hover:text-white px-1 ml-1" 
+                                :class="{ 'bg-emerald-800 text-white': showData == true }" 
+                                @click=" hideAllActivities(); showData = true;"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 pt-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5" />
+                                    </svg>
                             </button>
-                            {% endif %}
-
-                            {% if event.status == 'WAITING_CONFIRMATION' %}
-                            <button hx-get="{% url 'event-sector-confirmation' event.id %}" hx-target="#parentDiv"
-                                hx-swap="innerHTML"
-                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
-                                Alert Confirmation
+                              
+                            <button 
+                                class="flex bg-gray-200 p-1 rounded-md hover:bg-emerald-800 hover:text-white px-1 ml-1" 
+                                :class="{ 'bg-emerald-800 text-white': showNotes == true }" 
+                                @click="hideAllActivities(); showNotes = true;"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 pt-1">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                                    </svg>
                             </button>
-                            {% endif %}
-
-                            {% if event.status == 'WAITING_CONFIRMATION' %}
-                            <button hx-get="{% url 'event-confirmation' event.id %}" hx-target="#parentDiv"
-                                hx-swap="innerHTML"
-                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
-                                Confirm/Discard Alert
-                            </button>
-                            {% endif %}
-
-                            {% if event.status == 'CONFIRMED' %}
-                            <button hx-get="{% url 'event-progress-report' event.id %}" hx-target="#parentDiv"
-                                hx-swap="innerHTML"
-                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
-                                Progress Reports
-                            </button>
-                            {% endif %}
-
-                            {% if event.status == 'CONFIRMED' %}
-                            <button
-                                class="bg-gray-300 px-2 py-1 rounded-sm text-sm hover:bg-green-800 hover:text-white">
-                                Situation Reports
-                            </button>
-                            {% endif %}
                         </div>
 
-                        <div id="parentDiv" class="py-2">
-                            <div class="">
-                                <div class="flex mb-0">
-                                    <h4 class="text-sm font-medium py-1 uppercase text-gray-600">Alert Activities</h4>
-                                </div>
 
-                                {% if activities.count > 0%}
-                                <ul role="list" class="divide-y divide-gray-200">
-                                    {% for val in activities %}
-                                    <li class="py-3 sm:py-4">
-                                        <div class="flex justify-between">
-                                            <div class="">
-                                                <p class="text-sm font-medium text-gray-700 truncate">
-                                                    {% if val.action == 'WAITING_CONFIRMATION' %}
-                                                    <span>Waiting Confirmation</span>
-                                                    {% elif val.action == 'CONFIRMED' %}
-                                                    <span>Confirmation</span>
-                                                    {% elif val.action == 'PROGRESS_REPORT' %}
-                                                    <span>Progress Report</span>
-                                                    {% elif val.action == 'SITUATION_REPORT' %}
-                                                    <span>Situational Report</span>
-                                                    {% endif %}
-                                                </p>
-
-                                                <p class="text-sm font-normal text-gray-600">
-                                                    {% if val.action == 'WAITING_CONFIRMATION' %}
-                                                    {% if val.confirmed == 1 %}
-                                                    Confirmed: <span class="text-green-600 font-medium">Yes</span>
-                                                    {% elif val.confirmed == 0 %}
-                                                    Confirmed: <span class="text-red-600 font-medium">No</span>
-                                                    {% endif %}
-                                                    {% elif val.action == 'CONFIRMED' or val.action == 'DISCARDED' %}
-                                                    {% if val.action == "CONFIRMED" %}
-                                                    Confirmed: <span class="text-green-600 font-medium">Yes</span>
-                                                    {% elif val.action == 'DISCARDED' %}
-                                                    Confirmed: <span class="text-red-600 font-medium">No</span>
-                                                    {% endif %}
-                                                    {% endif %}
-                                                </p>
-                                            </div>
-
-                                            <div class="">
-                                                <p class="text-xs font-medium text-gray-600">
-                                                    {{ val.created_by.first_name }} {{ val.created_by.last_name }}
-                                                </p>
-
-                                                <p class="text-xs  text-gray-500">
-                                                    {{ val.created_on|date:"d-m-Y" }}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="py-1">
-                                            {% if val.action == 'WAITING_CONFIRMATION' %}
-                                            {% if val.severity is not None %}
-                                            <p class="text-sm text-gray-500 truncate py-1">
-                                                Severity: {{ val.severity }}
-                                            </p>
-                                            {% endif %}
-                                            {% endif %}
-
-                                            <p class="text-sm text-gray-500 truncate py-1">
-                                                {{ val.remarks }}
-                                            </p>
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                                {% else %}
-                                <p class="text-sm font-normal text-gray-600">No any activity</p>
-                                {% endif %}
+                    </div>
+                    <div class="h-full overflow-y-hidden">
+                        <div x-show="showActions" class="h-full overflow-y-hidden">
+                            <div id="parentDiv" class="py-2 h-full overflow-y-scroll px-5">
+                               
                             </div>
                         </div>
+                        <div x-show="showNotes" class="flex flex-col h-full pb-12 overflow-y-hidden">
+
+                            <div class="grow overflow-y-hidden">
+                                <div class="h-full space-y-5 pb-5 overflow-y-scroll px-5">
+                                    <template x-for="(note, index) in eventNotes" :key="index">
+                                        <div class="flex text-xs">
+                                            <p class="mr-5 bg-red-500 rounded-full h-10 px-3 pt-3 text-white" x-text="note.initials"></p>
+                                            <ul class="flex-1">
+                                                <li class="" x-text="note.name"></li>
+                                                <li class="" x-text="note.message"></li>
+                                                <li class="text-xs text-gray-500" x-text="note.created_on"></li>
+                                            </ul>
+                                        </div>  
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="flex-none text-xs px-5 py-3 border-t flex bg-emerald-50">
+                                <p class="mr-5 bg-red-500 rounded-full h-10 px-3 pt-3 text-white">{{user.first_name|upper|make_list|first}}{{user.last_name|upper|make_list|first}}</p>
+                                <div class="flex-1">
+                                    <textarea x-model="new_note" rows="3" class="block p-2.5 w-full text-sm rounded-sm text-gray-900 border border-gray-300 focus:ring-gray-400 focus:border-gray-400" placeholder="Your message..."></textarea>
+                                    <div class="flex space-x-2 mt-2">
+                                        <button class="bg-emerald-500 hover:bg-emerald-300 px-3 py-1 rounded-sm" :disabled="note_uploading" @click="addNote()">Save</button>
+                                        <button class="bg-gray-100 hover:bg-gray-300 px-3 py-1 rounded-sm">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div x-show="showFiles" class="flex flex-col h-full pb-12 overflow-y-hidden">
+                            <template x-for="(f, index) in eventFiles" :key="index">
+                                <div class="flex justify-between py-1 text-xs border-b">
+                                    <div class="flex space-x-2">
+                                        <i class="text-md" :class="f.css_icon"></i>
+                                        <p class="" x-text="f.file_name"></p>
+                                    </div>
+                                    <div class="flex space-x-2">
+        
+                                        <p class="" x-text="f.created_on"></p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 hover:text-red-900" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                        </svg>
+                                        <a :href="f.url" download>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 hover:text-emerald-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" /> 
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+
+                        <div x-show="showData" class="flex flex-col h-full pb-12 overflow-y-hidden">
+                            <div class="space-y-4">
+                                <template x-for="(edata, index) in eventData" :key="index">
+                                    <div class="text-xs grid grid-flow-col auto-cols-max gap-4">
+                                        <p class="" x-text="edata.stage"></p>
+                                        <div class="">
+                                            <template x-for="[label,value] in Object.entries(edata.data)">
+                                                <div class="grid grid-cols-2 gap-2">
+                                                    <p class="font-bold" x-text="label.replaceAll('_',' ')"></p>
+                                                    <p class="flex-1" x-text="value"></p>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <p class="" x-text="edata.name"></p>
+                                        <p class="" x-text="edata.created_at"></p>
+                                    </div>  
+                                </template>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -264,7 +256,20 @@
         return{
 
 
-            workflow:           [],
+            workflow:       [],
+            eventNotes:     [],
+            eventData:      [],
+            eventFiles:     [],
+
+            new_note:           "",
+
+
+            showNotes:          true,
+            showFiles:          false,
+            showData:           false,
+            showColabs:         false,
+            showActions:        false,
+            note_uploading:     false,
 
             cur_event:{
                 stage_id:       {{ event.stage.id }},
@@ -298,13 +303,83 @@
                 ]
             },
 
+            fetchEventNotes(){
+                var url         = window.location.origin + '/ems/utils/gn?eid='+{{event.id}};
+
+                console.log('getting notes start');
+                fetch(url, {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('getting notes done');
+                    //this.file_uploading     = true;
+                    this.eventNotes = data;
+                    console.log(this.eventNotes);
+                
+                })
+                .catch(() => {
+                    console.log('add link error')
+                    //this.file_uploading     = true;
+                })
+            },
+
+            fetchEventFiles(){
+
+                var url         = window.location.origin + '/ems/utils/gf?eid='+{{event.id}};
+
+                fetch(url, {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('getting files done');
+                    //this.file_uploading     = true;
+                    this.eventFiles = data;
+                })
+                .catch(() => {
+                    console.log('add files error')
+                    //this.file_uploading     = true;
+                })
+            },
+
+            fetchEventData(){
+                
+                var url         = window.location.origin + '/ems/utils/ged?eid='+{{event.id}};
+
+                fetch(url, {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log('getting Data done');
+                    //this.file_uploading     = true;
+                    this.eventData = data;
+                
+                })
+                .catch(() => {
+                    console.log('add link error')
+                    //this.file_uploading     = true;
+                })
+            },
+
+            initEventData(){
+                this.fetchEventNotes();
+                this.fetchEventFiles();
+                this.fetchEventData();
+            },
 
             formData: {
+            },
+
+            formFiles:  {           
             },
 
             UpdateWfForm() {
 
                 console.log(JSON.stringify(this.formData)+' '+JSON.stringify(this.cur_workflow));
+
+                console.log(this.formFiles);
 
                 // set values
 
@@ -313,6 +388,13 @@
                 data.append('ei',{{ event.id }})
                 data.append('fi',JSON.stringify(this.formData))
                 data.append('ns',this.cur_workflow.next_stage)
+
+                Object.keys(this.formFiles).map((key, index) => {
+                    console.log(key)
+                    data.append(key, this.formFiles[key][0])
+                });
+
+                console.log(data)
 
                 var url     = window.location.origin + '/ems/utils/uwf'
 
@@ -326,6 +408,7 @@
                     console.log(data)
                     this.cur_event  = data
                     $('#parentDiv').html('update successfull')
+                    htmx.process('#main')
                 })
                 .catch(() => {
                     console.log('something went wrong')
@@ -338,6 +421,82 @@
 
                 //this.cur_stage.stage_id   = this.cur_workflow.next_stage;
                 this.formData       = {};
+                this.formFiles      = {};
+                console.log('htmx.process')
+                htmx.process(document.body)
+            },
+
+            doAction(wf){
+
+                this.cur_workflow = wf;
+                this.showActions = true; 
+
+                var url     = window.location.origin + '/ems/utils/cwf?ns='+wf.next_stage+'&ei={{event.id}}&fi='+wf.form_id
+
+                fetch(url, {
+                    method: 'GET',
+                    credentials : 'same-origin',
+                })
+                .then(res => res.text())
+                .then(data => {
+                    $('#parentDiv').html(data)
+                    htmx.process('#main')
+                })
+                .catch(() => {
+                    console.log('something went wrong')
+                })
+
+            },
+
+            addNote(){
+
+                console.log('adding note');
+                this.note_uploading = true;
+                var url             = window.location.origin + '/ems/utils/an';
+
+                let formData    = new FormData();
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append("event_id", {{event.id}});
+                formData.append("message", this.new_note);
+
+                fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    credentials : 'same-origin',
+                })
+                .then(res => res.json())
+                .then(data => {
+                    tmp = {
+                        'initials': '{{user.first_name|upper|make_list|first}}{{user.last_name|upper|make_list|first}}',
+                        'name':     '{{user.first_name}} {{user.last_name}}',
+                        'message':  this.new_note,
+                        'created_on': 'Just now',
+                    }
+                    this.eventNotes.unshift(tmp)
+                    console.log('adding note done');
+                    this.new_note   = "";
+                    this.note_uploading     = false;
+
+
+                })
+                .catch(() => {
+                    
+                    console.log('upload error')
+                    //this.file_uploading     = true;
+                })
+                .finally(() => {
+                    this.note_uploading     = false;
+                    
+                })
+
+            },
+
+            hideAllActivities(){
+                this.showFiles  = false;
+                this.showNotes  = false;
+                this.showData   = false;
+                this.showColabs = false;
+                this.showActions= false;
             },
 
         }

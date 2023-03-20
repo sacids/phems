@@ -3,8 +3,6 @@
 <div class="flex flex-col text-xs">
     <form @submit.prevent="UpdateWfForm" defer>
 
-
-
         {% for element in form_details %}
             <p class="mt-5 mb-1">{{element.label}}</p>
 
@@ -58,6 +56,16 @@
                             {% if element.requred %} required {% endif %}></textarea>
             {% elif element.col_type == 'label' %}
                 <!-- label -->
+            {% elif element.col_type == 'upload' %}
+                <label class="border-2 border-gray-200 p-3 w-full block rounded cursor-pointer my-2" for="customFile1">
+                    <input 
+                        type="file" 
+                        class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full" 
+                        id="customFile1"
+                        x-on:change="formFiles.{{element.col_name}} = Object.values($event.target.files)">
+
+                    <span x-text="formFiles.{{element.col_name}} ? formFiles.{{element.col_name}}.map(file => file.name).join(', ') : 'Choose multiple files...'"></span>
+                </label>
             {% else %}
                 <input  type="{{element.col_type}}" 
                         class="text-sm rounded-sm border-gray-300 bg-gray-50 hover:bg-gray-100 w-full"  

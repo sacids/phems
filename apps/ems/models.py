@@ -333,9 +333,12 @@ class workflow_config(models.Model):
 class workflow_data(models.Model):
     event           = models.ForeignKey('Event', on_delete=models.CASCADE)
     stage           = models.ForeignKey('Stage', related_name='workflow_stage', on_delete=models.CASCADE)
-    data            = models.JSONField(null=False, blank=False)
+    data            = models.JSONField(null=False, blank=False)   
     created_at      = models.DateTimeField(auto_now_add=True, null=True)
     created_by      = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=PROTECT)
+    
+    
+    files           = GenericRelation('files')
       
     def __str__(self):
         return 'WF: '+self.event.title
@@ -410,6 +413,7 @@ class Form_config(models.Model):
         ('select', 'select multiple'),
         ('datetime-local', 'datetime'),
         ('label', 'label'),
+        ('upload', 'upload'),
         
     )
 
