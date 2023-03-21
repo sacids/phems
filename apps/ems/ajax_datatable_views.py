@@ -161,7 +161,6 @@ class EventList(AjaxDatatableView):
         row['stage']        = '<span class="rounded-md py-1 px-3 text-xs '+obj.stage.css+'">'+obj.stage.title+'</span>'
         
         if obj.status == 'NEW':
-            row['status'] = '<span class="bg-blue-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">New</span>'
             row['actions'] = '<div class="flex">'\
                 '<a href="%s" class="px-1">'\
                     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-slate-500 hover:text-blue-600 hover:cursor-pointer">'\
@@ -174,29 +173,7 @@ class EventList(AjaxDatatableView):
                     '</svg>'\
                 '</a>'\
             '</div>' % (reverse('edit-event', args=(obj.id,)), reverse('delete-event', args=(obj.id,)))
-
-        elif obj.status == 'WAITING_CONFIRMATION':
-            row['status'] = '<span class="bg-yellow-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">Waiting</span>'
-            row['actions'] = ''   
-
-        elif obj.status == 'PROGRESS':
-            row['status'] = '<span class="bg-orange-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">On Progress</span>'
-            row['actions'] = ''
-            
-        elif obj.status == 'CONFIRMED':
-            row['status'] = '<span class="bg-green-600 text-white rounded-full px-2 py-0.5 text-xs font-medium">Confirmed</span>'
-            row['actions'] = ''
-
-        elif obj.status == 'DISCARDED':
-            row['status'] = '<span class="bg-red-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">Discarded</span>'
-            row['actions'] = '' 
-
-        elif obj.status == 'CLOSED':
-            row['status'] = '<span class="bg-green-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">Closed</span>'
-            row['actions'] = ''
-
         else:
-            row['status'] = row['status']
             row['actions'] = ''
 
 
