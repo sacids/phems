@@ -42,6 +42,7 @@ $(document).ready(function () {
                         allowPointSelect: true,
                         cursor: 'pointer',
                         colors: [
+                            '#1565C0',
                             '#F57C00',
                             '#B71C1C',
                             '#388E3C',
@@ -66,6 +67,10 @@ $(document).ready(function () {
                     colorByPoint: true,
                     data: [
                         {
+                            name: "New",
+                            y: data.new
+                        },
+                        {
                             name: "On Progress",
                             y: data.on_progress
                         },
@@ -74,8 +79,8 @@ $(document).ready(function () {
                             y: data.discarded
                         },
                         {
-                            name: "Closed",
-                            y: data.success
+                            name: "Confirmed",
+                            y: data.confirmed
                         }
                     ]
                 }],
@@ -92,14 +97,14 @@ $(document).ready(function () {
             var arrSectors = [];
             var arrNew = [];
             var arrProgress = [];
-            var arrClosed = [];
+            var arrConfirmed = [];
             var arrDiscarded = [];
 
             for (k = 0; k < data.chart.length; k++) {
                 arrSectors.push(data.chart[k].name);
                 arrNew.push(data.chart[k].new);
                 arrProgress.push(data.chart[k].progress);
-                arrClosed.push(data.chart[k].closed);
+                arrConfirmed.push(data.chart[k].confirmed);
                 arrDiscarded.push(data.chart[k].discarded);
             }
 
@@ -152,9 +157,9 @@ $(document).ready(function () {
                     data: arrDiscarded
                 },
                 {
-                    name: 'Closed',
+                    name: 'Confirmed',
                     color: "#388E3C",
-                    data: arrClosed
+                    data: arrConfirmed
                 }],
                 credits: {
                     enabled: false
