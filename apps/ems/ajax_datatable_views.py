@@ -42,7 +42,7 @@ class UserList(AjaxDatatableView):
         {'name': 'first_name', 'title': 'Fullname', 'visible': True, 'className': 'w-36 text-left border-r'},
         {'name': 'email', 'visible': 'Email', 'className': 'w-32 text-left border-r'},
         {'name': 'username', 'visible': 'Username', 'className': 'w-20 text-left border-r'},
-        {'name': 'roles', 'title': 'Roles','className': 'w-28 text-left border-r'},
+        {'name': 'roles', 'title': 'Roles','className': 'w-28 text-left border-r', 'searchable': False,},
         {'name': 'is_active', 'title': 'Status', 'visible': True, 'className': 'w-12 text-left border-r'},
         {'name': 'date_joined', 'title': 'Created On', 'visible': True,'className': 'w-[100px] text-left border-r'},
         {'name': 'last_login', 'title': 'Last Login', 'visible': True,'className': 'w-[100px] text-left border-r'},
