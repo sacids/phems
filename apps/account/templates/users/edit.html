@@ -13,9 +13,9 @@
 {% block contents %}
 
 <main class="bg-white h-full relative">
-    <div class="bg-gray-100 py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
+    <div class="bg-gray-100 py-2 px-4 sm:px-6 lg:px-4 flex justify-between">
         <div>
-            <h1 class="text-xl font-medium tracking-tight text-gray-600">Edit User</h1>
+            <h1 class="text-xl py-1 font-normal text-gray-600">Edit User</h1>
         </div>
 
         <div></div>
@@ -23,7 +23,7 @@
 
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
         <div class="flex-1 h-full overflow-y-scroll">
-            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-4">
                 <div class="" x-init="initjq()">
                     {% for message in messages %}
                     {% if message.tags == 'success' %}
@@ -41,8 +41,8 @@
                         autocomplete="off">
                         {% csrf_token %}
 
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-1/2 px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ form.first_name|as_crispy_field }}
                             </div>
 
@@ -51,8 +51,8 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-1/2 px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ form.email|as_crispy_field }}
                             </div>
 
@@ -61,34 +61,52 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-full px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ profile_form.sector|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/2 px-2">
+                                {{ profile_form.level|as_crispy_field }}
                             </div>
                         </div>
 
                         <div class="flex flex-wrap mb-4">
-                            <div class="w-full md:w-full px-2">
+                            <div class="w-full md:w-1/2 pr-2">
                                 <div class="control-group">
-                                    <label class="control-label">Location <span class="text-red-600">*</span></label>
-                                    <select class="get_location w-full" data-placeholder="Search location ..."
-                                        id="location_id" name="location_id">
-                                        <option value="{{ user.profile.location.id }}">{{ user.profile.location.title }}</option>
+                                    <label class="control-label">Region</label>
+                                    <select name="region_id" id="region_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
+                                        <option value="{{ user.profile.region.id }}">{{ user.profile.region.title }}</option>
+                                        <option value="">--Select --</option>
+                                        {% for region in regions %}
+                                        <option value="{{ region.id }}">{{ region.title }}</option>
+                                        {% endfor %}
                                     </select>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/2 px-2">
+                                <div class="control-group">
+                                    <label class="control-label">District</label>
+                                    <select name="district_id" id="district_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
+                                        <option value="{{ user.profile.district.id }}">{{ user.profile.district.title }}</option>
+                                        <option value="">--Select --</option>
+                                    </select>  
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-full px-2">
+                            <div class="w-full md:w-full pr-2">
                                 <h6 class="uppercase font-medium py-2">Login Credentials</h6>
                                 <hr />
                             </div>
                         </div>
 
                         <div class="flex flex-wrap mb-4">
-                            <div class="w-full md:w-full px-2">
-                                <label>Roles <span class="text-red-600">*</span></label><br /><br />
+                            <div class="w-full md:w-full pr-2">
+                                <label>Roles <span class="text-red-600">*</span></label><br />
                                 {% for role in roles %}
                                 {% define "" as action %}
                                 {% define role.id as role_id %}
@@ -96,9 +114,9 @@
                                 {% if role_id in user_roles %}
                                 {% define ' checked="checked"' as action %}
                                 {% endif %}
-                                <input class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-none"
+                                <input class="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded-none"
                                     type="checkbox" id="{{ role.id}}" value="{{ role.id}}" name="role_ids" {{ action }}>
-                                <label class="form-check-label" for="{{ role.id}}">
+                                <label class="form-check-label font-normal" for="{{ role.id}}">
                                     {{ role.name }}
                                 </label>&nbsp;&nbsp;&nbsp;
                                 {% endfor %}
@@ -106,14 +124,14 @@
                         </div>
 
                         <div class="flex flex-wrap mb-0">
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ form.username|as_crispy_field }}
                             </div>
 
                             <div class="w-full md:w-1/2 px-2">
                                 <div class="control-group">
                                     <label class="control-label">Status</label>
-                                    <select name="status_id" id="status_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
+                                    <select name="status_id" id="status_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
                                         <option value="">Select</option>
                                             <option value="True" {% if user.is_active == True %}selected{% endif %}>Active</option>
                                             <option value="False" {% if user.is_active == False %}selected{% endif %}>Inactive</option>
@@ -122,11 +140,11 @@
                             </div>
                         </div>
 
-                        <div class="flex items-start px-2 mb-6">
+                        <div class="flex items-start pr-2 mb-6">
                             <a href="{% url 'list-users' %}"
-                                class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Cancel</a>
+                                class="text-white text-sm font-normal bg-red-500 hover:bg-red-400 rounded-sm w-full sm:w-auto px-4 py-2 text-center mr-2">Cancel</a>
                             <button type="submit"
-                                class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Update</button>
+                                class="text-white text-sm font-normal bg-slate-700 hover:bg-slate-800 rounded-sm w-full sm:w-auto px-4 py-2 text-center">Update</button>
                         </div>
                     </form>
                 </div>
@@ -149,15 +167,22 @@
     function initjq() {
         $(".select2").select2();
         $(".input-mask").inputmask();
-
-        $('.get_location').select2({
-            minimumInputLength: 3,
-            ajax: {
-                url: window.location.origin + '/ems/utils/sl',
-                dataType: 'json',
-                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            }
-        });
     };
+
+    //dropdown districts
+    $('#region_id').on('change', function (e) {
+            region_id = $(this).val();
+            baseURL = window.location.origin;
+
+            console.log(region_id)
+
+            $.ajax({
+                url: baseURL + '/ems/get_districts/' + region_id,
+                type: "get",
+                success: function (data) {
+                    $('#district_id').html(data);
+                }
+            });
+        });
 </script>
 {% endblock %}
