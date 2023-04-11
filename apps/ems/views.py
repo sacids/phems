@@ -1032,7 +1032,6 @@ def update_wf(request):
     #{'upload': [<InMemoryUploadedFile: Photo reportage - EB.docx (application/vnd.openxmlformats-officedocument.wordprocessingml.document)>]}>
     if request.FILES:
         for k,v in request.FILES.items():
-            print(k,v)
             wfObj.files.create(obj=v, title=k, created_by=request.user)
         wfObj.save()
     
