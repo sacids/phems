@@ -6,6 +6,14 @@ from django.dispatch import receiver
 
 from apps.ems.models import Sector, Location
 
+LEVEL_OPTIONS = (
+        ('', '-- Select --'),
+        ('NATIONAL', 'National'),
+        ('REGION', 'Region'),
+        ('DISTRICT', 'District'),
+        ('WARD', 'Ward'),
+        ('VILLAGE', 'Village'),
+    )
 
 # Create your models here.
 class Profile(models.Model):
@@ -15,7 +23,9 @@ class Profile(models.Model):
     photo           = models.ImageField("Photo", upload_to="uploads/profile/", null=True, blank=True)
     email_verified  = models.BooleanField("Email verified", default=False)
     sector          = models.ForeignKey(Sector, blank=True, null=True, on_delete=models.SET_NULL)
-    location        = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL)
+    level           = models.CharField(max_length=30, choices=LEVEL_OPTIONS, null=True, blank=True, default="NATIONAL")
+    region          = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="region")
+    district        = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="district")
 
 
     @receiver(post_save, sender=User)

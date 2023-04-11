@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework import routers
 from django.urls.resolvers import URLPattern
 from .views import *
+from .setup import *
 from . import api
 
 from . import ajax_datatable_views
@@ -90,5 +91,9 @@ urlpatterns = [
 
     #users
     path('ajax_datatable/users_list/', ajax_datatable_views.UserList.as_view(), name="u_list"),
+
+
+    #location
+    path('get_districts/<str:region_id>', get_districts, name='get-districts'), 
     
 ]

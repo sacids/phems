@@ -61,6 +61,7 @@ class EventListView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(EventListView, self).get_context_data(**kwargs)
         context['events'] = Event.objects.all().order_by('-pk')
+        # (location__path_icontains=self.location.path)
         context['sectors'] = Sector.objects.all()
         context['workflows'] = workflow_config.objects.all()
         context['profession'] = Event.PROFESSION

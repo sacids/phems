@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Sum, Count
 from apps.ems.models import Signal, Event, Sector, Alert
+from django.db.models import Q
 
 class SignalPercentageChartView(APIView):
     def get(self, request, format=None):
@@ -29,7 +30,7 @@ class SignalPercentageChartView(APIView):
 class SignalChartView(APIView):
     def get(self, request, format=None):
         """channels"""
-        channels = ['SMS', 'WHATSAPP', 'TELEGRAM', 'TWITTER', 'WEB', 'APP']
+        channels = ['SMS', 'USSD' , 'WHATSAPP', 'TELEGRAM', 'TWITTER', 'WEB', 'APP']
 
         arr_data = []
         for val in channels:
@@ -59,25 +60,29 @@ class EventPercentageChartView(APIView):
         events = Event.objects
 
         """Number of events"""
-        discarded = events.filter(status='DISCARED').count()
-        on_progress = events.filter(status='PROGRESS').count()
-        closed = events.filter(status='COMPLETE').count()
+        new = events.filter(stage_id=1).count()
+        confirmed = events.filter(stage_id=5).count()
+        discarded = events.filter(stage_id=7).count()
+        on_progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).count()
+       
 
         """aggregate data"""
-        aggregate = discarded + closed + on_progress
+        aggregate = new + discarded + confirmed + on_progress
 
         """Percentage"""
+        percent_new = 0
         percent_discarded = 0
-        percent_closed = 0
+        percent_confirmed = 0
         percent_on_progress = 0
 
         if(aggregate != 0):
+            percent_new = (new / aggregate) * 100
             percent_discarded = (discarded / aggregate) * 100
-            percent_closed = (closed / aggregate) * 100
+            percent_confirmed = (confirmed / aggregate) * 100
             percent_on_progress = (on_progress / aggregate) * 100
 
         """response"""
-        return Response({"error": False, 'closed': percent_closed, 'discarded': percent_discarded, 'on_progress': percent_on_progress}, status=status.HTTP_201_CREATED)
+        return Response({"error": False, 'new': percent_new, 'confirmed': percent_confirmed, 'discarded': percent_discarded, 'on_progress': percent_on_progress}, status=status.HTTP_201_CREATED)
 
 
 class EventChartView(APIView):
@@ -88,10 +93,10 @@ class EventChartView(APIView):
         arr_data = []
         for val in sectors:
             """Number of events"""
-            new = Event.objects.filter(sector__id=val.id, status='NEW').count()
-            progress = Event.objects.filter(sector__id=val.id, status='PROGRESS').count()
-            closed = Event.objects.filter(sector__id=val.id, status='COMPLETE').count()
-            discarded = Event.objects.filter(sector__id=val.id, status='DISCARED').count()
+            new = Event.objects.filter(sector__id=val.id, stage_id=1).count()
+            progress = Event.objects.filter(Q(stage_id=3) | Q(stage_id=4)).filter(sector__id=val.id).count()
+            confirmed = Event.objects.filter(sector__id=val.id, stage_id=5).count()
+            discarded = Event.objects.filter(sector__id=val.id, stage_id=7).count()
 
             """dictionary"""
             chart = {
@@ -99,7 +104,7 @@ class EventChartView(APIView):
                 'new': new,
                 'progress': progress,
                 'discarded': discarded,
-                'closes': closed
+                'confirmed': confirmed
             }
             
             """append dictionary"""
@@ -118,7 +123,7 @@ class AlertChartView(APIView):
         for val in alerts:
             """Number of events"""
             number_of_events = Event.objects.filter(alert__id=val.id).count()
-            confirmed_number_of_events = Event.objects.filter(alert__id=val.id, stage__id=2).count()
+            confirmed_number_of_events = Event.objects.filter(alert__id=val.id, stage_id=5).count()
 
             """dictionary"""
             chart = {
@@ -131,5 +136,5 @@ class AlertChartView(APIView):
             arr_data.append(chart)
 
         """response"""
-        return Response({"error": False, "chart" : arr_data}, status = status.HTTP_201_CREATED)
+        return Response({"error": False, "chart" : arr_data}, status = status.HTTP_200_OK)
       

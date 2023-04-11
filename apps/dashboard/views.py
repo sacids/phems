@@ -1,9 +1,9 @@
-from multiprocessing import Event
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from apps.ems.models import Signal, Event
+from django.db.models import Q
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -18,10 +18,10 @@ class DashboardView(View):
         no_of_success_signals = Signal.objects.filter(status='ADDED').count()
 
         """Number of events"""
-        no_of_new_events = Event.objects.filter(status='NEW').count()
-        no_of_discarded_events = Event.objects.filter(status='DISCARED').count()
-        no_of_closed_events = Event.objects.filter(status='COMPLETE').count()
-        no_of_progress_events = Event.objects.filter(status='PROGRESS').count()
+        no_of_new_events = Event.objects.filter(stage_id=1).count()
+        no_of_discarded_events = Event.objects.filter(stage_id=7).count()
+        no_of_comfirmed_events = Event.objects.filter(stage_id=5).count()
+        no_of_progress_events = Event.objects.filter(Q(stage_id=3) | Q(stage_id=4)).count()
 
         """Passing data to views"""
         context = {
@@ -31,8 +31,8 @@ class DashboardView(View):
             'no_of_success_signals': no_of_success_signals,
             'no_of_new_events' : no_of_new_events,
             'no_of_progress_events' : no_of_progress_events,
-            'no_of_discarded_events' : no_of_discarded_events,
-            'no_of_closed_events' : no_of_closed_events   
+            'no_of_comfirmed_events' : no_of_comfirmed_events, 
+            'no_of_discarded_events' : no_of_discarded_events, 
         }
 
         return render(request, self.template_name, context)
