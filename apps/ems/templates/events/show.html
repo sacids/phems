@@ -207,7 +207,7 @@
 
 
                         <div x-show="showData" class="flex flex-col h-full pb-12 overflow-y-hidden">
-                            <div class="space-y-4">
+                            <div class="h-full w-full space-y-5 pb-5 overflow-y-scroll px-5">
                                 <template x-for="(edata, index) in eventData" :key="index">
                                     <div class="text-xs grid grid-flow-col auto-cols-max gap-4">
                                         <p class="" x-text="edata.stage"></p>
