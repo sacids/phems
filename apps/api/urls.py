@@ -17,7 +17,7 @@ urlpatterns = [
 
     path('sectors', views.SectorsList.as_view()),
     path('alert_types', views.AlertTypesList.as_view()),
-    path('alerts', views.AlertList.as_view()),
+    path('alerts/', views.AlertList.as_view()),
 
     path('login/', users.LoginView.as_view()),
 ]

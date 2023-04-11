@@ -6,12 +6,14 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 
+{% block title %}Edit Alert{% endblock %}
+
 {% block contents %}
 
 <main class="bg-white">
-    <div class="bg-gray-100 py-4 px-4 sm:px-6 lg:px-8 flex justify-between">
+    <div class="bg-gray-100 py-2 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
-            <h1 class="text-xl font-medium tracking-tight text-gray-600">Edit Alert</h1>
+            <h1 class="py-1 text-xl font-medium tracking-tight text-gray-600">Edit Alert</h1>
         </div>
 
         <div></div>
@@ -19,68 +21,102 @@
 
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
         <div class="flex-1 h-full overflow-y-scroll">
-            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-8">
-
-                <div  x-init="initjq()">
-                    <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium" autocomplete="off">
+            <div class="mx-auto py-2 px-4 sm:px-4 lg:px-4">
+                <div class="w-2/3 mx-auto bg-slate-100 border-none rounded-sm px-4 py-4">
+                    <form method="post" enctype="multipart/form-data" class="w-full text-sm font-medium text-gray-600 mb-2" autocomplete="off">
                         {% csrf_token %}
         
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-full px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-full pr-2">
                                 {{ form.title|as_crispy_field }}
                             </div>
                         </div>
         
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-full px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-full">
                                 {{ form.description|as_crispy_field }}
                             </div>
                         </div>
         
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-1/2 px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ form.alert|as_crispy_field }}
                             </div>
         
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 {{ form.pri_sector|as_crispy_field }}
                             </div>
                         </div>
-        
-                        <div class="flex flex-wrap mb-4">
-                            <div class="w-full md:w-full px-2">
+
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 <div class="control-group">
-                                    <label class="control-label">Location <span class="text-red-600">*</span></label>
-                                    <select class="get_location w-full" data-placeholder="Search location ..."
-                                        id="location_id" name="location_id" required>
-                                        <option value="{{ event.location.id }}">{{ event.location.title }}</option>
+                                    <label class="control-label">Region <span class="text-red-600">*</span></label>
+                                    <select name="region_id" id="region_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal" required>
+                                        <option value="{{ event.region.id }}">{{ event.region.title }}</option>
+                                        <option value="">--Select --</option>
+                                        {% for region in regions %}
+                                        <option value="{{ region.id }}">{{ region.title }}</option>
+                                        {% endfor %}
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/2">
+                                <div class="control-group">
+                                    <label class="control-label">District <span class="text-red-600">*</span></label>
+                                    <select name="district_id" id="district_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal" required>
+                                        <option value="{{ event.district.id }}">{{ event.district.title }}</option>
+                                        <option value="">--Select --</option>
+                                    </select>  
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-1/2 pr-2">
+                                <div class="control-group">
+                                    <label class="control-label">Ward</label>
+                                    <select name="ward_id" id="ward_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal" required>
+                                        <option value="{{ event.ward.id }}">{{ event.ward.title }}</option>
+                                        <option value="">--Select --</option>
+                                    </select>  
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/2">
+                                <div class="control-group">
+                                    <label class="control-label">Village</label>
+                                    <select name="village_id" id="village_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal" required>
+                                        <option value="{{ event.village.id }}">{{ event.village.title }}</option>
+                                        <option value="">--Select --</option>
+                                    </select>  
                                 </div>
                             </div>
                         </div>
         
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-full px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-full">
                                 <h6 class="uppercase font-medium py-2">Reporter Information</h6>
                                 <hr />
                             </div>
                         </div>
         
-                        <div class="flex flex-wrap mb-0">
-                            <div class="w-full md:w-1/2 px-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ form.contact_name|as_crispy_field }}
                             </div>
         
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 {{ form.contact_phone|as_crispy_field }}
                             </div>
                         </div>
         
-                        <div class="flex items-start px-2 mb-6">
+                        <div class="flex items-start space-x-2">
                             <a href="{% url 'events' %}"
-                                class="text-white bg-red-600 hover:bg-red-500 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center mr-2">Cancel</a>
+                                class="text-white text-sm font-normal bg-red-500 hover:bg-red-400 rounded-sm w-full sm:w-auto px-4 py-2 text-center">Cancel</a>
                             <button type="submit"
-                                class="text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 font-medium rounded-sm text-sm w-full sm:w-auto px-5 py-2 text-center">Update</button>
+                                class="text-white text-sm font-normal bg-slate-700 hover:bg-slate-800 rounded-sm w-full sm:w-auto px-4 py-2 text-center">Update</button>
                         </div>
                     </form>
                 </div>
@@ -90,7 +126,10 @@
     </div>
 </main>
 
+{% endblock %}
 
+{% block extrajs %}
+<script src="{% static 'js/custom.js' %}"></script>
 {% endblock %}
 
 

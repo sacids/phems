@@ -13,28 +13,28 @@
 <main class="bg-white h-full relative">
     <div class="bg-gray-100 py-2 px-4 sm:px-6 lg:px-4 flex justify-between">
         <div>
-            <h1 class="text-xl py-1 font-normal text-gray-600">My Profile</h1>
+            <h1 class="py-1 text-xl font-medium tracking-tight text-gray-600">My Profile</h1>
         </div>
 
         <div></div>
     </div>
 
-    <div class="h-full py-4 px-4 sm:px-6 lg:px-4">
-        <div class="overflow-y-scroll" x-init="initjq()">
+    <div class="h-full py-4 px-4 sm:px-4 lg:px-4">
+        <div class="w-2/3 mx-auto bg-slate-100 border-none rounded-sm px-4 py-4">
 
             {% for message in messages %}
                 {% if message.tags == 'success' %}
-                    <div class="w-1/2 bg-teal-100 rounded-b text-teal-900 text-sm font-normal px-4 py-3 mb-4">
+                    <div class="w-full bg-teal-100 rounded-b text-teal-900 text-sm font-normal px-4 py-3 mb-4">
                         {{ message }}
                     </div>
                 {% elif message.tags == 'error' %}
-                    <div class="w-1/2 bg-red-100 rounded-b text-teal-900 text-sm font-normal px-4 py-3 mb-4">
+                    <div class="w-full bg-red-100 rounded-b text-teal-900 text-sm font-normal px-4 py-3 mb-4">
                         {{ message }}
                     </div>
                 {% endif %}
             {% endfor %}
 
-            <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium" autocomplete="off">
+            <form method="post" enctype="multipart/form-data" class="w-full text-sm font-medium text-gray-600 mb-2" autocomplete="off">
                 {% csrf_token %}
 
                 <div class="flex flex-wrap mb-1">

@@ -446,7 +446,7 @@ class Alert(models.Model):
     sector      = models.ManyToManyField(Sector) 
     
     def __str__(self):
-        return self.label
+        return self.reference + ": " + self.label
     
     class Meta:
         db_table = 'ph_alerts'

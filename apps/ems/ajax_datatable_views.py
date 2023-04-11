@@ -40,8 +40,9 @@ class UserList(AjaxDatatableView):
     column_defs = [
         {'name': 'id', 'visible': False, },
         {'name': 'first_name', 'title': 'Fullname', 'visible': True, 'className': 'w-36 text-left border-r'},
-        {'name': 'email', 'visible': 'Email', 'className': 'w-32 text-left border-r'},
         {'name': 'username', 'visible': 'Username', 'className': 'w-20 text-left border-r'},
+        {'name': 'level','title': 'User Level' ,'foreign_field': 'profile__level', 'className': 'w-32 text-left border-r'},
+        {'name': 'region','title': 'Region' ,'foreign_field': 'profile__region__title', 'className': 'w-32 text-left border-r'},
         {'name': 'roles', 'title': 'Roles','className': 'w-28 text-left border-r', 'searchable': False,},
         {'name': 'is_active', 'title': 'Status', 'visible': True, 'className': 'w-12 text-left border-r'},
         {'name': 'date_joined', 'title': 'Created On', 'visible': True,'className': 'w-[100px] text-left border-r'},
@@ -134,16 +135,24 @@ class EventList(AjaxDatatableView):
 
     column_defs = [
         {'name': 'id', 'visible': False, },
+        {'name': 'title', 'visible': True, 'className': 'text-left w-max border-r'},
+        {'name': 'region', 'foreign_field': 'region__title', 'visible': True,
+            'max_length': 15, 'className': 'w-24 text-left border-r'},
+
+        {'name': 'district', 'foreign_field': 'district__title', 'visible': True,
+            'max_length': 15, 'className': 'w-28 text-left border-r'},
+
         {'name': 'alert', 'title': 'Alert Type', 'foreign_field': 'alert__label',
             'visible': True, 'className': 'w-36 text-left border-r'},
-        {'name': 'title', 'visible': True, 'className': 'text-left w-max border-r'},
+
         {'name': 'pri_sector', 'foreign_field': 'pri_sector__title',
             'title': 'Primary Sector', 'visible': True, 'className': 'w-28 text-left border-r'},
-        {'name': 'location', 'foreign_field': 'location__title', 'visible': True,
-            'max_length': 15, 'className': 'w-36 text-left border-r'},
+
         {'name': 'stage', 'visible': True, 'className': 'text-left whitespace-nowrap w-20 border-r'},
+
         {'name': 'created_on', 'title': 'Created', 'visible': True,
             'className': 'w-[100px] text-left border-r'},
+
         {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-10 text-left border-r',
             'placeholder': 'True', 'searchable': False, },
     ]
@@ -152,26 +161,43 @@ class EventList(AjaxDatatableView):
         return False
 
     def customize_row(self, row, obj):
-        # 'row' is a dictionary representing the current row, and 'obj' is the current object.
-        row['title']        = '<a class="text-emerald-800 font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
+        row['title']        = '<a class="text-gray-600 hover:text-blue-600 text-sm font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
         row['created_on']   = naturalday(obj.created_on)
-        row['stage']        = '<span class="rounded-md py-1 px-3 text-xs '+obj.stage.css+'">'+obj.stage.title+'</span>'
+        row['stage']        = '<span class="rounded-md py-1 px-2 text-xs ' + obj.stage.css + '">' + obj.stage.title + '</span>'
         
-        if obj.status == 'NEW':
+        if obj.stage.title == 'New':
             row['actions'] = '<div class="flex">'\
-                '<a href="%s" class="px-1">'\
-                    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-slate-500 hover:text-blue-600 hover:cursor-pointer">'\
-                    '<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />'\
-                    '</svg>'\
+                '<a href="%s" class="btn btn-xss px-1">'\
+                '<i class="bx bxs-folder-open text-blue-600"></i>'\
+                '</a>&nbsp;&nbsp;'\
+                '<a href="%s" class="btn btn-xss px-1">'\
+                '<i class="bx bx-edit"></i>'\
+                '</a>&nbsp;&nbsp;'\
+                '<a href="%s" class="btn btn-xss">'\
+                '<i class="bx bx-trash text-red-600"></i>' \
                 '</a>'\
-                '<a href="%s" class="px-1">'\
-                    '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500 hover:text-red-600 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">'\
-                    '<path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />'\
-                    '</svg>'\
-                '</a>'\
-            '</div>' % (reverse('edit-event', args=(obj.id,)), reverse('delete-event', args=(obj.id,)))
+            '</div>' % (reverse('show-event', args=(obj.id,)) ,reverse('edit-event', args=(obj.id,)), reverse('delete-event', args=(obj.id,)))
         else:
             row['actions'] = ''
+
+
+    def get_initial_queryset(self, request=None):
+        # We accept either GET or POST
+        if not getattr(request, 'REQUEST', None):
+            request.REQUEST = request.GET if request.method == 'GET' else request.POST
+
+        queryset = self.model.objects
+
+        if self.request.user.profile.level == 'NATIONAL':
+            queryset = queryset.all().order_by('-pk')
+
+        elif self.request.user.profile.level == 'REGION': 
+            queryset = queryset.filter(region_id=self.request.user.profile.region_id).order_by('-pk')
+
+        elif self.request.user.profile.level == 'DISTRICT': 
+            queryset = queryset.filter(district_id=self.request.user.profile.district_id).order_by('-pk')
+
+        return queryset
 
 
 class RumorList(AjaxDatatableView):
@@ -209,8 +235,7 @@ class RumorList(AjaxDatatableView):
         if not getattr(request, 'REQUEST', None):
             request.REQUEST = request.GET if request.method == 'GET' else request.POST
 
-        queryset = self.model.objects.exclude(
-            relevance=0).order_by('relevance')
+        queryset = self.model.objects.exclude(relevance=0).order_by('relevance')
 
         if 'status' in request.REQUEST:
             status = request.REQUEST.get('status')

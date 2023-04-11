@@ -159,8 +159,12 @@ class SectorsList(APIView):
 
 class AlertList(APIView):
     """API to fetch alerts"""
-    def get(self, request, format=None):
-        alerts = Event.objects.all().order_by('-created_on')
+    def get(self, request, format = None):
+
+        print("primary key")
+        print(self.request.user.pk)
+
+        alerts = Event.objects.all().order_by('-pk')      
 
         arr_data = []
         for alert in alerts:

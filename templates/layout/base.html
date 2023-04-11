@@ -14,6 +14,15 @@
     <!-- Icons Css -->
     <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              
+            }
+          }
+        }
+      </script>
 
     <!--./jquery -->
     <script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
@@ -29,7 +38,7 @@
         integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
         crossorigin=""></script>
 
-    <!-- map Css -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/map.css' %}" rel="stylesheet" type="text/css" />
 
     <!-- htmx -->

@@ -62,12 +62,9 @@ class EventListView(PermissionRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventListView, self).get_context_data(**kwargs)
-        context['events'] = Event.objects.all().order_by('-pk')
-        # (location__path_icontains=self.location.path)
-        context['sectors'] = Sector.objects.all()
-        context['workflows'] = workflow_config.objects.all()
-        context['profession'] = Event.PROFESSION
-        context['alerts'] = Alert.objects.all().order_by('reference')
+
+        context['title'] = "Manage Events"
+
         return context
 
 
@@ -107,16 +104,19 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
         return super(EventCreateView, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        sectors = Sector.objects.all()
+        regions = Location.objects.filter(depth=2).order_by("title")
 
-        context = {'form': EventForm(), 'sectors': sectors}
+        context = {'form': EventForm(), 'regions': regions}
         return render(request, 'events/create.html', context)
 
     def post(self, request, *args, **kwargs):
         form = EventForm(request.POST)
         if form.is_valid():
             new_event = form.save(commit=False)
-            new_event.location_id = request.POST.get('location_id')
+            new_event.region_id = request.POST.get('region_id')
+            new_event.district_id = request.POST.get('district_id')
+            new_event.ward_id = request.POST.get('ward_id')
+            new_event.village_id = request.POST.get('village_id')
             new_event.created_by = self.request.user
             new_event.save()
 
@@ -139,7 +139,7 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
                     arr_managers.append(user.email)
 
                 """send email in background"""
-                response = send_email("New Alert" , message_to_eoc, arr_managers)     
+                #response = send_email("New Alert" , message_to_eoc, arr_managers)     
 
             """message"""
             messages.success(request, 'New alert created!')
@@ -158,17 +158,41 @@ class EventUpdateView(PermissionRequiredMixin, generic.UpdateView):
     form_class = EventForm
     template_name = 'events/edit.html'
 
-    def form_valid(self, form):
-        response = form.save(commit=False)
-        response.location_id = self.request.POST.get('location_id')
-        response.updated_by = self.request.user
-        response.save()
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(EventUpdateView, self).dispatch( *args, **kwargs)
 
-        """message"""
-        messages.success(self.request, 'Alert Updated!')
+    def get(self, request, *args, **kwargs):
+        event = Event.objects.get(pk=kwargs['pk']) 
 
-        """redirect to events"""
-        return HttpResponseRedirect(reverse_lazy('events'))
+        """forms"""
+        form = EventForm(instance=event)
+
+        """regions""" 
+        regions = Location.objects.filter(depth=2).order_by('title')
+
+        """context"""
+        context = {"event": event,'regions': regions,'form': form}
+        return render(request, 'events/edit.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        event = Event.objects.get(pk=kwargs['pk'])
+        form = EventForm(request.POST, instance=event)
+
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.region_id = request.POST.get('region_id')
+            event.district_id = request.POST.get('district_id')
+            event.ward_id = request.POST.get('ward_id')
+            event.village_id = request.POST.get('village_id')
+            event.updated_by = self.request.user
+            event.save()
+
+            """message"""
+            messages.success(self.request, 'Alert Updated!')
+
+            """redirect to events"""
+            return HttpResponseRedirect(reverse_lazy('events'))
     
 
 class EventDeleteView(generic.DeleteView):

@@ -13,9 +13,9 @@
 {% block contents %}
 
 <main class="bg-white h-full relative">
-    <div class="bg-gray-100 py-2 px-4 sm:px-6 lg:px-4 flex justify-between">
+    <div class="bg-gray-100 py-2 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
-            <h1 class="text-xl py-1 font-normal text-gray-600">Edit User</h1>
+            <h1 class="py-1 text-xl font-medium tracking-tight text-gray-600">Edit User</h1>
         </div>
 
         <div></div>
@@ -23,21 +23,9 @@
 
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
         <div class="flex-1 h-full overflow-y-scroll">
-            <div class="mx-auto py-4 px-4 sm:px-6 lg:px-4">
-                <div class="" x-init="initjq()">
-                    {% for message in messages %}
-                    {% if message.tags == 'success' %}
-                    <div class="w-1/2 bg-teal-100 rounded-b text-teal-900 px-4 py-3 mb-4">
-                        {{ message }}
-                    </div>
-                    {% elif message.tags == 'error' %}
-                    <div class="w-1/2 bg-red-100 rounded-b text-teal-900 px-4 py-3 mb-4">
-                        {{ message }}
-                    </div>
-                    {% endif %}
-                    {% endfor %}
-
-                    <form method="post" enctype="multipart/form-data" class="w-1/2 text-sm font-medium mb-4"
+            <div class="mx-auto py-4 px-4 sm:px-4 lg:px-4">
+                <div class="w-2/3 mx-auto bg-slate-100 border-none rounded-sm px-4 py-4">
+                    <form method="post" enctype="multipart/form-data" class="w-full text-sm font-medium text-gray-600 mb-2"
                         autocomplete="off">
                         {% csrf_token %}
 
@@ -46,7 +34,7 @@
                                 {{ form.first_name|as_crispy_field }}
                             </div>
 
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 {{ form.last_name|as_crispy_field }}
                             </div>
                         </div>
@@ -56,7 +44,7 @@
                                 {{ form.email|as_crispy_field }}
                             </div>
 
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 {{ profile_form.organization|as_crispy_field }}
                             </div>
                         </div>
@@ -66,12 +54,12 @@
                                 {{ profile_form.sector|as_crispy_field }}
                             </div>
 
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 {{ profile_form.level|as_crispy_field }}
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap mb-4">
+                        <div class="flex flex-wrap mb-2">
                             <div class="w-full md:w-1/2 pr-2">
                                 <div class="control-group">
                                     <label class="control-label">Region</label>
@@ -86,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 <div class="control-group">
                                     <label class="control-label">District</label>
                                     <select name="district_id" id="district_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
@@ -97,8 +85,8 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-full pr-2">
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-full">
                                 <h6 class="uppercase font-medium py-2">Login Credentials</h6>
                                 <hr />
                             </div>
@@ -128,7 +116,7 @@
                                 {{ form.username|as_crispy_field }}
                             </div>
 
-                            <div class="w-full md:w-1/2 px-2">
+                            <div class="w-full md:w-1/2">
                                 <div class="control-group">
                                     <label class="control-label">Status</label>
                                     <select name="status_id" id="status_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">

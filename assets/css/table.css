@@ -9,6 +9,7 @@ table.dataTable {
 table.dataTable th {
     border-bottom: 1px solid #e5e7eb;
     background-color: #f5f5f5;
+    font-size: 13px;
 }
 
 table.dataTable tbody tr:hover {
