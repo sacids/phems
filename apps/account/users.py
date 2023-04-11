@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.http import JsonResponse
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -14,7 +15,9 @@ from apps.ems.models import Sector, Location
 from .forms import UserForm, UserUpdateForm, UserProfileForm
 
 
-class UserListView(generic.ListView):
+class UserListView(PermissionRequiredMixin, generic.ListView):
+    permission_required = 'auth.view_user' 
+
     model = User
     context_object_name = 'users'
     template_name = 'users/lists.html'
@@ -30,8 +33,10 @@ class UserListView(generic.ListView):
         return context
 
 
-class UserCreateView(generic.CreateView):
+class UserCreateView(PermissionRequiredMixin, generic.CreateView):
     """Register new user"""
+    permission_required = 'auth.add_user' 
+
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(UserCreateView, self).dispatch( *args, **kwargs)
@@ -85,8 +90,9 @@ class UserCreateView(generic.CreateView):
         return render(request, 'users/create.html', {"roles": roles, 'form': user_form, 'profile_form': profile_form, 'title': 'Register User'})  
 
 
-class UserUpdateView(generic.UpdateView):
+class UserUpdateView(PermissionRequiredMixin, generic.UpdateView):
     """Update user"""
+    permission_required = 'auth.change_user' 
     model = User
     context_object_name = 'user'
     template_name = 'users/edit.html'
@@ -155,8 +161,9 @@ class UserUpdateView(generic.UpdateView):
             return HttpResponseRedirect(reverse_lazy('list-users')) 
    
 
-class UserDeleteView(generic.DeleteView):
-    """Delete User""" 
+class UserDeleteView(PermissionRequiredMixin, generic.DeleteView):
+    """Delete User"""
+    permission_required = 'auth.delete_user' 
     model = User
     template_name = "users/confirm_delete.html"
 

@@ -6,9 +6,9 @@
 {% block contents %}
 
 <main class="bg-white h-full relative">
-    <div class="bg-gray-100 h-16 py-4 px-4 sm:px-4 lg:px-4 flex justify-between">
+    <div class="bg-gray-100 py-2 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
-            <h1 class="text-xl font-medium tracking-tight text-gray-600">Reported Rumors</h1>
+            <h1 class="text-xl py-1 font-normal text-gray-600">Reported Rumors</h1>
         </div>
 
         <div>
@@ -27,7 +27,7 @@
         </div>
         <div class="bg-white border-l shadow-md py-3 flex-shrink-0 w-[570px] h-full flex flex-col overflow-hidden transition-all duration-500"
             :class="{ '-mr-[570px]': !sidebarOpen }">
-            <div id="detail-div" class="h-full overflow-hidden pb-8"></div>
+            <div id="detail-div" class="w-full h-full overflow-hidden pb-8"></div>
         </div>
     </div>
 </main>
@@ -85,35 +85,35 @@
             showModal: false,
             eModal: "showRumor",
 
-            eventFormEl: {
-                label: "Submit",
-                loading: false,
-                message: ""
-            },
-
             cur_signal: {
                 id: "",
-                channel: "",
-                contact: "",
-                contents: "",
-                relevance: "",
-                status: "",
-                created_on: "",
             },
 
-            new_event: {
-                location: "",
-                alert: "",
-                contact_name: "",
-                title: "",
+            //sectors and alert types
+            sectors: {},
+            alert_types: {},
+
+            //form data
+            formData:{
+                title:"",
                 description: "",
-                pri_sector: "",
-                sector: "",
-                contact_prof: "",
-                contact_phone: "",
-                contact_email: "",
-                signal: "",
+                alert_id: null,
+                pri_sector_id : null,
+                region_id: null,
+                district_id: null,
+                ward_id: null,
+                village_id: null,
+                rumor_id: null,
             },
+            formMessage: "",
+            formLoading: false,
+            buttonText: "Submit",
+            
+            //deals with location
+            regions: {},
+            districts: {},
+            wards: {},
+            villages: {},
 
             //manage signal
             manageRumor(id) {
@@ -126,57 +126,14 @@
                 document.getElementById('row-' + id).classList.add("bg-emerald-100");
 
                 var url = window.location.origin + '/ems/utils/mr?sid=' + id;
-                this.new_event.signal = id;
+                this.cur_signal.id = id;
 
                 fetch(url)
                     .then(response => response.text())
                     .then(data => {
                         $('#detail-div').html(data)
-                        //htmx.process('#detail-div');
                     })
             },
-
-            //set signal
-            setSignal(e) {
-                this.cur_signal = e;
-                this.new_event.signal = e.id;
-            },
-
-            //discard signal
-            discardSignal(s_id) {
-                var url = window.location.origin + '/ems/utils/di?ii=' + s_id + '&it=si';
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data == 1) {
-                            this.showModal = false;
-                            // this.signals.splice(this.signals.indexOf(this.cur_signal), 1);
-                            // this.signals = this.signals.filter(t => t.id !== this.cur_signal.id);
-                            //document.getElementById(s_id).remove();
-
-                            console.log('signal discarded');
-                        } else {
-                            console.log('failed to discard signal')
-                        }
-                    })
-            },
-
-            //attach signal to alerts
-            attachSignal(e) {
-                s_id = this.new_event.signal
-                e_id = e.id
-
-                var url = window.location.origin + '/ems/utils/as?sid=' + s_id + '&eid=' + e_id;
-
-                fetch(url)
-                    .then((response) => response.json())
-                    .then((json) => {
-                        console.log("reached hapa")
-                        console.log(json.success_msg)
-                        $('#attachEvent_wrp').html(json.success_msg)
-                    })
-            },
-
 
             //get filtered events
             get filteredEvents() {
@@ -193,36 +150,134 @@
 
             //fetch events
             fetchEvents() {
-                this.events = [
-                    {% for event in events %}
-                    {
-            id: "{{ event.id }}",
-                title           : "{{ event.title }}",
-                    description     : "{{ event.description }}",
-                        location        : "{{ event.location.title }}",
-                            status          : "{{ event.status }}",
-                                created_on      : "{{ event.created_on }}",
+                fetch('/api/alerts')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.events = data;
+                    });
+            },
+
+            //attach signal to alerts
+            attachSignal(e) {
+                s_id = this.cur_signal.id
+                e_id = e.id
+
+                var url = window.location.origin + '/ems/utils/as?sid=' + s_id + '&eid=' + e_id;
+
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((json) => {
+                        $('#attachEvent_wrp').html(json.success_msg)
+                    })
+            },
+
+            //fetch alerts
+            fetchAlertTypes(){
+                fetch('/api/alert_types')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.alert_types = data;
+                    });
+            },
+
+            //fetch primary sectors
+            fetchSectors(){
+                fetch('/api/sectors')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.sectors = data;
+                    });
+            },
+
+            //fetch regions
+            fetchRegions(){
+                fetch('/api/regions')
+                    .then(res => res.json())
+                    .then(data => {
+                        this.regions = data;
+                    });
+            },
+
+            onRegionChange(e) {
+                var selectedValue = e.target.value;
+
+                // Reset districts
+                this.districts = {};
+
+                fetch('/api/districts/' + selectedValue)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.districts = data;
+                    }); 
+            },
+
+            onDistrictChange(e) {
+                var selectedValue = e.target.value;
+
+                // Reset wards
+                this.wards = {};
+
+                fetch('/api/wards/' + selectedValue)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.wards = data;
+                    }); 
+            },
+
+            onWardChange(e) {
+                var selectedValue = e.target.value;
+
+                // Reset villages
+                this.villages = {};
+
+                fetch('/api/villages/' + selectedValue)
+                    .then(res => res.json())
+                    .then(data => {
+                        this.villages = data;
+                    }); 
+            },
+
+            //submit form
+            submitForm() {
+                this.formMessage = "";
+                this.formLoading = false;
+                this.buttonText = "Submitting...";
+
+                //token
+                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+                //rumor id
+                this.formData.rumor_id = this.cur_signal.id
+                
+                fetch("/ems/utils/ae", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-CSRFToken": csrf_token
                     },
-        {% endfor %}
-                ]
-    },
+                    body: JSON.stringify(this.formData),
+                }).then((response) => {
+                    //set message
+                    $('#setEvent_wrp').html("<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New alert created.</div>");
+
+                    //TODO: remove the added filter in the lists
+
+                }).catch(() => {
+                    this.formMessage = "Something went wrong.";
+                }).finally(() => {
+                    this.formLoading = false;
+                    this.buttonText = "Submit";
+                });
+            },
+   
         }
     }
 
     function initjq() {
         $(".select2").select2();
         $(".input-mask").inputmask();
-
-        $('.get_location').select2({
-            minimumInputLength: 3,
-            ajax: {
-                url: window.location.origin + '/ems/utils/sl',
-                dataType: 'json',
-                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-            }
-        });
-
-        htmx.process('#detail-div');
     };
+
 </script>
 {% endblock %}

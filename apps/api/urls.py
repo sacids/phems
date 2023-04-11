@@ -10,6 +10,11 @@ urlpatterns = [
     path('rumors/discard', views.discard_rumor, name='discard_rumor'),
 
     path('location', views.LocationList.as_view()),
+    path('regions', views.RegionsList.as_view()),
+    path('districts/<str:region_id>', views.DistrictsList.as_view()),
+    path('wards/<str:district_id>', views.WardsList.as_view()),
+    path('villages/<str:ward_id>', views.VillagesList.as_view()),
+
     path('sectors', views.SectorsList.as_view()),
     path('alert_types', views.AlertTypesList.as_view()),
     path('alerts', views.AlertList.as_view()),

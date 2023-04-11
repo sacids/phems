@@ -38,9 +38,11 @@
         <div></div>
 
         <div>
-            <a href="{% url 'create-user' %}" class="text-white bg-slate-800 hover:bg-gray-600 hover:text-white font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
-                <i class="bx bx-user-plus"></i> Register
-            </a>&nbsp;
+            {% if perms.auth.create_user %}
+                <a href="{% url 'create-user' %}" class="text-white bg-slate-800 hover:bg-gray-600 hover:text-white font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
+                    <i class="bx bx-user-plus"></i> Register
+                </a>&nbsp;
+            {% endif %}
 
             <a href="#" class="text-white bg-green-600 hover:bg-green-800 font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
                 <i class="fas fa-file-excel"></i> Export

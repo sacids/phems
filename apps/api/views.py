@@ -45,6 +45,99 @@ class LocationList(APIView):
             arr_data.append(chart)
 
         return Response(arr_data, status = status.HTTP_200_OK)
+    
+class RegionsList(APIView):
+    """API to fetch regions"""
+    def get(self, request, format=None):
+        location = Location.objects.filter(depth=2).order_by('title')
+
+        arr_data = []
+        for val in location:
+            """create dict"""
+            chart = {
+                'id': val.id,
+                'code': val.code,
+                'title': val.title,
+            } 
+            """append to arr_data"""
+            arr_data.append(chart)
+
+        return Response(arr_data, status = status.HTTP_200_OK)
+    
+
+class DistrictsList(APIView):
+    """API to fetch districts"""
+    def get(self, request, *args, **kwargs):
+        region_id = kwargs.get("region_id")
+
+        """Region"""
+        region = Location.objects.get(pk=region_id)
+
+        """districts"""
+        districts = Location.objects.filter(path__istartswith=region.path, depth=3).order_by('title')
+
+        arr_data = []
+        for val in districts:
+            """create dict"""
+            chart = {
+                'id': val.id,
+                'code': val.code,
+                'title': val.title,
+            } 
+            """append to arr_data"""
+            arr_data.append(chart)
+
+        return Response(arr_data, status = status.HTTP_200_OK)
+    
+class WardsList(APIView):
+    """API to fetch wards"""
+    def get(self, request, *args, **kwargs):
+        district_id = kwargs.get("district_id")
+
+        """District"""
+        district = Location.objects.get(pk=district_id)
+
+        """wards"""
+        wards = Location.objects.filter(path__istartswith=district.path, depth=4)
+
+        arr_data = []
+        for val in wards:
+            """create dict"""
+            chart = {
+                'id': val.id,
+                'code': val.code,
+                'title': val.title,
+            } 
+            """append to arr_data"""
+            arr_data.append(chart)
+
+        return Response(arr_data, status = status.HTTP_200_OK)
+    
+
+class VillagesList(APIView):
+    """API to fetch wards"""
+    def get(self, request, *args, **kwargs):
+        ward_id = kwargs.get("ward_id")
+
+        """District"""
+        ward = Location.objects.get(pk=ward_id)
+
+        """villages"""
+        villages = Location.objects.filter(path__istartswith=ward.path, depth=5)
+
+        arr_data = []
+        for val in villages:
+            """create dict"""
+            chart = {
+                'id': val.id,
+                'code': val.code,
+                'title': val.title,
+            } 
+            """append to arr_data"""
+            arr_data.append(chart)
+
+        return Response(arr_data, status = status.HTTP_200_OK)
+
 
 class SectorsList(APIView):
     """API to fetch sectors"""
@@ -78,7 +171,7 @@ class AlertList(APIView):
                 'description': alert.description,
                 'status': alert.status,
                 'created_on': date.strftime(alert.created_on, '%d/%m/%Y %H:%M'),
-                'location': alert.location.title,
+                # 'location': alert.location.title,
                 'stage': alert.stage.title,
                 'alert_type_label': alert.alert.label,
                 'alert_type_title': alert.alert.title,
@@ -95,7 +188,7 @@ class AlertList(APIView):
         new_alert.title         = request.POST.get('title')
         new_alert.description   = request.POST.get('description')
         new_alert.alert_id      = request.POST.get('alert_type_id')
-        new_alert.location_id   = request.POST.get('location_id')
+        # new_alert.location_id   = request.POST.get('location_id')
         new_alert.pri_sector_id = request.POST.get('primary_sector_id')
         new_alert.save()
 

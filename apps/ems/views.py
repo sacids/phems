@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db.models import Q
 from django.utils.decorators import method_decorator
@@ -51,7 +52,8 @@ class EventList2View(generic.TemplateView):
         return context
 
 
-class EventListView(generic.TemplateView):
+class EventListView(PermissionRequiredMixin, generic.TemplateView):
+    permission_required = 'ems.view_event'
     template_name = "events/lists.html"
 
     @method_decorator(login_required)
@@ -69,8 +71,10 @@ class EventListView(generic.TemplateView):
         return context
 
 
-class EventDetailView(generic.TemplateView):
+class EventDetailView(PermissionRequiredMixin, generic.TemplateView):
     """View to update a details"""
+    permission_required = 'ems.view_event'
+
     model = Event
     context_object_name = 'event'
     template_name = "events/show.html"
@@ -94,8 +98,10 @@ class EventDetailView(generic.TemplateView):
         return context
 
 
-class EventCreateView(generic.CreateView):
+class EventCreateView(PermissionRequiredMixin, generic.CreateView):
     """Create new event"""
+    permission_required = 'ems.add_event'
+
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(EventCreateView, self).dispatch(*args, **kwargs)
@@ -143,8 +149,10 @@ class EventCreateView(generic.CreateView):
         return render(request, 'events/create.html', {'form': form})
 
 
-class EventUpdateView(generic.UpdateView):
+class EventUpdateView(PermissionRequiredMixin, generic.UpdateView):
     """View to update"""
+    permission_required = 'ems.change_event'
+
     model = Event
     context_object_name = 'event'
     form_class = EventForm
@@ -501,7 +509,8 @@ class SignalListView(generic.TemplateView):
         return context
 
 
-class RumorListView(generic.TemplateView):
+class RumorListView(PermissionRequiredMixin, generic.TemplateView):
+    permission_required = 'ems.view_signal'
     template_name = "rumors/lists.html"
 
     @method_decorator(login_required)
@@ -574,11 +583,11 @@ def manage_rumor(request):
     context = {}
     context['signal'] = Signal.objects.get(pk=sig_id)
     context['sig_id'] = sig_id
-    context['events'] = Event.objects.all()
     context['sectors'] = Sector.objects.all()
-    context['profession'] = Event.PROFESSION
-    context['alerts'] = Alert.objects.all()
-
+    context['alerts']   = Alert.objects.all()
+    context['regions'] = Location.objects.filter(depth=2).order_by('title')
+    
+    """render view"""
     template = 'rumors/async/manage_signal.html'
     return TemplateResponse(request, template, context)
 
@@ -589,6 +598,7 @@ def promote_signal(request):
 
     context = {}
     context['signal'] = Signal.objects.get(pk=sig_id)
+    
     context['events'] = Event.objects.all()
     context['sectors'] = Sector.objects.all()
     context['profession'] = Event.PROFESSION
@@ -601,17 +611,22 @@ def promote_signal(request):
 def add_event(request):
     """create new event from the signal"""
     if request.method == 'POST':
+        post_data = json.loads(request.body)
+
         """new event"""
         new_event = Event()
-        new_event.title = request.POST.get('title')
-        new_event.description = request.POST.get('description')
-        new_event.alert_id = request.POST.get('alert_id')
-        new_event.location_id = request.POST.get('location_id')
-        new_event.pri_sector_id = request.POST.get('pri_sector_id')
+        new_event.title = post_data['title']
+        new_event.description = post_data['description']
+        new_event.alert_id = post_data['alert_id']
+        new_event.region_id = post_data['region_id']
+        new_event.district_id = post_data['district_id']
+        new_event.ward_id = post_data['ward_id']
+        new_event.village_id = post_data['village_id']
+        new_event.pri_sector_id = post_data['pri_sector_id']
         new_event.save()
 
         """signal"""
-        signal = Signal.objects.get(pk=request.POST.get('signal'))
+        signal = Signal.objects.get(pk = post_data['rumor_id'])
 
         """attach signal to new event """
         new_event.signal.add(signal.id)
@@ -642,12 +657,12 @@ def add_event(request):
             #response = send_email("Alert Confirmation" , message_to_eoc, arr_managers) 
 
         """response"""
-        response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New alert created.</div>"
+        response = "New alert created."
     else:
-        response = "<div class='bg-red-200 text-red-900 text-sm rounded-sm p-2'>Failed to create new alert.</div>"
+        response = "Failed to create new alert"
 
     """return response"""
-    return HttpResponse(response)
+    return JsonResponse({"error": False})
 
 
 
@@ -681,8 +696,7 @@ def attach_sig2event(request):
     signal.save()
 
     """response"""
-    response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>Rumor attached to a alert.</div>"
-
+    response = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2 mt-2'>Rumor attached to a alert.</div>"
 
     """return response"""
     return JsonResponse({"error": False, "success_msg": response})

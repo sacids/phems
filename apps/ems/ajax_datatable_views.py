@@ -185,29 +185,24 @@ class RumorList(AjaxDatatableView):
 
     column_defs = [
         {'name': 'id', 'visible': False, },
-        {'name': 'contents', 'title': 'Rumor', 'visible': True,
-            'className': 'text-left flex-1 cursor-pointer'},
-        #{'name': 'contents', 'title':'Contents','visible': True, 'className':' text-left'  },
-        {'name': 'css_icon', 'title': '', 'visible': True,
-            'className': 'w-6 text-left border-r', 'searchable': False, },
-        {'name': 'relevance', 'title': '#', 'visible': True,
-            'className': 'w-6 text-left border-r'},
-        {'name': 'created_on', 'title': 'Received On', 'visible': True,
-            'className': 'w-[120px] text-left border-r'},
-        {'name': 'd', 'title': '', 'visible': True, 'className': 'w-6 text-left',
-            'placeholder': 'True', 'searchable': False, },
+        {'name': 'contents', 'title': 'Rumor', 'visible': True, 'className': 'text-left flex-1 cursor-pointer'},
+        {'name': 'css_icon', 'title': '', 'visible': True, 'className': 'w-6 text-left border-r', 'searchable': False, },
+        {'name': 'relevance', 'title': '#', 'visible': True, 'className': 'w-6 text-left border-r'},
+        {'name': 'created_on', 'title': 'Received On', 'visible': True, 'className': 'w-[120px] text-left border-r'},
+        {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-6 text-left', 'placeholder': 'True', 'searchable': False, },
     ]
 
     def get_show_column_filters(self, request):
         return False
 
     def customize_row(self, row, obj):
-        row['contents'] = '<span class=" line-clamp-1" @click="sidebarOpen = true, manageRumor('+str(
-            obj.id)+')" >'+str(obj.contents['text'])+'</span>'
+        row['contents'] = '<span class=" line-clamp-1" @click="sidebarOpen = true, manageRumor('+str(obj.id)+')" >' + str(obj.contents['text']) + '</span>'
         row['css_icon'] = '<i class="'+obj.css_icon+'">'
         row['created_on'] = naturalday(obj.created_on)
-        row['d'] = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-500 hover:text-slate-600 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" @click="discardSignal('+str(
-            obj.id)+')"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>'
+
+        row['actions'] = '<a class="btn btn-xss" @click="discardSignal('+str(obj.id)+')">'\
+                '<i class="bx bx-trash text-red-600"></i>' \
+                '</a>'
 
     def get_initial_queryset(self, request=None):
         # We accept either GET or POST

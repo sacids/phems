@@ -62,63 +62,96 @@
 
     <template x-if="eModal=='setEvent'">
         <div id="setEvent_wrp" class="text-xs pr-5 mt-2" x-init="initjq()">
-            <form class="flex flex-col text-xs" hx-post="{% url 'add_event' %}" hx-target="#setEvent_wrp"
-                hx-indicator="#spinner">
-                <input type="hidden" name="signal" value="{{sig_id}}" />
+            <form class="flex flex-col text-xs" @submit.prevent="submitForm">  
+                {% csrf_token %}   
 
-                <div role="status" id="spinner" class="htmx-indicator">
-                    <svg aria-hidden="true"
-                        class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-green-500"
-                        viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor" />
-                        <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill" />
-                    </svg>
-                    <span class="sr-only">Loading...</span>
-                </div>
+                <input type="hidden" name="rumor_id" x-model="formData.rumor_id" />
 
-                <p class="mt-3 mb-1 font-medium">Title</p>
+                <p class="mt-3 mb-1 font-medium">Title <span class="text-red-600">*</span></p>
                 <input type="text" class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"
-                    name="title" placeholder="Write alert title..." required />
+                    name="title" x-model="formData.title" placeholder="Write alert title..." required />
 
-                <p class="mt-3 mb-1 font-medium">Description</p>
-                <textarea id="textarea" name="description"
+                <p class="mt-3 mb-1 font-medium">Description <span class="text-red-600">*</span></p>
+                <textarea id="textarea" name="description" x-model="formData.description"
                     class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" maxlength="225"
                     rows="3" placeholder="Write description...." required></textarea>
 
-                <p class="mt-3 mb-1 font-medium">Alert Type</p>
-                <select class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" id="alert_id"
-                    name="alert_id" aria-label="Alert" required>
-                    <option value="">Select</option>
-                    {% for alert in alerts %}
-                        <option value="{{alert.id}}">{{alert.reference}} : {{alert.label}}</option>
-                    {% endfor %}
-                </select>
+                <div class="flex flex-row mb-3">
+                    <div class="w-64 mr-2" x-init="fetchAlertTypes();">
+                        <p class="mt-3 mb-1 font-medium">Alert Type <span class="text-red-600">*</span></p>
+                        <select class="w-full text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"
+                            name="alert_id" x-model="formData.alert_id" required>
+                            <option value="">-- Select --</option>
+                            <template x-for="(alert_type, index) in alert_types" :key="index">
+                                <option x-bind:value="alert_type.id"><span x-text="alert_type.reference + ' : ' + alert_type.label"></span></option>
+                            </template>
+                        </select>
+                    </div>
 
-                <p class="mt-3 mb-1 font-medium">Location</p>
-                <select x-ref="location"
-                    class="get_location text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100"
-                    id="location_id" name="location_id" data-placeholder="Search Location..." required></select>
+                    <div class="w-64" x-init="fetchSectors();">
+                        <p class="mt-3 mb-1 font-medium">Primary Sector <span class="text-red-600">*</span></p>
+                        <select class="w-full text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" name="pri_sector_id"
+                            x-model="formData.pri_sector_id" required>
+                            <option value="">-- Select --</option>
+                            <template x-for="(sector, index) in sectors" :key="index">
+                                <option x-bind:value="sector.id"><span x-text="sector.title"></span></option>
+                            </template>
+                        </select>
+                    </div>
+                </div>    
 
-                <p class="mt-3 mb-1 font-medium">Primary Sector</p>
-                <select class="text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" name="pri_sector_id"
-                    id="pri_sector_id" required>
-                    <option value="">Select</option>
-                    {% for sector in sectors %}
-                        <option value="{{sector.id}}">{{sector.title}}</option>
-                    {% endfor %}
-                </select>
+                <div class="flex flex-row" x-init="fetchRegions();">
+                    <div class="w-64 mr-2">
+                        <p class="mt-3 mb-1 font-medium">Region <span class="text-red-600">*</span></p>
+                        <select name="region_id" x-model="formData.region_id" x-on:change="onRegionChange" class="w-full text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" required>
+                            <option value="">-- Select --</option>
+                            <template x-for="(region, index) in regions" :key="index">
+                                <option x-bind:value="region.id"><span x-text="region.title"></span></option>
+                            </template>
+                        </select>
+                    </div>
 
-                <div class="flex space-x-3 justify-start mt-3 mb-6">
-                    <button class="text-white text-sm font-medium px-4 py-2 rounded-sm bg-red-600 hover:bg-red-500"
+                    <div class="w-64">
+                        <p class="mt-3 mb-1 font-medium">District <span class="text-red-600">*</span></p>
+                        <select name="district_id" x-model="formData.district_id" x-on:change="onDistrictChange" class="w-full text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100" required>
+                            <option value="">-- Select --</option>
+                            <template x-for="(district, index) in districts" :key="index">
+                                <option x-bind:value="district.id"><span x-text="district.title"></span></option>
+                            </template>
+                        </select>
+                    </div>
+                </div> 
+                
+                <div class="flex flex-row">
+                    <div class="w-64 mr-2">
+                        <p class="mt-3 mb-1 font-medium">Ward</p>
+                        <select id="ward_id" name="ward_id" x-model="formData.ward_id" x-on:change="onWardChange" class="w-full text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100">
+                            <option value="">-- Select --</option>
+                            <template x-for="(ward, index) in wards" :key="index">
+                                <option x-bind:value="ward.id"><span x-text="ward.title"></span></option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <div class="w-64">
+                        <p class="mt-3 mb-1 font-medium">Village</p>
+                        <select name="village_id" x-model="formData.village_id" class="w-full text-sm rounded-sm text-gray-600 border border-gray-300 hover:bg-gray-100">
+                            <option value="">-- Select --</option>
+                            <template x-for="(village, index) in villages" :key="index">
+                                <option x-bind:value="village.id"><span x-text="village.title"></span></option>
+                            </template>
+                        </select>
+                    </div>
+                </div>   
+                
+                <div class="flex space-x-2 justify-start mt-3 mb-6">
+                    <button class="text-white text-sm font-normal bg-red-500 hover:bg-red-400 rounded-sm w-full sm:w-auto px-4 py-2 text-center"
                         @click="eModal = 'showRumor'">Cancel</button>
-                    <button type="submit"
-                        class="text-white text-sm font-medium px-4 py-2 rounded-sm bg-slate-700 hover:bg-slate-800 "
-                        x-text="eventFormEl.label" :disabled="eventFormEl.loading"></button>
+                    <button type="submit" class="text-white text-sm font-normal bg-slate-700 hover:bg-slate-800 rounded-sm w-full sm:w-auto px-4 py-2 text-center"
+                        x-bind:disabled="formLoading" x-text="buttonText"></button>
                 </div>
+
+                <div x-text="formMessage"></div>
             </form>
         </div>
     </template>
@@ -149,14 +182,20 @@
                 </div>
             </div>
 
-            <ul class="divide-y border text-base">
+            <ul class="divide-y border-0 text-base">
                 <template x-for="(event, index) in filteredEvents" :key="index">
-                    <li class="p-2 flex justify-between hover:bg-gray-100 space-x-3">
-                        <div class="flex flex-col text-xs">
+                    <li class="flex justify-between p-2 hover:bg-gray-100 space-x-3">
+                        <div class="flex flex-col text-sm">
                             <p class="hover:cursor-pointer" x-text="event.title"></p>
-                            <p class="font-light" x-text="event.status+' '+event.location+' '+event.created_on"></p>
+                            <p>Location : <span class="font-medium text-xs" x-text="event.location"></span></p>
+                            <p>Date Occured : <span class="font-medium text-xs" x-text="event.created_on"></span></p>
                         </div>
-                        <button class="bg-gray-100 border text-gray-600 hover:bg-emerald-800 hover:text-white  text-xs font-medium px-2 py-0 rounded-sm" @click="attachSignal(event)">Attach</button>
+
+                        <div class="align-items-center">
+                            <button class="bg-gray-100 border text-gray-600 hover:bg-emerald-800 hover:text-white text-xs font-medium px-2 py-2 rounded-sm" 
+                            @click="attachSignal(event)">Attach</button>
+                        </div>
+                        
                     </li>
                 </template>
             </ul>

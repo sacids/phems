@@ -143,6 +143,10 @@
 </main>
 {% endblock %}
 
+{% block extrajs %}
+<script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}
+
 
 {% block get_contents %}
 <script src="{% static 'libs/popper/popper.min.js' %}"></script>
@@ -157,21 +161,5 @@
         $(".select2").select2();
         $(".input-mask").inputmask();
     };
-
-    //dropdown districts
-    $('#region_id').on('change', function (e) {
-        region_id = $(this).val();
-        baseURL = window.location.origin;
-
-        console.log(region_id)
-
-        $.ajax({
-            url: baseURL + '/ems/get_districts/' + region_id,
-            type: "get",
-            success: function (data) {
-                $('#district_id').html(data);
-            }
-        });
-    });
 </script>
 {% endblock %}

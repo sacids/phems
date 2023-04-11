@@ -95,5 +95,8 @@ urlpatterns = [
 
     #location
     path('get_districts/<str:region_id>', get_districts, name='get-districts'), 
+    path('get_wards/<str:district_id>', get_wards, name='get-wards'), 
+    path('get_villages/<str:ward_id>', get_villages, name='get-villages'), 
+
     
 ]
