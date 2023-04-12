@@ -163,7 +163,7 @@ class EventList(AjaxDatatableView):
     def customize_row(self, row, obj):
         row['title']        = '<a class="text-gray-600 hover:text-blue-600 text-sm font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
         row['created_on']   = naturalday(obj.created_on)
-        row['stage']        = '<span class="rounded-md py-1 px-2 text-xs ' + obj.stage.css + '">' + obj.stage.title + '</span>'
+        row['stage']        = '<span class="text-white rounded-full px-2 py-0.5 text-xs font-normal ' + obj.stage.css + '">' + obj.stage.title + '</span>'
         
         if obj.stage.title == 'New':
             row['actions'] = '<div class="flex">'\

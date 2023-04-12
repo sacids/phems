@@ -12,10 +12,6 @@ class DashboardView(View):
     template_name = 'dashboard.html'
 
     def get(self, request):
-        fullURL = ''.join(['http://', get_current_site(self.request).domain])
-        print("site url: ")
-        print(fullURL)
-
         """Number of signals"""
         signals = Signal.objects
         no_of_signals = signals.count()

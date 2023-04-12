@@ -17,11 +17,11 @@ from .forms import EventForm
 from apps.notification.classes import NotificationWrapper
 from apps.notification.tasks import send_email
 from django.forms.models import model_to_dict
-
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from django.contrib.sites.shortcuts import get_current_site
 
 from apps.account.models import Profile
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 # Create your views here.
@@ -120,6 +120,9 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
             new_event.created_by = self.request.user
             new_event.save()
 
+            """base url"""
+            fullURL = ''.join(['http://', get_current_site(self.request).domain, reverse('show-event', kwargs={'pk': new_event.id})])
+
             """wrapper"""
             notify = NotificationWrapper()
 
@@ -127,7 +130,7 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
             users = User.objects.filter(groups__name='EOC Manager')
 
             """create message to EOC Manager"""
-            message_to_eoc = f"New alert created!"
+            message_to_eoc = f"New alert created!. Please click this link <a href='{fullURL}'>here</a> to preview the event."
 
             if users.count() > 0:
                 arr_managers = []
