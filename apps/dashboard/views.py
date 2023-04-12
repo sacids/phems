@@ -12,16 +12,33 @@ class DashboardView(View):
 
     def get(self, request):
         """Number of signals"""
-        no_of_signals = Signal.objects.count()
-        no_of_new_signals = Signal.objects.filter(status='NEW').count()
-        no_of_discarded_signals = Signal.objects.filter(status='DISCARDED').count()
-        no_of_success_signals = Signal.objects.filter(status='ADDED').count()
+        signals = Signal.objects
+        no_of_signals = signals.count()
+        no_of_new_signals = signals.filter(status='NEW').count()
+        no_of_discarded_signals = signals.filter(status='DISCARDED').count()
+        no_of_success_signals = signals.filter(status='ADDED').count()
 
         """Number of events"""
-        no_of_new_events = Event.objects.filter(stage_id=1).count()
-        no_of_discarded_events = Event.objects.filter(stage_id=7).count()
-        no_of_comfirmed_events = Event.objects.filter(stage_id=5).count()
-        no_of_progress_events = Event.objects.filter(Q(stage_id=3) | Q(stage_id=4)).count()
+        events = Event.objects
+
+        if self.request.user.profile.level == "NATIONAL":
+            no_of_new_events = events.filter(stage_id=1).count()
+            no_of_discarded_events = events.filter(stage_id=7).count()
+            no_of_comfirmed_events = events.filter(stage_id=5).count()
+            no_of_progress_events = events.filter(Q(stage_id=3) | Q(stage_id=4)).count()
+
+        elif self.request.user.profile.level == "REGION":
+            no_of_new_events = events.filter(region_id=self.request.user.profile.region_id, stage_id=1).count()
+            no_of_discarded_events = events.filter(region_id=self.request.user.profile.region_id, stage_id=7).count()
+            no_of_comfirmed_events = events.filter(region_id=self.request.user.profile.region_id, stage_id=5).count()
+            no_of_progress_events = events.filter(Q(region_id=self.request.user.profile.region_id) & (Q(stage_id=3) | Q(stage_id=4))).count()
+
+        elif self.request.user.profile.level == "DISTRICT":
+            no_of_new_events = events.filter(district_id=self.request.user.profile.district_id, stage_id=1).count()
+            no_of_discarded_events = events.filter(district_id=self.request.user.profile.district_id, stage_id=7).count()
+            no_of_comfirmed_events = events.filter(district_id=self.request.user.profile.district_id, stage_id=5).count()
+            no_of_progress_events = events.filter(Q(district_id=self.request.user.profile.district_id) & (Q(stage_id=3) | Q(stage_id=4))).count()
+
 
         """Passing data to views"""
         context = {
