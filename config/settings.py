@@ -39,13 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     # installed apps
     'crispy_forms',
     # "crispy_tailwind",
     'rest_framework',
-    'corsheaders',
-    'django.contrib.humanize',
+    # 'corsheaders',
+    
     'treebeard',
     'ajax_datatable',
     
@@ -62,7 +63,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -129,10 +129,16 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #Django Rest Framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ],
+# }
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
 }
 
 

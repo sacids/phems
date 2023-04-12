@@ -160,12 +160,18 @@ class SectorsList(APIView):
 class AlertList(APIView):
     """API to fetch alerts"""
     def get(self, request, format = None):
+        """alerts"""
+        alerts = Event.objects   
 
-        print("primary key")
-        print(self.request.user.pk)
+        if self.request.user.profile.level == 'NATIONAL':
+            alerts = alerts.all().order_by('-pk')
 
-        alerts = Event.objects.all().order_by('-pk')      
+        elif self.request.user.profile.level == 'REGION': 
+            alerts = alerts.filter(region_id=self.request.user.profile.region_id).order_by('-pk')
 
+        elif self.request.user.profile.level == 'DISTRICT': 
+            alerts = alerts.filter(district_id=self.request.user.profile.district_id).order_by('-pk')
+   
         arr_data = []
         for alert in alerts:
             """create dict"""
@@ -175,12 +181,24 @@ class AlertList(APIView):
                 'description': alert.description,
                 'status': alert.status,
                 'created_on': date.strftime(alert.created_on, '%d/%m/%Y %H:%M'),
-                # 'location': alert.location.title,
                 'stage': alert.stage.title,
                 'alert_type_label': alert.alert.label,
                 'alert_type_title': alert.alert.title,
                 'primary_sector': alert.pri_sector.title
             } 
+
+            if alert.region_id is not None:
+                chart['region'] = alert.region.title
+
+            if alert.district_id is not None:
+                chart['district'] = alert.district.title
+
+            if alert.ward_id is not None:
+                chart['ward'] = alert.ward.title
+
+            if alert.village_id is not None:
+                chart['village'] = alert.village.title
+
             """append to arr_data"""
             arr_data.append(chart)
 

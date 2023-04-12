@@ -262,6 +262,14 @@
                     },
                     body: JSON.stringify(this.formData),
                 }).then((response) => {
+                    this.formData.title = "";
+                    this.formData.description = "";
+                    this.formData.alert_id = null;
+                    this.formData.pri_sector_id = null;
+                    this.formData.region_id = null;
+                    this.formData.ward_id = null;
+                    this.formData.village_id = null;
+                    
                     //set message
                     $('#setEvent_wrp').html("<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New alert created.</div>");
 
