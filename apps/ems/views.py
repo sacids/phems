@@ -142,7 +142,7 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
                     arr_managers.append(user.email)
 
                 """send email in background"""
-                #response = send_email("New Alert" , message_to_eoc, arr_managers)     
+                response = send_email("New Alert" , message_to_eoc, arr_managers)     
 
             """message"""
             messages.success(request, 'New alert created!')
