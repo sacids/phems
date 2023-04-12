@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from apps.ems.models import Signal, Event
 from django.db.models import Q
+from django.contrib.sites.shortcuts import get_current_site
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -11,6 +12,10 @@ class DashboardView(View):
     template_name = 'dashboard.html'
 
     def get(self, request):
+        fullURL = ''.join(['http://', get_current_site(self.request).domain])
+        print("site url: ")
+        print(fullURL)
+
         """Number of signals"""
         signals = Signal.objects
         no_of_signals = signals.count()

@@ -95,7 +95,7 @@ class MessageList(AjaxDatatableView):
         {'name': 'message', 'title': 'Message', 'visible': True, 'className': 'w-96 text-left border-r'},
         {'name': 'created_on', 'title': 'Created On', 'visible': True,'className': 'w-8 text-left border-r'},
         {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-8 text-left border-r'},
-        {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-8 text-left border-r', 'placeholder': 'True', 'searchable': False, },
+        # {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-8 text-left border-r', 'placeholder': 'True', 'searchable': False, },
     ]
 
     def get_show_column_filters(self, request):
@@ -106,15 +106,15 @@ class MessageList(AjaxDatatableView):
         row['created_on'] = obj.created_on.strftime('%d/%m/%Y %H:%M')
 
         if obj.app_status == 'PENDING':
-            row['status'] = '<span class="bg-yellow-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">Pending</span>'
-            row['actions'] = '<a href="%s" class="px-1 py-1 rounded-sm text-white text-xs font-normal bg-gray-600">Mark as Read</a>' % reverse('mark-as-done', args=(obj.id,))
+            row['status'] = '<span class="bg-yellow-500 text-white rounded-full px-2 py-0.5 text-xs font-normal">Pending</span>'
+            # row['actions'] = '<a href="%s" class="px-1 py-1 rounded-sm text-white text-xs font-normal bg-gray-600">Mark as Read</a>' % reverse('mark-as-done', args=(obj.id,))
 
         elif obj.app_status == 'DELIVERED':
-            row['status'] = '<span class="bg-green-600 text-white rounded-full px-2 py-0.5 text-xs font-medium">Delivered</span>'
+            row['status'] = '<span class="bg-green-600 text-white rounded-full px-2 py-0.5 text-xs font-norma">Delivered</span>'
             row['actions'] = ''   
 
         elif obj.app_status == 'REJECTED':
-            row['status'] = '<span class="bg-red-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">Rejected</span>'
+            row['status'] = '<span class="bg-red-400 text-white rounded-full px-2 py-0.5 text-xs font-normal">Rejected</span>'
             row['actions'] = ''
 
     def get_initial_queryset(self, request=None):
