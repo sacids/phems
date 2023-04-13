@@ -21,32 +21,16 @@
             <div class="flex h-full">
                 <div class="w-7/12 h-full overflow-y-scroll px-4 sm:px-4 lg:px-4">
                     <div class="w-full my-1 py-4 pr-4">
-                        <div class="flex flex-col mb-4">
-                            <p class="text-gray-500 text-sm font-normal">Title: </p>
-                            <p class="font-normal text-gray-600 text-sm py-0">
-                                {{event.title}}
-                            </p>
-                        </div>
-
-                        <div class="flex flex-col mt-3 mb-4">
-                            <p class="text-gray-500 text-sm font-normal">Description: </p>
-                            <p class="font-normal text-gray-600 text-sm py-0">
-                                {{event.description}}
-                            </p>
-                        </div>
-
                         <div class="flex justify-between mb-4">
-                            <div class="flex flex-col">
-                                <p class="text-gray-500 text-sm font-normal">Location: </p>
+                            <div>
+                                <p class="text-gray-700 text-sm font-medium">Title: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
-                                    {{event.location}}
+                                    {{event.title}}
                                 </p>
                             </div>
 
                             <div>
-                                <p class="text-gray-500 text-sm font-normal">Status: </p>
-                                <p 
-                                    class="text-white rounded-full px-2 py-1 text-xs font-medium"
+                                <p class="text-white rounded-full px-2 py-1 text-xs font-medium"
                                     :class="cur_event.stage_class"
                                     x-text="cur_event.stage_title">
                                 </p>
@@ -54,8 +38,37 @@
                             </div>
                         </div>
 
+                        <div class="flex flex-col mt-3 mb-4">
+                            <p class="text-gray-700 text-sm font-medium">Description: </p>
+                            <p class="font-normal text-gray-600 text-sm py-0">
+                                {{event.description}}
+                            </p>
+                        </div>
+
+                        <div class="flex justify-between mb-4">
+                            <div class="flex flex-col">
+                                <p class="text-gray-700 text-sm font-medium">Location: </p>
+
+                                <p class="font-normal text-gray-600 text-sm py-0">
+                                    Region : <span class="italic">{{event.region.title }}</span>
+                                </p>
+
+                                <p class="font-normal text-gray-600 text-sm py-0">
+                                    District : <span class="italic">{{event.district.title }}</span>
+                                </p>
+
+                                <p class="font-normal text-gray-600 text-sm py-0">
+                                    Ward : <span class="italic">{{event.ward.title }}</span>
+                                </p>
+
+                                <p class="font-normal text-gray-600 text-sm py-0">
+                                    Village : <span class="italic">{{event.village.title }}</span>
+                                </p>
+                            </div>
+                        </div>
+
                         <div class="flex flex-col mb-4">
-                            <p class="text-gray-500 text-sm font-normal">Alert Type: </p>
+                            <p class="text-gray-700 text-sm font-medium">Alert Type: </p>
                             <p class="font-normal text-gray-600 text-sm py-0">
                                 {{ event.alert.reference }} - {{ event.alert.title}}
                             </p>
@@ -63,14 +76,14 @@
 
                         <div class="flex justify-between mb-4">
                             <div class="flex flex-col">
-                                <p class="text-gray-500 text-sm font-normal">Primary Sector: </p>
+                                <p class="text-gray-700 text-sm font-medium">Primary Sector: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
                                     {{ event.pri_sector.title}}
                                 </p>
                             </div>
 
                             <div class="flex flex-col">
-                                <p class="text-gray-500 text-sm font-normal">Tagged Sectors: </p>
+                                <p class="text-gray-700 text-sm font-medium">Tagged Sectors: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
                                     {% for val in event.sector.all %}
                                     {{val}},
@@ -81,14 +94,14 @@
 
                         <div class="flex justify-between mb-4">
                             <div class="flex flex-col">
-                                <p class="text-gray-500 text-sm font-normal">Created On: </p>
+                                <p class="text-gray-700 text-sm font-medium">Created On: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
                                     {{ event.created_on}}
                                 </p>
                             </div>
 
                             <div>
-                                <p class="text-gray-500 text-sm font-normal">Created By: </p>
+                                <p class="text-gray-700 text-sm font-medium">Created By: </p>
                                 <p class="font-normal text-gray-600 text-sm py-0">
                                     {{ event.created_by.first_name}} {{ event.created_by.last_name}}
                                 </p>
