@@ -158,7 +158,7 @@ class EventList(AjaxDatatableView):
         return False
 
     def customize_row(self, row, obj):
-        row['title']        = '<a class="text-gray-600 hover:text-blue-600 text-sm font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
+        row['title']        = '<a class="hover:text-blue-600" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
         row['created_on']   = naturalday(obj.created_on)
         row['stage']        = '<span class="text-white rounded-full px-2 py-0.5 text-xs font-normal ' + obj.stage.css + '">' + obj.stage.title + '</span>'
         
@@ -175,7 +175,11 @@ class EventList(AjaxDatatableView):
                 '</a>'\
             '</div>' % (reverse('show-event', args=(obj.id,)) ,reverse('edit-event', args=(obj.id,)), reverse('delete-event', args=(obj.id,)))
         else:
-            row['actions'] = ''
+            row['actions'] = '<div class="flex">'\
+                    '<a href="%s" class="btn btn-xss px-1">'\
+                    '<i class="bx bxs-folder-open text-blue-600"></i>'\
+                    '</a>&nbsp;&nbsp;'\
+                '</div>' % (reverse('show-event', args=(obj.id,)))
 
 
     def get_initial_queryset(self, request=None):
