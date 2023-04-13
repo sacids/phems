@@ -51,6 +51,22 @@ class EventList2View(generic.TemplateView):
 
         return context
 
+class AlertTypeListView(PermissionRequiredMixin, generic.TemplateView):
+    permission_required = 'ems.view_alert'
+    template_name = "alert_types/lists.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AlertTypeListView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AlertTypeListView, self).get_context_data(**kwargs)
+
+        context['title'] = "Manage Alert Types"
+
+        return context
+    
+
 
 class EventListView(PermissionRequiredMixin, generic.TemplateView):
     permission_required = 'ems.view_event'

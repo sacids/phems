@@ -2,7 +2,7 @@ from ajax_datatable.views import AjaxDatatableView
 from django.contrib.auth.models import Permission
 from django.urls import reverse
 from django.contrib.humanize.templatetags.humanize import naturalday
-from .models import Event, Signal
+from .models import Event, Signal, Alert
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User, Group
 from apps.notification.models import Notification
@@ -243,3 +243,20 @@ class RumorList(AjaxDatatableView):
             queryset = queryset.filter(status=status)
 
         return queryset
+    
+
+class AlertTypeList(AjaxDatatableView):
+    model = Alert
+    show_column_filters = False
+    length_menu = [[16, 50, 100, -1], [16, 50, 100, 'all']]
+    search_values_separator = '+'
+    full_row_select = False
+
+    column_defs = [
+        {'name': 'id', 'visible': False, },
+        {'name': 'reference', 'title': 'Reference', 'visible': True, 'className': 'text-left w-12 border-r'},
+        {'name': 'label', 'title': 'Label', 'visible': True, 'className': 'w-36 text-left border-r', 'searchable': False, },
+        {'name': 'title', 'title': 'Title', 'visible': True, 'className': 'w-96 text-left border-r'},
+    ]
+    def get_show_column_filters(self, request):
+        return False
