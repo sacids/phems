@@ -171,7 +171,7 @@ class EventList(AjaxDatatableView):
                 '<i class="bx bxs-folder-open text-blue-600"></i>'\
                 '</a>&nbsp;&nbsp;'\
                 '<a href="%s" class="btn btn-xss px-1">'\
-                '<i class="bx bx-edit"></i>'\
+                '<i class="bx bx-edit text-gray-600"></i>'\
                 '</a>&nbsp;&nbsp;'\
                 '<a href="%s" class="btn btn-xss">'\
                 '<i class="bx bx-trash text-red-600"></i>' \
