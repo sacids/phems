@@ -81,44 +81,41 @@ class UserList(AjaxDatatableView):
             '</div>' % (reverse('edit-user', args=(obj.id,)), reverse('delete-user', args=(obj.id,)))
         
 
-class MessageList(AjaxDatatableView):
+class NotificationList(AjaxDatatableView):
     model = Notification
     title = 'Notifications'
     show_column_filters = False
-    initial_order = [["created_on", "asc"], ]
+    # initial_order = [["created_on", "desc"], ]
     length_menu = [[12, 50, 100, -1], [12, 50, 100, 'all']]
     search_values_separator = '+'
     full_row_select = False
 
     column_defs = [
         {'name': 'id', 'visible': False, },
-        {'name': 'message', 'title': 'Message', 'visible': True, 'className': 'w-96 text-left border-r'},
+        {'name': 'message', 'title': 'Message', 'visible': True, 'className': 'w-96 text-left border-r cursor-pointer'},
         {'name': 'created_on', 'title': 'Created On', 'visible': True,'className': 'w-8 text-left border-r'},
-        {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-8 text-left border-r'},
-        # {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-8 text-left border-r', 'placeholder': 'True', 'searchable': False, },
+        {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-8 text-left border-r'}
     ]
 
     def get_show_column_filters(self, request):
         return False
 
     def customize_row(self, row, obj):
-        # 'row' is a dictionary representing the current row, and 'obj' is the current object.
+        row['message'] = '<span class=" line-clamp-1" @click="sidebarOpen = true, manageNotification('+str(obj.id)+')" >' + str(obj.message) + '</span>'
         row['created_on'] = obj.created_on.strftime('%d/%m/%Y %H:%M')
 
         if obj.app_status == 'PENDING':
-            row['status'] = '<span class="bg-yellow-500 text-white rounded-full px-2 py-0.5 text-xs font-normal">Pending</span>'
-            # row['actions'] = '<a href="%s" class="px-1 py-1 rounded-sm text-white text-xs font-normal bg-gray-600">Mark as Read</a>' % reverse('mark-as-done', args=(obj.id,))
-
+            row['status'] = '<span class="bg-amber-500 text-white rounded-lg px-2 py-0.5 text-xs font-normal">Pending</span>'
+            
         elif obj.app_status == 'DELIVERED':
-            row['status'] = '<span class="bg-green-600 text-white rounded-full px-2 py-0.5 text-xs font-norma">Delivered</span>'
-            row['actions'] = ''   
+            row['status'] = '<span class="bg-green-600 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Viewed</span>'  
 
         elif obj.app_status == 'REJECTED':
-            row['status'] = '<span class="bg-red-400 text-white rounded-full px-2 py-0.5 text-xs font-normal">Rejected</span>'
-            row['actions'] = ''
+            row['status'] = '<span class="bg-red-500 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Rejected</span>'
 
     def get_initial_queryset(self, request=None):
         queryset = super().get_initial_queryset(request)
+        
         queryset = queryset.filter(user_id=request.user)
         return queryset
     

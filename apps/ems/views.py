@@ -130,13 +130,17 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
             users = User.objects.filter(groups__name='EOC Manager')
 
             """create message to EOC Manager"""
-            message_to_eoc = f"New alert created!. Please click this link <a href='{fullURL}'>here</a> to preview the event."
+            message_to_eoc = f"New alert created!. Please click this link to preview the event."
 
             if users.count() > 0:
                 arr_managers = []
                 for user in users:
                     """create notification"""
-                    response = notify.create_notification(user_id=user.id, message=message_to_eoc)
+                    response = notify.create_notification(
+                        user_id = user.id, 
+                        created_by = self.request.user.id,
+                        message=message_to_eoc,
+                        url = fullURL )
 
                     """assign to array"""
                     arr_managers.append(user.email)

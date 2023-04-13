@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.core.mail import BadHeaderError
 from django.http import JsonResponse, HttpResponseRedirect
+from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib import messages
@@ -24,14 +25,17 @@ class MessageListView(generic.TemplateView):
         return context
     
 
-def mark_as_read(request, **kwargs):
+def show(request, **kwargs):
     """mark notification as read"""
-    message = Notification.objects.get(pk=kwargs['pk'])
+    notification = Notification.objects.get(pk=kwargs['pk'])
 
-    """change status"""
-    message.app_status = "DELIVERED"
-    message.save()
+    """change status of notification"""
+    notification.app_status = "DELIVERED"
+    notification.save()
 
-    """redirect with message"""
-    messages.success(request, 'Notification marked as read')
-    return HttpResponseRedirect(reverse_lazy('messages')) 
+    context = {}
+    context['notification'] = notification
+
+    """render view"""
+    template = 'messages/async/show.html'
+    return TemplateResponse(request, template, context)

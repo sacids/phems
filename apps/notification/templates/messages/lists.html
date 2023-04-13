@@ -18,27 +18,16 @@
         </div>
     </div>
 
-    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
-        <div class="flex-1 h-full overflow-y-scroll">
-            <div class="mx-auto py-4 px-4 sm:px-4 lg:px-4">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="bg-teal-100 rounded-b text-teal-900 py-3 px-3 mb-2" role="alert">
-                            <div class="flex">
-                                <div>
-                                    <p class="text-sm font-normal">{{ message }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
-                <div class="table-responsive h-full overflow-hidden">
-                    <table id="datatable" width="100%"
-                        class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
-                    </table>
-                </div>
-            </div>
+    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative" x-init="">
+        <div class="flex-1 table-responsive py-4 px-4 sm:px-4 lg:px-4 h-full overflow-hidden">
+            <table id="datatable" width="100%"
+                class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
+            </table>
+        </div>
+        
+        <div class="bg-white border-l shadow-md py-3 flex-shrink-0 w-[570px] h-full flex flex-col overflow-hidden transition-all duration-500"
+            :class="{ '-mr-[570px]': !sidebarOpen }">
+            <div id="detail-div" class="w-full h-full overflow-hidden pb-8"></div>
         </div>
     </div>
 </main>
@@ -47,7 +36,7 @@
     $(document).ready(function () {
         AjaxDatatableViewUtils.initialize_table(
             $('#datatable'),
-            "{% url 'm_list' %}",
+            "{% url 'nt_list' %}",
             {
                 processing: false,
                 autoWidth: false,
@@ -84,6 +73,34 @@
 
 {% block get_contents %}
 <script>
-    function getContents() {}
+    function getContents() {
+        return {
+            sidebarOpen: false,
+            showModal: false,
+            eModal: "showMsg",
+
+            //show notification
+            manageNotification(id) {
+                this.eModal = "showMsg";
+
+                const all_tr = document.querySelectorAll('.odd, .even');
+                all_tr.forEach(tr => {
+                    tr.classList.remove('bg-emerald-100');
+                });
+                document.getElementById('row-' + id).classList.add("bg-emerald-100");
+
+                var url = window.location.origin + '/notification/' + id + '/show';
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log(data);
+                        $('#detail-div').html(data)
+                    })
+            },
+
+
+        }
+    }
 </script>
 {% endblock %}

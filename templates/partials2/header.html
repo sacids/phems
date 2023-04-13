@@ -72,7 +72,7 @@
                                     class="p-2 my-3 hover:bg-green-100 hover:rounded-md hover:text-green-900 text-sm font-medium">
                                     Notifications
                                     {% if request.user|show_notification > 0 %}
-                                        <span class="rounded-full bg-red-600 text-sm text-white font-medium px-1">{{ request.user|show_notification }}</span>
+                                        <span class="rounded-lg bg-red-500 text-xs text-white font-normal px-1">{{ request.user|show_notification }}</span>
                                     {% endif %}
                                 </a>
                             </div>
@@ -99,8 +99,8 @@
                         {% if perms.ems.add_event %}
                             <div class="pt-3 pb-2 ">
                                 <a href="{% url 'create-event' %}"
-                                    class="p-2 rounded-sm text-white bg-green-700 hover:bg-green-900 text-xs font-bold">
-                                    <i class="mdi mdi-add-circle-outline"></i> Create Alert
+                                    class="p-2 rounded-sm text-white bg-green-700 hover:bg-green-900 text-xs font-medium">
+                                    <i class='bx bx-plus'></i> Create Alert
                                 </a>
                             </div>
                         {% endif %}

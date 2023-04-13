@@ -87,7 +87,7 @@ urlpatterns = [
     path('ajax_datatable/rumor_list/', ajax_datatable_views.RumorList.as_view(), name="r_list"),
 
     #messages
-    path('ajax_datatable/message_list/', ajax_datatable_views.MessageList.as_view(), name="m_list"),
+    path('ajax_datatable/message_list/', ajax_datatable_views.NotificationList.as_view(), name="nt_list"),
 
     #users
     path('ajax_datatable/users_list/', ajax_datatable_views.UserList.as_view(), name="u_list"),

@@ -3,5 +3,5 @@ from .views import *
 
 urlpatterns = [
     path('messages', MessageListView.as_view(), name='messages'),
-    path('<int:pk>/mark-as-done', mark_as_read, name='mark-as-done'),
+    path('<int:pk>/show', show, name='show-message'),
 ]
