@@ -50,14 +50,15 @@ class ussd_session:
         session         = Session.objects.filter(Q(session_id=self.session_id) & Q(msisdn=self.msisdn))
         if not session:
             # check if is initial session
-            menu        = Menu.objects.get(code=self.msg)
+            menu        = Menu.objects.filter(Q(code=self.msg) & (Q(active=True) | Q(test_numbers__contains=self.msisdn)) )
             if not menu:
                 # not valid session or menu return error response
                 return {"status":2,"msg":"Shortcode not available"}
             else:
+                menu    = menu[0]
                 # valid menu create new session
                 self.session    = Session.objects.create(session_id=self.session_id,msisdn=self.msisdn,current_tree=menu.init_tree,data=menu.output_url+'/?')
-                return {"status":0,"msg":self.session.argument}
+                return {"status":0,"msg":self.session.current_tree.argument}
 
         else:
             if session[0].active == False:

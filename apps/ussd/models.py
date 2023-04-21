@@ -10,6 +10,10 @@ class Menu(models.Model):
     code           = models.CharField(max_length=15,primary_key=True)
     init_tree      = models.ForeignKey('Tree', on_delete=DO_NOTHING)
     output_url     = models.CharField(max_length=255)
+    active         = models.BooleanField(default=False)
+    test_numbers   = models.TextField(blank=True, null=True)
+    
+    
        
     def __str__(self):
         return self.code
