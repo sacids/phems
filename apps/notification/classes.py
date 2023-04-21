@@ -22,10 +22,10 @@ class NotificationWrapper:
 
     def create_notification(self, **kwargs):
         """ Create notification for different users """
-
-        """args"""
         message        = kwargs['message']
-        user_id          = kwargs['user_id']
+        url            = kwargs['url']
+        user_id        = kwargs['user_id']
+        created_by     = kwargs['created_by']
 
         """random code"""
         message_id = ''.join(random.choices(string.ascii_uppercase, k=12))
@@ -40,9 +40,11 @@ class NotificationWrapper:
             """new notification"""
             new_data = Notification()
             new_data.message = message
+            new_data.url = url
             new_data.message_id = message_id
-            new_data.user_id = user.pk
             new_data.email = user.email
+            new_data.user_id = user.pk
+            new_data.created_by_id =  created_by
             new_data.save()
 
             """return response"""

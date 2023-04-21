@@ -60,12 +60,22 @@ class EventPercentageChartView(APIView):
         events = Event.objects
 
         """Number of events"""
-        new = events.filter(stage_id=1).count()
-        confirmed = events.filter(stage_id=5).count()
-        discarded = events.filter(stage_id=7).count()
-        on_progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).count()
+        if self.request.user.profile.level == "NATIONAL":
+            new = events.filter(stage_id=1).count()
+            confirmed = events.filter(stage_id=5).count()
+            discarded = events.filter(stage_id=7).count()
+            on_progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).count()
+        elif self.request.user.profile.level == "REGION": 
+            new = events.filter(region_id=self.request.user.profile.region_id, stage_id=1).count()
+            confirmed = events.filter(region_id=self.request.user.profile.region_id, stage_id=5).count()
+            discarded = events.filter(region_id=self.request.user.profile.region_id,stage_id=7).count()
+            on_progress = events.filter(Q(region_id=self.request.user.profile.region_id) & (Q(stage_id=3) | Q(stage_id=4))).count()
+        elif self.request.user.profile.level == "DISTRICT": 
+            new = events.filter(district_id=self.request.user.profile.district_id, stage_id=1).count()
+            confirmed = events.filter(district_id=self.request.user.profile.district_id, stage_id=5).count()
+            discarded = events.filter(district_id=self.request.user.profile.district_id, stage_id=7).count()
+            on_progress = events.filter(Q(district_id=self.request.user.profile.district_id) & (Q(stage_id=3) | Q(stage_id=4))).count()  
        
-
         """aggregate data"""
         aggregate = new + discarded + confirmed + on_progress
 
@@ -93,10 +103,26 @@ class EventChartView(APIView):
         arr_data = []
         for val in sectors:
             """Number of events"""
-            new = Event.objects.filter(sector__id=val.id, stage_id=1).count()
-            progress = Event.objects.filter(Q(stage_id=3) | Q(stage_id=4)).filter(sector__id=val.id).count()
-            confirmed = Event.objects.filter(sector__id=val.id, stage_id=5).count()
-            discarded = Event.objects.filter(sector__id=val.id, stage_id=7).count()
+            events  = Event.objects
+
+            if self.request.user.profile.level == "NATIONAL":
+                new = events.filter(sector__id=val.id, stage_id=1).count()
+                progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).filter(sector__id=val.id).count()
+                confirmed = events.filter(sector__id=val.id, stage_id=5).count()
+                discarded = events.filter(sector__id=val.id, stage_id=7).count()
+
+            elif self.request.user.profile.level == "REGION": 
+                new = events.filter(sector__id=val.id, region_id=self.request.user.profile.region_id, stage_id=1).count()
+                progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).filter(sector__id=val.id, region_id=self.request.user.profile.region_id).count()
+                confirmed = events.filter(sector__id=val.id, stage_id=5, region_id=self.request.user.profile.region_id).count()
+                discarded = events.filter(sector__id=val.id, stage_id=7, region_id=self.request.user.profile.region_id).count()
+
+            elif self.request.user.profile.level == "DISTRICT": 
+                new = events.filter(sector__id=val.id, district_id=self.request.user.profile.district_id, stage_id=1).count()
+                progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).filter(sector__id=val.id, district_id=self.request.user.profile.district_id).count()
+                confirmed = events.filter(sector__id=val.id, district_id=self.request.user.profile.district_id, stage_id=5).count()
+                discarded = events.filter(sector__id=val.id, district_id=self.request.user.profile.district_id, stage_id=7).count()
+
 
             """dictionary"""
             chart = {
@@ -122,8 +148,17 @@ class AlertChartView(APIView):
         arr_data = []
         for val in alerts:
             """Number of events"""
-            number_of_events = Event.objects.filter(alert__id=val.id).count()
-            confirmed_number_of_events = Event.objects.filter(alert__id=val.id, stage_id=5).count()
+            events  = Event.objects
+
+            if self.request.user.profile.level == "NATIONAL":
+                number_of_events = events.filter(alert__id=val.id).count()
+                confirmed_number_of_events = events.filter(alert__id=val.id, stage_id=5).count()
+            elif self.request.user.profile.level == "REGION":
+                number_of_events = events.filter(alert__id=val.id, region_id=self.request.user.profile.region_id).count()
+                confirmed_number_of_events = events.filter(alert__id=val.id, stage_id=5, region_id=self.request.user.profile.region_id).count() 
+            elif self.request.user.profile.level == "DISTRICT":
+                number_of_events = events.filter(alert__id=val.id, district_id=self.request.user.profile.district_id).count()
+                confirmed_number_of_events = events.filter(alert__id=val.id, stage_id=5, district_id=self.request.user.profile.district_id).count()
 
             """dictionary"""
             chart = {

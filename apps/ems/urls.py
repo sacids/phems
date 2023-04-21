@@ -19,6 +19,9 @@ urlpatterns = [
     path('signals', SignalListView.as_view(), name='signals'),
     path('event_list', EventList2View.as_view(), name='event_list'),
 
+    #alert types
+    path('alert-types', AlertTypeListView.as_view(), name='alert-types'),
+
     #events
     path('events', EventListView.as_view(), name='events'),
     path('events/<int:pk>/show', EventDetailView.as_view(), name='show-event'),
@@ -85,9 +88,10 @@ urlpatterns = [
     path('ajax_datatable/permissions/', ajax_datatable_views.PermissionAjaxDatatableView.as_view(), name="ajax_datatable_permissions"),
     path('ajax_datatable/event_list/', ajax_datatable_views.EventList.as_view(), name="e_list"),
     path('ajax_datatable/rumor_list/', ajax_datatable_views.RumorList.as_view(), name="r_list"),
+    path('ajax_datatable/alert_type_list/', ajax_datatable_views.AlertTypeList.as_view(), name="at_list"),
 
     #messages
-    path('ajax_datatable/message_list/', ajax_datatable_views.MessageList.as_view(), name="m_list"),
+    path('ajax_datatable/message_list/', ajax_datatable_views.NotificationList.as_view(), name="nt_list"),
 
     #users
     path('ajax_datatable/users_list/', ajax_datatable_views.UserList.as_view(), name="u_list"),

@@ -17,11 +17,11 @@ from .forms import EventForm
 from apps.notification.classes import NotificationWrapper
 from apps.notification.tasks import send_email
 from django.forms.models import model_to_dict
-
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from django.contrib.sites.shortcuts import get_current_site
 
 from apps.account.models import Profile
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 # Create your views here.
@@ -50,6 +50,22 @@ class EventList2View(generic.TemplateView):
         context['alerts'] = Alert.objects.all().order_by('reference')
 
         return context
+
+class AlertTypeListView(PermissionRequiredMixin, generic.TemplateView):
+    permission_required = 'ems.view_alert'
+    template_name = "alert_types/lists.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AlertTypeListView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(AlertTypeListView, self).get_context_data(**kwargs)
+
+        context['title'] = "Manage Alert Types"
+
+        return context
+    
 
 
 class EventListView(PermissionRequiredMixin, generic.TemplateView):
@@ -120,6 +136,9 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
             new_event.created_by = self.request.user
             new_event.save()
 
+            """base url"""
+            fullURL = ''.join(['http://', get_current_site(self.request).domain, reverse('show-event', kwargs={'pk': new_event.id})])
+
             """wrapper"""
             notify = NotificationWrapper()
 
@@ -127,19 +146,23 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
             users = User.objects.filter(groups__name='EOC Manager')
 
             """create message to EOC Manager"""
-            message_to_eoc = f"New alert created!"
+            message_to_eoc = f"New alert created!. Please click this link to preview the event."
 
             if users.count() > 0:
                 arr_managers = []
                 for user in users:
                     """create notification"""
-                    response = notify.create_notification(user_id=user.id, message=message_to_eoc)
+                    response = notify.create_notification(
+                        user_id = user.id, 
+                        created_by = self.request.user.id,
+                        message=message_to_eoc,
+                        url = fullURL )
 
                     """assign to array"""
                     arr_managers.append(user.email)
 
                 """send email in background"""
-                #response = send_email("New Alert" , message_to_eoc, arr_managers)     
+                response = send_email("New Alert" , message_to_eoc, arr_managers)     
 
             """message"""
             messages.success(request, 'New alert created!')

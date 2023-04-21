@@ -10,7 +10,7 @@
 
 {% block contents %}
 
-<main class="bg-white">
+<main class="bg-white h-full relative">
     <div class="bg-gray-100 py-2 px-4 sm:px-4 lg:px-4 flex justify-between">
         <div>
             <h1 class="py-1 text-xl font-medium tracking-tight text-gray-600">Create New Alert</h1>
@@ -22,9 +22,16 @@
     <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
         <div class="flex-1 h-full overflow-y-scroll">
             <div class="mx-auto py-2 px-4 sm:px-4 lg:px-4">
-                <div class="w-2/3 mx-auto bg-slate-100 border-none rounded-sm px-4 py-4">
-                    <form method="post" enctype="multipart/form-data" class="w-full text-sm font-medium text-gray-600 mb-2" autocomplete="off">
+                <div class="w-2/3 mx-auto bg-gray-100 border border-gray-200 rounded-md px-4 py-4">
+                    <form method="post" enctype="multipart/form-data" class="w-full text-xs font-medium text--600 gray mb-2" autocomplete="off">
                         {% csrf_token %}
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full">
+                                <h6 class="uppercase font-medium text-sm py-2">Alert Information</h6>
+                                <hr />
+                            </div>
+                        </div>
         
                         <div class="flex flex-wrap mb-1">
                             <div class="w-full md:w-full">
@@ -49,10 +56,10 @@
                         </div>
         
                         <div class="flex flex-wrap mb-1">
-                            <div class="w-full md:w-1/2 pr-2">
+                            <div class="w-full md:w-1/4 pr-2">
                                 <div class="control-group">
                                     <label class="control-label">Region <span class="text-red-600">*</span></label>
-                                    <select name="region_id" id="region_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal" required>
+                                    <select name="region_id" id="region_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal" required>
                                         <option value="">Select</option>
                                         {% for region in regions %}
                                         <option value="{{ region.id }}">{{ region.title }}</option>
@@ -61,30 +68,28 @@
                                 </div>
                             </div>
 
-                            <div class="w-full md:w-1/2">
+                            <div class="w-full md:w-1/4 pr-2">
                                 <div class="control-group">
                                     <label class="control-label">District <span class="text-red-600">*</span></label>
-                                    <select name="district_id" id="district_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal" required>
+                                    <select name="district_id" id="district_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal" required>
                                         <option value="">Select</option>
                                     </select>  
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-1/2 pr-2">
+                        
+                            <div class="w-full md:w-1/4 pr-2">
                                 <div class="control-group">
                                     <label class="control-label">Ward</label>
-                                    <select name="ward_id" id="ward_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
+                                    <select name="ward_id" id="ward_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
                                         <option value="">Select</option>
                                     </select>  
                                 </div>
                             </div>
 
-                            <div class="w-full md:w-1/2">
+                            <div class="w-full md:w-1/4">
                                 <div class="control-group">
                                     <label class="control-label">Village</label>
-                                    <select name="village_id" id="village_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-3 px-4 mb-3 my-1 leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal">
+                                    <select name="village_id" id="village_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
                                         <option value="">Select</option>
                                     </select>  
                                 </div>
@@ -93,7 +98,7 @@
         
                         <div class="flex flex-wrap mb-1">
                             <div class="w-full md:w-full">
-                                <h6 class="uppercase font-medium py-2">Reporter Information</h6>
+                                <h6 class="uppercase font-medium text-sm py-2">Reporter Information</h6>
                                 <hr />
                             </div>
                         </div>

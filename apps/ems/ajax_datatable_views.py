@@ -2,7 +2,7 @@ from ajax_datatable.views import AjaxDatatableView
 from django.contrib.auth.models import Permission
 from django.urls import reverse
 from django.contrib.humanize.templatetags.humanize import naturalday
-from .models import Event, Signal
+from .models import Event, Signal, Alert
 from django.forms.models import model_to_dict
 from django.contrib.auth.models import User, Group
 from apps.notification.models import Notification
@@ -81,44 +81,41 @@ class UserList(AjaxDatatableView):
             '</div>' % (reverse('edit-user', args=(obj.id,)), reverse('delete-user', args=(obj.id,)))
         
 
-class MessageList(AjaxDatatableView):
+class NotificationList(AjaxDatatableView):
     model = Notification
     title = 'Notifications'
     show_column_filters = False
-    initial_order = [["created_on", "asc"], ]
+    # initial_order = [["created_on", "desc"], ]
     length_menu = [[12, 50, 100, -1], [12, 50, 100, 'all']]
     search_values_separator = '+'
     full_row_select = False
 
     column_defs = [
         {'name': 'id', 'visible': False, },
-        {'name': 'message', 'title': 'Message', 'visible': True, 'className': 'w-96 text-left border-r'},
+        {'name': 'message', 'title': 'Message', 'visible': True, 'className': 'w-96 text-left border-r cursor-pointer'},
         {'name': 'created_on', 'title': 'Created On', 'visible': True,'className': 'w-8 text-left border-r'},
-        {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-8 text-left border-r'},
-        {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-8 text-left border-r', 'placeholder': 'True', 'searchable': False, },
+        {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-8 text-left border-r'}
     ]
 
     def get_show_column_filters(self, request):
         return False
 
     def customize_row(self, row, obj):
-        # 'row' is a dictionary representing the current row, and 'obj' is the current object.
+        row['message'] = '<span class=" line-clamp-1" @click="sidebarOpen = true, manageNotification('+str(obj.id)+')" >' + str(obj.message) + '</span>'
         row['created_on'] = obj.created_on.strftime('%d/%m/%Y %H:%M')
 
         if obj.app_status == 'PENDING':
-            row['status'] = '<span class="bg-yellow-500 text-white rounded-full px-2 py-0.5 text-xs font-medium">Pending</span>'
-            row['actions'] = '<a href="%s" class="px-1 py-1 rounded-sm text-white text-xs font-normal bg-gray-600">Mark as Read</a>' % reverse('mark-as-done', args=(obj.id,))
-
+            row['status'] = '<span class="bg-amber-500 text-white rounded-lg px-2 py-0.5 text-xs font-normal">Pending</span>'
+            
         elif obj.app_status == 'DELIVERED':
-            row['status'] = '<span class="bg-green-600 text-white rounded-full px-2 py-0.5 text-xs font-medium">Delivered</span>'
-            row['actions'] = ''   
+            row['status'] = '<span class="bg-green-600 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Viewed</span>'  
 
         elif obj.app_status == 'REJECTED':
-            row['status'] = '<span class="bg-red-400 text-white rounded-full px-2 py-0.5 text-xs font-medium">Rejected</span>'
-            row['actions'] = ''
+            row['status'] = '<span class="bg-red-500 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Rejected</span>'
 
     def get_initial_queryset(self, request=None):
         queryset = super().get_initial_queryset(request)
+        
         queryset = queryset.filter(user_id=request.user)
         return queryset
     
@@ -161,9 +158,9 @@ class EventList(AjaxDatatableView):
         return False
 
     def customize_row(self, row, obj):
-        row['title']        = '<a class="text-gray-600 hover:text-blue-600 text-sm font-medium" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
+        row['title']        = '<a class="hover:text-blue-600" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
         row['created_on']   = naturalday(obj.created_on)
-        row['stage']        = '<span class="rounded-md py-1 px-2 text-xs ' + obj.stage.css + '">' + obj.stage.title + '</span>'
+        row['stage']        = '<span class="text-white rounded-full px-2 py-0.5 text-xs font-normal ' + obj.stage.css + '">' + obj.stage.title + '</span>'
         
         if obj.stage.title == 'New':
             row['actions'] = '<div class="flex">'\
@@ -171,14 +168,18 @@ class EventList(AjaxDatatableView):
                 '<i class="bx bxs-folder-open text-blue-600"></i>'\
                 '</a>&nbsp;&nbsp;'\
                 '<a href="%s" class="btn btn-xss px-1">'\
-                '<i class="bx bx-edit"></i>'\
+                '<i class="bx bx-edit text-gray-600"></i>'\
                 '</a>&nbsp;&nbsp;'\
                 '<a href="%s" class="btn btn-xss">'\
                 '<i class="bx bx-trash text-red-600"></i>' \
                 '</a>'\
             '</div>' % (reverse('show-event', args=(obj.id,)) ,reverse('edit-event', args=(obj.id,)), reverse('delete-event', args=(obj.id,)))
         else:
-            row['actions'] = ''
+            row['actions'] = '<div class="flex">'\
+                    '<a href="%s" class="btn btn-xss px-1">'\
+                    '<i class="bx bxs-folder-open text-blue-600"></i>'\
+                    '</a>&nbsp;&nbsp;'\
+                '</div>' % (reverse('show-event', args=(obj.id,)))
 
 
     def get_initial_queryset(self, request=None):
@@ -242,3 +243,20 @@ class RumorList(AjaxDatatableView):
             queryset = queryset.filter(status=status)
 
         return queryset
+    
+
+class AlertTypeList(AjaxDatatableView):
+    model = Alert
+    show_column_filters = False
+    length_menu = [[16, 50, 100, -1], [16, 50, 100, 'all']]
+    search_values_separator = '+'
+    full_row_select = False
+
+    column_defs = [
+        {'name': 'id', 'visible': False, },
+        {'name': 'reference', 'title': 'Reference', 'visible': True, 'className': 'text-left w-12 border-r'},
+        {'name': 'label', 'title': 'Label', 'visible': True, 'className': 'w-36 text-left border-r', 'searchable': False, },
+        {'name': 'title', 'title': 'Title', 'visible': True, 'className': 'w-96 text-left border-r'},
+    ]
+    def get_show_column_filters(self, request):
+        return False
