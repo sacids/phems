@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'apps.dashboard.apps.DashboardConfig',
     'apps.notification.apps.NotificationConfig',
     'apps.api.apps.ApiConfig',
+    'apps.ussd.apps.UssdConfig',
 ]
 
 MIDDLEWARE = [
