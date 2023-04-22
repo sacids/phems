@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     
     'treebeard',
     'ajax_datatable',
+    'django_summernote',
     
     
     # apps
