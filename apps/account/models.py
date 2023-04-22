@@ -28,6 +28,7 @@ class Profile(models.Model):
     district        = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="district")
 
 
+
     @receiver(post_save, sender=User)
     def update_user_profile(sender, instance, created, **kwargs):
         if created:
