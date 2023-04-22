@@ -18,11 +18,18 @@ class ussd_session:
     def get_response(self):
         
         response    = self.transverse()
+        status      = response['status']
         
-        if response['status']   == 0:
+        # status 0 = success
+        # status 2 = not valid shortcode
+        # status 1 = system error
+        # status 3 = last message
+        # status 4 = expired session
+        
+        if status   == 0:
             if self.has_nodes() == 0:
-                self.session.active = False
-                self.session.save()
+                response['status']  = 3
+                self.cancel_session(self.session_id)
                 
                 ## call final function
                 ret = requests.get(self.session.data)
@@ -30,12 +37,11 @@ class ussd_session:
                     response['msg'] = "something went wrong, please try again later"
                 ## if fails send corresponding error back
                 
-        elif response['status'] == 2:
+        elif status == 2:
             # not a valid menu
             pass
         else:
-            self.session.active = False
-            self.session.save()
+            self.cancel_session(self.session_id)
             
         return response
         
@@ -58,7 +64,7 @@ class ussd_session:
 
         else:
             if session[0].active == False:
-                return {"status":2,"msg":"Session has expired"}
+                return {"status":4,"msg":"Session has expired"}
             else: 
                 self.session    = session[0]
                 
@@ -136,3 +142,9 @@ class ussd_session:
             
     def has_nodes(self):
         return Node.objects.filter(tree=self.session.current_tree).count()
+    
+    def cancel_session():
+        session     = Session.objects.filter(Q(session_id=self.session_id))[0]
+        session.active = False
+        session.save()
+        
