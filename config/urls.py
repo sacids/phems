@@ -40,4 +40,5 @@ urlpatterns = [
     path('notification/', include('apps.notification.urls')),
     path('api/', include('apps.api.urls')), 
     path('ussd/', include('apps.ussd.urls')), 
+    path('sms/', include('apps.sms.urls')), 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

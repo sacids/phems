@@ -10,7 +10,6 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 
 #halotel
 from django.views.decorators.csrf import csrf_exempt
-import xml.etree.ElementTree as ET
 from bs4 import BeautifulSoup
 
 from .tasks import send_response
