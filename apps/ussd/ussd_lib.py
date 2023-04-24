@@ -112,16 +112,16 @@ class ussd_session:
             return {"status":0,"msg":res}
         else:
             # call the function
-            #ret     = requests.get(state.argument+'?'+self.session.data)
+            ret     = requests.get(state.argument+'?'+self.session.data)
             print(state.argument+'?'+self.session.data)
             
-            #res     = ret.json()
-            #code    = '0'
-            #if res['status'] == 1:
-            #    code = '3'
+            res     = ret.json()
+            code    = 0
+            if res['status'] == 1:
+                code = 3
                 
-            #return {"status":code,"msg":res['msg']}
-            return {"status":0,"msg":'Success message after func call'}
+            return {"status":code,"msg":res['msg']}
+            #return {"status":0,"msg":'Success message after func call'}
         
 
             
