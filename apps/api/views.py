@@ -28,6 +28,7 @@ class AlertTypesList(APIView):
 
         return Response(arr_data, status = status.HTTP_200_OK)
 
+
 class LocationList(APIView):
     """API to fetch location"""
     def get(self, request, format=None):
@@ -280,7 +281,10 @@ def attach_rumor2alert(request):
     signal.save()
     
     """return response"""
-    return JsonResponse({"error": False, "success_msg": "Rumor added to alert"}, safe=False)         
+    return JsonResponse({"error": False, "success_msg": "Rumor added to alert"}, safe=False)    
+
+
+
 
 
 class ReportsList(APIView):
