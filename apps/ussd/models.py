@@ -29,7 +29,7 @@ class Tree(models.Model):
 
     title           = models.TextField()
     show_text       = models.BooleanField(default=False)
-    argument        = models.CharField(max_length=155)
+    argument        = models.TextField()
     var_name        = models.CharField(max_length=50)
     validation      = models.CharField(max_length=150, blank=True, null=True)
     
