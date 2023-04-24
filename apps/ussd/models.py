@@ -27,7 +27,7 @@ class Menu(models.Model):
         
 class Tree(models.Model):
 
-    title           = models.CharField(max_length=50)
+    title           = models.TextField()
     show_text       = models.BooleanField(default=False)
     argument        = models.CharField(max_length=155)
     var_name        = models.CharField(max_length=50)
