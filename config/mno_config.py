@@ -1,8 +1,10 @@
 #HALOTEL
 
 halotel     = {
-    'username'      : 'username',
-    'password'      : 'password',
+    'pmo_username'      : 'PMO_OH',
+    'pmo_password'      : 'PM00#U$$D',
+    'hal_username'      : 'username',
+    'hal_password'      : 'password',
     'send_sms_wsdl' : 'http://10.225.198.54:9201/smsws?wsdl',
     'send_ussd_url' : '10.225.198.34:8890',
 }

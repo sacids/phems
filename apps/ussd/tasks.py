@@ -12,8 +12,8 @@ def send_response(msg, session_id, req_type):
     <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"xmlns:xsi="htt p://www.w3.org/2001/XMLSchema- instance"xmlns:xsd="http://www.w3.org/2001/XMLSchema">
         <soap:Body>
             <InsertMO xmlns="http://tempuri.org/">
-                <user>'''+cfg.halotel['username']+'''</user>
-                <pass>'''+cfg.halotel['password']+'''</pass>
+                <user>'''+cfg.halotel['pmo_username']+'''</user>
+                <pass>'''+cfg.halotel['pmo_password']+'''</pass>
                 <msisdn>null</msisdn>
                 <msg>'''+msg+'''</msg>
                 <sessionid>null</sessionid> 
