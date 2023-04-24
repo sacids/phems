@@ -117,7 +117,8 @@ def halotel(request):
         resp   = soap_response(code)
         return HttpResponse(resp, content_type='text/xml')
     else:
-        return HttpResponseBadRequest('Invalid request method')  
+        resp   = soap_response(1)
+        return HttpResponse(resp, content_type='text/xml')
      
 
 def soap_response(code):
