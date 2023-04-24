@@ -1,7 +1,9 @@
 amqp==5.1.1
 asgiref==3.5.0
 async-timeout==4.0.2
+attrs==23.1.0
 autopep8==1.6.0
+beautifulsoup4==4.12.2
 billiard==3.6.4.0
 bleach==6.0.0
 celery==5.2.7
@@ -29,10 +31,13 @@ djangorestframework==3.13.1
 djangorestframework-simplejwt==5.0.0
 http-ece==1.1.0
 idna==3.3
+isodate==0.6.1
 jellyfish==0.9.0
 kombu==5.2.4
+lxml==4.9.2
 packaging==21.3
 Pillow==8.4.0
+platformdirs==3.2.0
 prompt-toolkit==3.0.30
 psycopg2-binary==2.9.1
 py-vapid==1.8.2
@@ -49,7 +54,10 @@ pywebpush==1.14.0
 PyYAML==6.0
 redis==4.3.4
 requests==2.27.1
+requests-file==1.5.1
+requests-toolbelt==0.10.1
 six==1.16.0
+soupsieve==2.4.1
 sqlparse==0.4.2
 toml==0.10.2
 twilio==7.8.0
@@ -59,3 +67,4 @@ vine==5.0.0
 wcwidth==0.2.5
 webencodings==0.5.1
 wrapt==1.14.1
+zeep==4.2.1
