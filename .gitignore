@@ -150,3 +150,5 @@ makemigrations
 migrate
 run
 node_modules
+
+mno_config.py
