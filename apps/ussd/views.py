@@ -41,7 +41,7 @@ def vodacom(request):
         
     xml = '''
         <ussd>
-            <type>'''+code+'''</type>
+            <type>'''+str(code)+'''</type>
             <msg>'''+resp_msg+'''</msg> 
             <premium>
                 <cost></cost>
@@ -56,7 +56,8 @@ def vodacom(request):
 def test_final_func(request):
     current_url = request.build_absolute_uri()
     print(current_url)
-    return JsonResponse(1, safe=False)
+    return JsonResponse({'status':0,'msg':'Success message'}, safe=False)
+    #return JsonResponse({'status':1,'msg':'Fail message'}, safe=False)
     
 
 
