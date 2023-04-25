@@ -53,6 +53,86 @@ def vodacom(request):
     
 
 
+
+# Create your views here.
+def tigo(request):
+    
+    session_id      = request.GET['FSESSION']
+    msisdn          = request.GET['MSISDN']
+    msg             = request.GET['INPUT']
+    msg_type        = request.GET['NEW_REQUEST']
+    password        = request.GET['PASSWORD']
+    login           = request.GET['LOGIN']
+    
+    ussd_trx        = ussd_session(session_id,msisdn,msg)
+    
+    
+    if msg_type == '3' or msg_type == '4' or msg_type == '10':
+        ussd_trx.cancel_session()
+        return
+    
+    response    = ussd_trx.get_response()
+    status      = response['status']
+    resp_msg    = response['msg']
+    
+    if status == 0 or status == 3: # success
+        code = '2' # keep session open
+    else:
+        code = '3' # release session
+        
+    http_response   = HttpResponse(xml)
+    return HttpResponse(xml, content_type='application/xml')
+    
+
+
+
+# Create your views here.
+def ttcl(request):
+    
+    if request.method != 'POST':
+        return 'error'
+    
+    # extract the SOAP XML from the POST data
+    soap_xml    = request.body.decode('utf-8')
+    soup        = BeautifulSoup(soap_xml, 'xml')
+    root        = soup.find('ussd_request')
+    
+    msisdn          = root.msisdn.contents[0]
+    msg             = root.text.contents[0]
+    session_id      = root.session_id.contents[0]
+
+    ussd_trx        = ussd_session(session_id,msisdn,msg)
+    
+    response    = ussd_trx.get_response()
+    status      = response['status']
+    resp_msg    = response['msg']
+    
+    if status == 0 or status == 3: # success
+        code = '1' # keep session open
+    if status == 4:
+        code = '3'
+    else:
+        code = '2' # release session
+    
+    xml     = ttcl_response(code,session_id,resp_msg)
+        
+    return HttpResponse(xml, content_type='application/xml')
+    
+def ttcl_response(code,session_id,msg):
+    
+    xml     = '''
+        <?xml version=1.0?>
+        <ussd_response>
+            <result_code>'''+code+'''</result_code>
+            <result_text></result_text>
+            <session_id>'''+session_id+'''</session_id>
+            <text>'''+msg+'''</text>
+        </ussd_response>
+    '''
+    
+    return xml
+
+
 def test_final_func(request):
     current_url = request.build_absolute_uri()
     print(current_url)

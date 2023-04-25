@@ -3,6 +3,7 @@ import json
 import zeep
 import requests
 from django.db.models import Q
+from .models import *
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 import config.mno_config as cfg
 
@@ -36,10 +37,14 @@ def soap_rec(request):
 
 def smpp_rec(request):
     
+    msg         = request.GET['msg']
+    msisdn      = request.GET['msisdn']
+    shortcode   = request.GET['shortcode']
+    smsc_id     = request.GET['smsc_id']
     
     
-    
-    pass
+    SmsLog.objects.create(msisdn=msisdn,shortcode=shortcode,smsc_id=smsc_id,msg=msg)
+    return JsonResponse(1,safe=False)
 
 def send_sms(request):
     pass
@@ -89,7 +94,7 @@ class sms:
     
     
     def _kannel_send(self):
-        url         = cfg.kannel['send_sms_url']+'?user='+cfg.kannel['send_sms_username']+'&pass='+cfg.kannel['send_sms_passwd']+'&text='+self.msg+'to='+self.msisdn+'&from='+self.shortcode+'smsc_id='+self.mno
+        url         = cfg.kannel['send_sms_url']+'?user='+cfg.kannel['send_sms_username']+'&pass='+cfg.kannel['send_sms_passwd']+'&text='+self.msg+'to='+self.msisdn+'&from='+self.shortcode+'smsc='+self.mno
         ret         = requests.get(url)
         return ret.json()
        
