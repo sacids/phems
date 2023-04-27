@@ -89,34 +89,36 @@ def tigo(request):
 # Create your views here.
 def ttcl(request):
     
-    if request.method != 'POST':
-        return 'error'
+    if request.method == 'POST':
     
-    # extract the SOAP XML from the POST data
-    soap_xml    = request.body.decode('utf-8')
-    soup        = BeautifulSoup(soap_xml, 'xml')
-    root        = soup.find('ussd_request')
-    
-    msisdn          = root.msisdn.contents[0]
-    msg             = root.text.contents[0]
-    session_id      = root.session_id.contents[0]
-
-    ussd_trx        = ussd_session(session_id,msisdn,msg)
-    
-    response    = ussd_trx.get_response()
-    status      = response['status']
-    resp_msg    = response['msg']
-    
-    if status == 0 or status == 3: # success
-        code = '1' # keep session open
-    if status == 4:
-        code = '3'
-    else:
-        code = '2' # release session
-    
-    xml     = ttcl_response(code,session_id,resp_msg)
+        # extract the SOAP XML from the POST data
+        soap_xml    = request.body.decode('utf-8')
+        soup        = BeautifulSoup(soap_xml, 'xml')
+        root        = soup.find('ussd_request')
         
-    return HttpResponse(xml, content_type='application/xml')
+        msisdn          = root.msisdn.contents[0]
+        msg             = root.text.contents[0]
+        session_id      = root.session_id.contents[0]
+
+        ussd_trx        = ussd_session(session_id,msisdn,msg)
+        
+        response    = ussd_trx.get_response()
+        status      = response['status']
+        resp_msg    = response['msg']
+        
+        if status == 0 or status == 3: # success
+            code = '1' # keep session open
+        if status == 4:
+            code = '3'
+        else:
+            code = '2' # unspecified failure release session
+        
+        xml     = ttcl_response(code,session_id,resp_msg)
+            
+        return HttpResponse(xml, content_type='application/xml')
+    else:
+        xml     = ttcl_response('2','0','Invalid request')         
+        return HttpResponse(xml, content_type='application/xml')
     
 def ttcl_response(code,session_id,msg):
     
