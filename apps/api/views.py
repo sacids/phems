@@ -190,6 +190,9 @@ class AlertList(APIView):
 
         elif level == 'WARD': 
             alerts = alerts.filter(ward_id=ward_id).order_by('-pk')
+
+        else:
+            alerts = alerts.all().order_by('-pk')    
    
         arr_data = []
         for alert in alerts:
