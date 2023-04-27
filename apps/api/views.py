@@ -451,13 +451,27 @@ class RumorList(APIView):
         return Response({'error': False, 'success_msg': 'Rumor created'}, status = status.HTTP_200_OK) 
 
 
+def confirm_rumor(request):
+    """confirm rumors""" 
+    rumor_id = request.GET.get('rid', 0)
+
+    """rumor"""
+    rumor = Signal.objects.get(pk=rumor_id)
+    rumor.status = 'CONFIRMED'
+    rumor.relevance = 100
+    rumor.save()
+
+    """return response"""
+    return JsonResponse({"error": False, "success_msg": "Rumor confirmed"}, safe=False)  
+
+
 def discard_rumor(request):
     """discard rumors""" 
     rumor_id = request.GET.get('rid', 0)
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
-    rumor = 'DISCARDED'
+    rumor.status = 'DISCARDED'
     rumor.save()
 
     """return response"""

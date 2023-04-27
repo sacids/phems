@@ -50,6 +50,7 @@ class Signal(models.Model):
         ('NEW', 'New'),
         ('ADDED', 'Added'),
         ('DISCARDED', 'Discarded'),
+        ('CONFIRMED', 'Confirmed'),
     )
     
     channel         = models.CharField(max_length=15,choices=CHANNEL,default='WEB')
@@ -62,6 +63,7 @@ class Signal(models.Model):
     district        = models.ForeignKey(Location, related_name="sg_district", blank=True, null=True, on_delete=DO_NOTHING)
     ward            = models.ForeignKey(Location, related_name="sg_ward", blank=True, null=True, on_delete=DO_NOTHING)
     village         = models.ForeignKey(Location, related_name="sg_village",blank=True, null=True, on_delete=DO_NOTHING)
+    confirmed_on    = models.DateTimeField(auto_now=True)
  
     
     class Meta:
