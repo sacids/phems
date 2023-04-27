@@ -93,13 +93,21 @@ class Signal(models.Model):
             return 'bx bxl-html5 text-warning '
         elif self.channel == 'APP':
             return 'bx bxl-android text-danger '
-     
-     
-    def save(self, *args, **kwargs):
-        with open("assets/json/keywords.json", 'r') as file:
-            key_map = json.loads(file.read().rstrip())
-        self.relevance = calc_relevance(str(self.contents),key_map)
-        super(Signal, self).save(*args, **kwargs)
+
+
+    def update_relevance(sender, created, instance, **kwargs):
+        if created:
+            with open("assets/json/keywords.json", 'r') as file:
+                key_map = json.loads(file.read().rstrip())
+            instance.relevance = calc_relevance(str(kwargs['contents']),key_map) 
+            instance.save()
+        return instance
+
+    # def save(self, *args, **kwargs):
+    #     with open("assets/json/keywords.json", 'r') as file:
+    #         key_map = json.loads(file.read().rstrip())
+    #     self.relevance = calc_relevance(str(self.contents),key_map)
+    #     super(Signal, self).save(*args, **kwargs)
 
 
 

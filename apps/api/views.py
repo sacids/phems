@@ -500,12 +500,16 @@ class RumorList(APIView):
 def confirm_rumor(request):
     """confirm rumors""" 
     rumor_id = request.GET.get('sid', 0)
+    confirmed_by  = request.GET.get('uid', 0)
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
     rumor.status = 'CONFIRMED'
+    rumor.confirmed_by_id = confirmed_by
     rumor.relevance = 100
     rumor.save()
+
+    logging.info(rumor)
 
     """return response"""
     return JsonResponse({"error": False, "success_msg": "Rumor confirmed"}, safe=False)  
