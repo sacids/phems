@@ -1,3 +1,5 @@
+import logging
+
 from django.http import Http404, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -264,6 +266,7 @@ class RumorList(APIView):
 
             """query for village"""
             village = Location.objects.filter(depth=5, title__icontains=village_name, path__startswith='0001000O')
+            logging.info(village)
 
             if village.count() > 0:
                 if village.count() == 1:
