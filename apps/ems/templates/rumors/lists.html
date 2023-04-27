@@ -89,6 +89,8 @@
             userLevel : "{{ user.profile.level }}",
             userRegion : "{{ user.profile.region_id }}",
             userDistrict : "{{ user.profile.district_id }}",
+            userWard : "{{ user.profile.ward_id }}",
+            userVillage : "{{ user.profile.village_id }}",
 
             cur_signal: {
                 id: "",
@@ -155,7 +157,9 @@
 
             //fetch events
             fetchEvents() {
-                fetch('/api/alerts', {method: "GET", credentials: 'same-origin'})
+                paramsURL = '/api/alerts?level=' + this.userLevel + '&region_id=' + this.userRegion + '&district_id=' + this.userDistrict + '&ward_id=' + this.userWard + '&village_id=' + this.userVillage
+
+                fetch(paramsURL, {method: "GET", credentials: 'same-origin'})
                     .then(res => res.json())
                     .then(data => {
                         this.events = data;
