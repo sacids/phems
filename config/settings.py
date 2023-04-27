@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'apps.notification.apps.NotificationConfig',
     'apps.api.apps.ApiConfig',
     'apps.ussd.apps.UssdConfig',
+    'apps.sms.apps.SmsConfig',
 ]
 
 MIDDLEWARE = [

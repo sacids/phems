@@ -20,6 +20,7 @@ class ussd_session:
         response    = self.transverse()
         status      = response['status']
         
+        print(response)
         # status 0 = success
         # status 2 = not valid shortcode
         # status 1 = system error
@@ -32,9 +33,9 @@ class ussd_session:
                 self.cancel_session(self.session_id)
                 
                 ## call final function
-                ret = requests.get(self.session.data)
-                if ret.json() == 0:
-                    response['msg'] = "something went wrong, please try again later"
+                ret     = requests.get(self.session.output_url+'?'+self.session.data)
+                res     = ret.json()
+                response['msg'] = res['msg']
                 ## if fails send corresponding error back
                 
         elif status == 2:
@@ -59,7 +60,7 @@ class ussd_session:
             else:
                 menu    = menu[0]
                 # valid menu create new session
-                self.session    = Session.objects.create(session_id=self.session_id,msisdn=self.msisdn,current_tree=menu.init_tree,data=menu.output_url+'?msisdn='+self.msisdn)
+                self.session    = Session.objects.create(session_id=self.session_id,msisdn=self.msisdn,current_tree=menu.init_tree,output_url=menu.output_url,data='msisdn='+self.msisdn)
                 return {"status":0,"msg":self.session.current_tree.argument}
 
         else:
@@ -78,7 +79,7 @@ class ussd_session:
         
         next_state  = 0
         for node in state.nodes.all():
-            if node.response == self.msg:
+            if node.response == self.msg or self.msg == 'ANY':
                 # matched response
                 ## update current state
                 
@@ -111,40 +112,24 @@ class ussd_session:
             return {"status":0,"msg":res}
         else:
             # call the function
-            msg = '1' # returned from func
+            ret     = requests.get(state.argument+'?'+self.session.data)
+            print(state.argument+'?'+self.session.data)
             
-            # check if valid response
-            next_state  = 0
-            for node in state.nodes.all():
-                if node.response == msg:
-                    # matched response
-                    ## update current state
-                    ### prepare new data
-                    n_data = '&'+self.session.current_tree.var_name+'='+self.msg
-                    self.session.data = str(self.session.data)+n_data
-                    
-                    ### reset error count
-                    self.session.error_count    = 0
-                    
-                    ### Transverse tree
-                    self.session.current_tree = node.next_id
-                    self.session.save()
-                    next_state = 1
-                    
-            if next_state == 0:
-                return {"status":1,"msg":"something wrong with system"}
-            
-            state   = self.session.current_tree 
-            if state.show_text:
-                return state.argument
-            else:
-                return {"status":1,"msg":"circular function recal"}
+            res     = ret.json()
+            code    = 0
+            if res['status'] == 1:
+                code = 3
+                
+            return {"status":code,"msg":res['msg']}
+            #return {"status":0,"msg":'Success message after func call'}
+        
+
             
     def has_nodes(self):
         return Node.objects.filter(tree=self.session.current_tree).count()
     
-    def cancel_session():
-        session     = Session.objects.filter(Q(session_id=self.session_id))[0]
+    def cancel_session(self,session_id):
+        session     = Session.objects.filter(Q(session_id=session_id))[0]
         session.active = False
         session.save()
         

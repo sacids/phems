@@ -64,6 +64,7 @@ class Session(models.Model):
     msisdn              = models.CharField(max_length=150)
     current_tree        = models.ForeignKey('Tree',related_name='session', on_delete=DO_NOTHING)
     error_count         = models.IntegerField(default=0)
+    output_url          = models.CharField(max_length=255)
     data                = models.TextField(blank=True, null=True)
     updated_on          = models.DateTimeField(auto_now_add=True)
     
