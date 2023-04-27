@@ -204,6 +204,11 @@ class EventList(AjaxDatatableView):
         elif self.request.user.profile.level == 'VILLAGE': 
             queryset = queryset.filter(village_id=self.request.user.profile.village_id).order_by('-pk')
 
+        """filtering"""   
+        if 'alert_type_id' in request.REQUEST:
+            alert_type_id = request.REQUEST.get('alert_type_id')
+            queryset = queryset.filter(alert_id=alert_type_id) 
+
         return queryset
 
 
