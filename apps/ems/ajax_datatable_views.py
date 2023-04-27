@@ -143,9 +143,9 @@ class EventList(AjaxDatatableView):
             'visible': True, 'className': 'w-36 text-left border-r'},
 
         {'name': 'pri_sector', 'foreign_field': 'pri_sector__title',
-            'title': 'Primary Sector', 'visible': True, 'className': 'w-28 text-left border-r'},
+            'title': 'Primary Sector', 'visible': True, 'className': 'w-28 text-left border-r',},
 
-        {'name': 'stage', 'visible': True, 'className': 'text-left whitespace-nowrap w-20 border-r'},
+        {'name': 'stage', 'visible': True, 'className': 'text-left whitespace-nowrap w-20 border-r', 'searchable': False,},
 
         {'name': 'created_on', 'title': 'Created', 'visible': True,
             'className': 'w-[100px] text-left border-r'},
@@ -244,10 +244,6 @@ class RumorList(AjaxDatatableView):
 
         queryset = self.model.objects.exclude(relevance=0).order_by('relevance')
 
-        if 'status' in request.REQUEST:
-            status = request.REQUEST.get('status')
-            queryset = queryset.filter(status=status)
-
         if self.request.user.profile.level == 'NATIONAL':
             queryset = queryset.all().order_by('-pk')
 
@@ -262,6 +258,12 @@ class RumorList(AjaxDatatableView):
 
         elif self.request.user.profile.level == 'VILLAGE': 
             queryset = queryset.filter(village_id=self.request.user.profile.village_id)
+
+
+        """filtering"""   
+        if 'status' in request.REQUEST:
+            status = request.REQUEST.get('status')
+            queryset = queryset.filter(status=status) 
 
         return queryset
     
