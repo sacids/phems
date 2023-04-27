@@ -339,7 +339,7 @@ class RumorList(APIView):
                     profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
 
                     """create message"""
-                    message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+                    message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
 
                     if profile.count() > 0:
                         arr_users = []
@@ -396,7 +396,7 @@ class RumorList(APIView):
                                 profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
 
                                 """create message"""
-                                message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+                                message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
 
                                 if profile.count() > 0:
                                     arr_users = []
@@ -452,7 +452,7 @@ class RumorList(APIView):
                             profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
 
                             """create message"""
-                            message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+                            message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
 
                             if profile.count() > 0:
                                 arr_users = []

@@ -95,11 +95,11 @@ class Signal(models.Model):
             return 'bx bxl-android text-danger '
 
 
-    def update_relevance(sender, created, instance, **kwargs):
+    def update_relevance(self, sender, created, instance, **kwargs):
         if created:
             with open("assets/json/keywords.json", 'r') as file:
                 key_map = json.loads(file.read().rstrip())
-            instance.relevance = calc_relevance(str(kwargs['contents']),key_map) 
+            instance.relevance = calc_relevance(str(self.contents),key_map) 
             instance.save()
         return instance
 
