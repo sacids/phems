@@ -1094,13 +1094,18 @@ def update_wf(request):
     # UPDATE OBJECT
     eventObj.stage = stageObj
     eventObj.save()
-    
+
+    """send notification"""
+
+
+    """current stage"""
     cur_event   = {
         'stage_id':     eventObj.stage.id,
         'stage_title':  eventObj.stage.title,
         'stage_class':  eventObj.stage.css,
     }
 
+    """response"""
     return JsonResponse( cur_event, safe=False)
 
 
