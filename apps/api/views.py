@@ -168,17 +168,27 @@ class SectorsList(APIView):
 class AlertList(APIView):
     """API to fetch alerts"""
     def get(self, request, format = None):
+        """get variables"""
+        level = self.request.GET.get("level")
+        region_id = self.request.GET.get("region_id")
+        district_id = self.request.GET.get("district_id")
+        ward_id = self.request.GET.get("ward_id")
+
         """alerts"""
         alerts = Event.objects   
 
-        if self.request.user.profile.level == 'NATIONAL':
+        """filtering per level"""
+        if level == 'NATIONAL':
             alerts = alerts.all().order_by('-pk')
 
-        elif self.request.user.profile.level == 'REGION': 
-            alerts = alerts.filter(region_id=self.request.user.profile.region_id).order_by('-pk')
+        elif level == 'REGION': 
+            alerts = alerts.filter(region_id=region_id).order_by('-pk')
 
-        elif self.request.user.profile.level == 'DISTRICT': 
-            alerts = alerts.filter(district_id=self.request.user.profile.district_id).order_by('-pk')
+        elif level == 'DISTRICT': 
+            alerts = alerts.filter(district_id=district_id).order_by('-pk')
+
+        elif level == 'WARD': 
+            alerts = alerts.filter(ward_id=ward_id).order_by('-pk')
    
         arr_data = []
         for alert in alerts:
@@ -188,6 +198,7 @@ class AlertList(APIView):
                 'title': alert.title,
                 'description': alert.description,
                 'status': alert.status,
+                'location': alert.region.title,
                 'created_on': date.strftime(alert.created_on, '%d/%m/%Y %H:%M'),
                 'stage': alert.stage.title,
                 'alert_type_label': alert.alert.label,
@@ -231,7 +242,26 @@ class AlertList(APIView):
 class RumorList(APIView):
     """API to fetch rumors""" 
     def get(self, request, format=None):
+        """get variables"""
+        level = self.request.GET.get("level")
+        region_id = self.request.GET.get("region_id")
+        district_id = self.request.GET.get("district_id")
+        ward_id = self.request.GET.get("ward_id")
+
         rumors = Signal.objects.filter(status="NEW").order_by('-created_on','-relevance')
+
+        """filtering per level"""
+        if level == 'NATIONAL':
+            rumors = rumors
+
+        elif level == 'REGION': 
+            rumors = rumors.filter(region_id=region_id)
+
+        elif level == 'DISTRICT': 
+            rumors = rumors.filter(district_id=district_id)
+
+        elif level == 'WARD': 
+            rumors = rumors.filter(ward_id=ward_id)
 
         arr_data = []
         for rumor in rumors:
