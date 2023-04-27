@@ -64,6 +64,7 @@ class Signal(models.Model):
     ward            = models.ForeignKey(Location, related_name="sg_ward", blank=True, null=True, on_delete=DO_NOTHING)
     village         = models.ForeignKey(Location, related_name="sg_village",blank=True, null=True, on_delete=DO_NOTHING)
     confirmed_on    = models.DateTimeField(auto_now=True)
+    confirmed_by    = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
  
     
     class Meta:
