@@ -226,7 +226,7 @@ class RumorList(AjaxDatatableView):
         {'name': 'contents', 'title': 'Rumor', 'visible': True, 'className': 'text-left flex-1 cursor-pointer'},
         {'name': 'css_icon', 'title': '', 'visible': True, 'className': 'w-6 text-left border-r', 'searchable': False, },
         {'name': 'relevance', 'title': '#', 'visible': True, 'className': 'w-6 text-left border-r'},
-        {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-12 text-left border-r'},
+        {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-[90px] text-left border-r'},
         {'name': 'created_on', 'title': 'Received On', 'visible': True, 'className': 'w-[120px] text-left border-r'},
         {'name': 'actions', 'title': '', 'visible': True, 'className': 'w-6 text-left', 'placeholder': 'True', 'searchable': False, },
     ]
