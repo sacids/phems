@@ -683,7 +683,7 @@ def add_event(request):
         new_event.signal.add(signal.id)
 
         """change status of signal"""
-        signal.status = "ADDED"
+        signal.status = "CONFIRMED"
         signal.save()
 
         """wrapper"""
@@ -743,7 +743,7 @@ def attach_sig2event(request):
     event.signal.add(signal)
 
     """change status of rumor"""
-    signal.status = 'ADDED'
+    signal.status = "CONFIRMED"
     signal.save()
 
     """response"""

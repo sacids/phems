@@ -543,7 +543,7 @@ def attach_rumor2alert(request):
     alert.signal.add(signal)
     
     """change rumor status"""
-    signal.status = 'ADDED'
+    signal.status = "CONFIRMED"
     signal.save()
     
     """return response"""
