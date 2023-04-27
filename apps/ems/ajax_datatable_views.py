@@ -239,6 +239,16 @@ class RumorList(AjaxDatatableView):
         row['css_icon'] = '<i class="'+obj.css_icon+'">'
         row['created_on'] = naturalday(obj.created_on)
 
+        if obj.status == 'NEW':
+            row['status'] = '<span class="bg-amber-500 text-white rounded-lg px-2 py-0.5 text-xs font-normal">New</span>'
+            
+        elif obj.status == 'CONFIRMED':
+            row['status'] = '<span class="bg-green-600 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Confirmed</span>'  
+
+        elif obj.status == 'DISCARDED':
+            row['status'] = '<span class="bg-red-500 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Discarded</span>'
+
+
         row['actions'] = '<a class="btn btn-xss" @click="discardSignal('+str(obj.id)+')">'\
                 '<i class="bx bx-trash text-red-600"></i>' \
                 '</a>'
