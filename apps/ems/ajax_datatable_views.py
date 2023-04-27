@@ -240,7 +240,7 @@ class RumorList(AjaxDatatableView):
         row['created_on'] = naturalday(obj.created_on)
 
         if obj.status == 'NEW':
-            row['status'] = '<span class="bg-amber-500 text-white rounded-lg px-2 py-0.5 text-xs font-normal">New</span>'
+            row['status'] = '<span class="bg-blue-400 text-white rounded-lg px-2 py-0.5 text-xs font-normal">New</span>'
             
         elif obj.status == 'CONFIRMED':
             row['status'] = '<span class="bg-green-600 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Confirmed</span>'  
