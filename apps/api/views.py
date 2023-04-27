@@ -432,7 +432,13 @@ class RumorList(APIView):
 
                                 """send email in background"""
                                 response = send_email("OHP: New Rumor" , message_to_users, arr_users)
-
+                else:
+                    """saving rumor data """
+                    new_signal = Signal()
+                    new_signal.channel     = channel
+                    new_signal.contact     = contact
+                    new_signal.contents    = contents
+                    new_signal.save()
         else:
             """saving rumor data """
             new_signal = Signal()
