@@ -6,18 +6,24 @@ from datetime import datetime
 from django.http import JsonResponse
 from django.contrib.auth.models import User, Group
 from .models import Notification
+from decouple import config
+
+import urllib3
+urllib3.disable_warnings()
 
 
 class NotificationWrapper:
-    BASE_URL   = "http://127.0.0.1:8000/"
-    API_TOKEN  = "" #for sending sms
+    API_BASE_URL = 'https://apisms.beem.africa/v1/send'
+    API_DELIVERY_URL = 'https://dlrapi.beem.africa/public/v1/delivery-reports'
+
+    api_key = config('API_KEY')
+    secret_key = config('SECRET_KEY')
 
     def __init__(self):
         self.headers = {
-            "Authorization": f"Bearer {self.API_TOKEN}",
             "Content-Type": "application/json",
+            "Authorization": "Basic " + self.api_key + ":" + self.secret_key,
         }
-        self.API_URL = self.BASE_URL
 
 
     def create_notification(self, **kwargs):
@@ -51,3 +57,45 @@ class NotificationWrapper:
             return JsonResponse({'error': False, 'message': 'Notification created'})
         else:
             return JsonResponse({'error': True, 'message': 'User does not exist!'}) 
+
+
+    def send_sms(self, arr_data):
+        """send sms"""
+        request = requests.post(url = self.API_BASE_URL, data = json.dumps(arr_data),
+                                headers=self.headers,
+        auth=(self.api_key, self.secret_key),verify=False)
+
+        print(request.status_code)
+        print(request.json())
+
+        """return response"""
+        return JsonResponse(request.json())
+    
+
+    def delivery_report(self, arr_data):
+        """get delivery report"""
+        payload = {
+            'headers': self.headers,
+            'params': arr_data
+        }
+
+        print(payload)
+
+        request = requests.get(url=self.API_DELIVERY_URL, data=json.dumps(payload), 
+                                auth=(self.api_key, self.secret_key), verify=False)
+        print(request.json())
+
+        """return response"""
+        return JsonResponse(request.json())
+
+    
+    def cast_phone_number(self, **kwargs):
+        """cast phone number"""
+        phone = str(kwargs['phone'])
+
+        if phone.startswith('0'):
+            return "255" + phone[1:]
+        elif len(phone) == 9:
+            return "255" + phone
+        else:
+            return phone

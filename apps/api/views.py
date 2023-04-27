@@ -1,10 +1,17 @@
-from apps.ems.models import *
-from .serializers import AlertSerializer
+import logging
+
 from django.http import Http404, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
+from apps.ems.models import *
+from apps.account.models import Profile
+from .serializers import AlertSerializer
+
+from django.contrib.sites.shortcuts import get_current_site
+from apps.notification.classes import NotificationWrapper
+from apps.notification.tasks import send_email
 
 
 # Create your views here.
@@ -245,11 +252,217 @@ class RumorList(APIView):
 
 
     def post(self, request, format=None):
-        serializer = AlertSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST) 
+        """data contents"""
+        contents = request.data['contents']
+        contact  = request.data['contact']
+        channel  = request.data['channel']
+
+        """notification wrapper"""
+        notify = NotificationWrapper()
+
+        """Find exact location of rumor"""
+        if 'village' in contents:
+            village_name = contents['village']
+
+            """query for village"""
+            village = Location.objects.filter(depth=5, title__icontains=village_name, path__startswith='0001000O')
+            logging.info(village)
+
+            if village.count() > 0:
+                if village.count() == 1:
+                    village = village.first() #village
+                    ward = village.get_parent() #ward
+                    district = ward.get_parent() #district
+                    region = district.get_parent() #region
+
+                    """saving rumor data """
+                    new_signal = Signal()
+                    new_signal.channel     = channel
+                    new_signal.contact     = contact
+                    new_signal.contents    = contents
+                    new_signal.region_id   = region.id
+                    new_signal.district_id = district.id
+                    new_signal.ward_id     = ward.id
+                    new_signal.village_id  = village.id
+                    new_signal.save()
+
+                    """send notification to ward supervisors"""
+                    profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
+
+                    """create message"""
+                    message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+
+                    if profile.count() > 0:
+                        arr_users = []
+                        for val in profile:
+                            """create notification"""
+                            response = notify.create_notification(
+                                        user_id = val.user.id, 
+                                        created_by = 1,
+                                        message=message_to_users,
+                                        url = get_current_site(self.request).domain)
+
+                            """assign to array"""
+                            arr_users.append(val.user.email)
+
+                            """send sms"""
+                            arr_phone = []
+                            phone = notify.cast_phone_number(phone=val.phone)
+                            recipient = {"recipient_id": 1, "dest_addr": phone}
+                            arr_phone.append(recipient)
+
+                            """array data"""
+                            arr_data = {"source_addr": "TAARIFA", "schedule_time": "", "encoding": "0", "message": message_to_users, "recipients": arr_phone}
+
+                            result = notify.send_sms(arr_data)
+                            data = json.loads(result.content) 
+
+                        """send email in background"""
+                        response = send_email("OHP: New Rumor" , message_to_users, arr_users)      
+  
+                elif village.count() > 1:
+                    if 'ward' in contents:
+                        ward_name = contents['ward']
+
+                        """query for ward"""
+                        ward = Location.objects.filter(depth=4, title__icontains=ward_name, path__startswith='0001000O')
+
+                        if ward.count() > 0:
+                            if ward.count() == 1:
+                                ward = ward.first() #ward
+                                district = ward.get_parent() #district
+                                region = district.get_parent() #region
+
+                                """saving rumor data """
+                                new_signal = Signal()
+                                new_signal.channel     = channel
+                                new_signal.contact     = contact
+                                new_signal.contents    = contents
+                                new_signal.region_id   = region.id
+                                new_signal.district_id = district.id
+                                new_signal.ward_id     = ward.id
+                                new_signal.save()
+
+                                """send notification to ward supervisors"""
+                                profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
+
+                                """create message"""
+                                message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+
+                                if profile.count() > 0:
+                                    arr_users = []
+                                    for val in profile:
+                                        """create notification"""
+                                        response = notify.create_notification(
+                                            user_id = val.user.id, 
+                                            created_by = 1,
+                                            message=message_to_users,
+                                            url = get_current_site(self.request).domain)
+
+                                        """assign to array"""
+                                        arr_users.append(val.user.email)
+
+                                        """send sms"""
+                                        arr_phone = []
+                                        phone = notify.cast_phone_number(phone=val.phone)
+                                        recipient = {"recipient_id": 1, "dest_addr": phone}
+                                        arr_phone.append(recipient)
+
+                                        """array data"""
+                                        arr_data = {"source_addr": "TAARIFA", "schedule_time": "", "encoding": "0", "message": message_to_users, "recipients": arr_phone}
+
+                                        result = notify.send_sms(arr_data)
+                                        data = json.loads(result.content) 
+
+                                    """send email in background"""
+                                    response = send_email("OHP: New Rumor" , message_to_users, arr_users)  
+            else:
+                if 'ward' in contents:
+                    ward_name = contents['ward']
+
+                    """query for ward"""
+                    ward = Location.objects.filter(depth=4, title__icontains=ward_name, path__startswith='0001000O')
+
+                    if ward.count() > 0:
+                        if ward.count() == 1:
+                            ward = ward.first() #ward
+                            district = ward.get_parent() #district
+                            region = district.get_parent() #region
+
+                            """saving rumor data """
+                            new_signal = Signal()
+                            new_signal.channel     = channel
+                            new_signal.contact     = contact
+                            new_signal.contents    = contents
+                            new_signal.region_id   = region.id
+                            new_signal.district_id = district.id
+                            new_signal.ward_id     = ward.id
+                            new_signal.save()
+
+                            """send notification to ward supervisors"""
+                            profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
+
+                            """create message"""
+                            message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+
+                            if profile.count() > 0:
+                                arr_users = []
+                                for val in profile:
+                                    """create notification"""
+                                    response = notify.create_notification(
+                                        user_id = val.user.id, 
+                                        created_by = 1,
+                                        message=message_to_users,
+                                        url = get_current_site(self.request).domain)
+                                    
+                                    """assign to array"""
+                                    arr_users.append(val.user.email)
+
+                                    """send sms"""
+                                    arr_phone = []
+                                    phone = notify.cast_phone_number(phone=val.phone)
+                                    recipient = {"recipient_id": 1, "dest_addr": phone}
+                                    arr_phone.append(recipient)
+
+                                    """array data"""
+                                    arr_data = {"source_addr": "TAARIFA", "schedule_time": "", "encoding": "0", "message": message_to_users, "recipients": arr_phone}
+
+                                    result = notify.send_sms(arr_data)
+                                    data = json.loads(result.content) 
+
+                                """send email in background"""
+                                response = send_email("OHP: New Rumor" , message_to_users, arr_users)
+                else:
+                    """saving rumor data """
+                    new_signal = Signal()
+                    new_signal.channel     = channel
+                    new_signal.contact     = contact
+                    new_signal.contents    = contents
+                    new_signal.save()
+        else:
+            """saving rumor data """
+            new_signal = Signal()
+            new_signal.channel     = channel
+            new_signal.contact     = contact
+            new_signal.contents    = contents
+            new_signal.save()
+
+        """response"""
+        return Response({'error': False, 'success_msg': 'Rumor created'}, status = status.HTTP_200_OK) 
+
+
+def confirm_rumor(request):
+    """confirm rumors""" 
+    rumor_id = request.GET.get('rid', 0)
+
+    """rumor"""
+    rumor = Signal.objects.get(pk=rumor_id)
+    rumor.status = 'CONFIRMED'
+    rumor.relevance = 100
+    rumor.save()
+
+    """return response"""
+    return JsonResponse({"error": False, "success_msg": "Rumor confirmed"}, safe=False)  
 
 
 def discard_rumor(request):
@@ -258,7 +471,7 @@ def discard_rumor(request):
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
-    rumor = 'DISCARDED'
+    rumor.status = 'DISCARDED'
     rumor.save()
 
     """return response"""

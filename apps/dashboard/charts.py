@@ -75,6 +75,11 @@ class EventPercentageChartView(APIView):
             confirmed = events.filter(district_id=self.request.user.profile.district_id, stage_id=5).count()
             discarded = events.filter(district_id=self.request.user.profile.district_id, stage_id=7).count()
             on_progress = events.filter(Q(district_id=self.request.user.profile.district_id) & (Q(stage_id=3) | Q(stage_id=4))).count()  
+        elif self.request.user.profile.level == "WARD": 
+            new = events.filter(ward_id=self.request.user.profile.ward_id, stage_id=1).count()
+            confirmed = events.filter(ward_id=self.request.user.profile.ward_id, stage_id=5).count()
+            discarded = events.filter(ward_id=self.request.user.profile.ward_id, stage_id=7).count()
+            on_progress = events.filter(Q(ward_id=self.request.user.profile.ward_id) & (Q(stage_id=3) | Q(stage_id=4))).count()  
        
         """aggregate data"""
         aggregate = new + discarded + confirmed + on_progress
@@ -123,6 +128,11 @@ class EventChartView(APIView):
                 confirmed = events.filter(sector__id=val.id, district_id=self.request.user.profile.district_id, stage_id=5).count()
                 discarded = events.filter(sector__id=val.id, district_id=self.request.user.profile.district_id, stage_id=7).count()
 
+            elif self.request.user.profile.level == "WARD": 
+                new = events.filter(sector__id=val.id, ward_id=self.request.user.profile.ward_id, stage_id=1).count()
+                progress = events.filter(Q(stage_id=3) | Q(stage_id=4)).filter(sector__id=val.id, ward_id=self.request.user.profile.ward_id).count()
+                confirmed = events.filter(sector__id=val.id, ward_id=self.request.user.profile.ward_id, stage_id=5).count()
+                discarded = events.filter(sector__id=val.id, ward_id=self.request.user.profile.ward_id, stage_id=7).count()
 
             """dictionary"""
             chart = {
@@ -159,6 +169,9 @@ class AlertChartView(APIView):
             elif self.request.user.profile.level == "DISTRICT":
                 number_of_events = events.filter(alert__id=val.id, district_id=self.request.user.profile.district_id).count()
                 confirmed_number_of_events = events.filter(alert__id=val.id, stage_id=5, district_id=self.request.user.profile.district_id).count()
+            elif self.request.user.profile.level == "WARD":
+                number_of_events = events.filter(alert__id=val.id, ward_id=self.request.user.profile.ward_id).count()
+                confirmed_number_of_events = events.filter(alert__id=val.id, stage_id=5, ward_id=self.request.user.profile.ward_id).count()
 
             """dictionary"""
             chart = {

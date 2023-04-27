@@ -143,9 +143,9 @@ class EventList(AjaxDatatableView):
             'visible': True, 'className': 'w-36 text-left border-r'},
 
         {'name': 'pri_sector', 'foreign_field': 'pri_sector__title',
-            'title': 'Primary Sector', 'visible': True, 'className': 'w-28 text-left border-r'},
+            'title': 'Primary Sector', 'visible': True, 'className': 'w-28 text-left border-r',},
 
-        {'name': 'stage', 'visible': True, 'className': 'text-left whitespace-nowrap w-20 border-r'},
+        {'name': 'stage', 'visible': True, 'className': 'text-left whitespace-nowrap w-20 border-r', 'searchable': False,},
 
         {'name': 'created_on', 'title': 'Created', 'visible': True,
             'className': 'w-[100px] text-left border-r'},
@@ -198,6 +198,17 @@ class EventList(AjaxDatatableView):
         elif self.request.user.profile.level == 'DISTRICT': 
             queryset = queryset.filter(district_id=self.request.user.profile.district_id).order_by('-pk')
 
+        elif self.request.user.profile.level == 'WARD': 
+            queryset = queryset.filter(ward_id=self.request.user.profile.ward_id).order_by('-pk')
+
+        elif self.request.user.profile.level == 'VILLAGE': 
+            queryset = queryset.filter(village_id=self.request.user.profile.village_id).order_by('-pk')
+
+        """filtering"""   
+        if 'alert_type_id' in request.REQUEST:
+            alert_type_id = request.REQUEST.get('alert_type_id')
+            queryset = queryset.filter(alert_id=alert_type_id) 
+
         return queryset
 
 
@@ -238,9 +249,26 @@ class RumorList(AjaxDatatableView):
 
         queryset = self.model.objects.exclude(relevance=0).order_by('relevance')
 
+        if self.request.user.profile.level == 'NATIONAL':
+            queryset = queryset.all().order_by('-pk')
+
+        elif self.request.user.profile.level == 'REGION': 
+            queryset = queryset.filter(region_id=self.request.user.profile.region_id)
+
+        elif self.request.user.profile.level == 'DISTRICT': 
+            queryset = queryset.filter(district_id=self.request.user.profile.district_id)
+
+        elif self.request.user.profile.level == 'WARD': 
+            queryset = queryset.filter(ward_id=self.request.user.profile.ward_id)
+
+        elif self.request.user.profile.level == 'VILLAGE': 
+            queryset = queryset.filter(village_id=self.request.user.profile.village_id)
+
+
+        """filtering"""   
         if 'status' in request.REQUEST:
             status = request.REQUEST.get('status')
-            queryset = queryset.filter(status=status)
+            queryset = queryset.filter(status=status) 
 
         return queryset
     

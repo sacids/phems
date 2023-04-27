@@ -5,7 +5,7 @@ from .serializers import *
 from .models import *
 
 # Create your views here.
-
+#/api/ems/signals/
 class SignalViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows signals to be viewed or edited.

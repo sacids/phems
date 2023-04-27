@@ -204,3 +204,11 @@ CELERY_TIMEZONE = 'Africa/Nairobi'
 
 # CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 # CRISPY_TEMPLATE_PACK = "tailwind"
+
+# Logging errors in django
+import logging
+
+logging.basicConfig(
+    level = logging.INFO,
+    format = '%(asctime)s %(levelname)s %(message)s',
+    filename = 'info.log',)

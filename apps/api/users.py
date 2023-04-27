@@ -42,10 +42,15 @@ class LoginView(APIView):
                 'id': user.pk,
                 'first_name': user.first_name,
                 'last_name': user.last_name,
-                'phone': '',
+                'phone': user.profile.phone,
                 'email': user.email,
                 'about': user.profile.organization,
                 'username': user.username,
+                'level': user.profile.level,
+                'region': user.profile.region_id,
+                'district': user.profile.district_id,
+                'ward': user.profile.ward_id,
+                'village': user.profile.village_id,
                 'token': ''
             }
         }

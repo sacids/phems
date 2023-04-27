@@ -7,7 +7,8 @@ urlpatterns = [
 
     path('rumors/', views.RumorList.as_view()),
     path('rumors/attach2alert', views.attach_rumor2alert, name='attach2alert'),
-    path('rumors/discard', views.discard_rumor, name='discard_rumor'),
+    path('rumors/discard', views.discard_rumor, name='discard-rumor'),
+    path('rumors/confirm', views.confirm_rumor, name='confirm-rumor'),
 
     path('location', views.LocationList.as_view()),
     path('regions', views.RegionsList.as_view()),

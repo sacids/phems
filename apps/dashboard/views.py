@@ -40,6 +40,12 @@ class DashboardView(View):
             no_of_comfirmed_events = events.filter(district_id=self.request.user.profile.district_id, stage_id=5).count()
             no_of_progress_events = events.filter(Q(district_id=self.request.user.profile.district_id) & (Q(stage_id=3) | Q(stage_id=4))).count()
 
+        elif self.request.user.profile.level == "WARD":
+            no_of_new_events = events.filter(ward_id=self.request.user.profile.ward_id, stage_id=1).count()
+            no_of_discarded_events = events.filter(ward_id=self.request.user.profile.ward_id, stage_id=7).count()
+            no_of_comfirmed_events = events.filter(ward_id=self.request.user.profile.ward_id, stage_id=5).count()
+            no_of_progress_events = events.filter(Q(ward_id=self.request.user.profile.ward_id) & (Q(stage_id=3) | Q(stage_id=4))).count()
+
 
         """Passing data to views"""
         context = {

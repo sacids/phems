@@ -80,6 +80,10 @@ class EventListView(PermissionRequiredMixin, generic.TemplateView):
         context = super(EventListView, self).get_context_data(**kwargs)
 
         context['title'] = "Manage Events"
+        context['alert_types'] = Alert.objects.all()
+        context['sectors'] = Sector.objects.all()
+        context['stages'] = Stage.objects.all()
+        context['regions'] = Location.objects.filter(depth=2).order_by("title")
 
         return context
 
@@ -1090,13 +1094,18 @@ def update_wf(request):
     # UPDATE OBJECT
     eventObj.stage = stageObj
     eventObj.save()
-    
+
+    """send notification"""
+
+
+    """current stage"""
     cur_event   = {
         'stage_id':     eventObj.stage.id,
         'stage_title':  eventObj.stage.title,
         'stage_class':  eventObj.stage.css,
     }
 
+    """response"""
     return JsonResponse( cur_event, safe=False)
 
 

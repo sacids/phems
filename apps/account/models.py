@@ -19,6 +19,7 @@ LEVEL_OPTIONS = (
 class Profile(models.Model):
     user            = models.OneToOneField(User, on_delete=models.CASCADE)
     slug            = models.UUIDField(default=uuid.uuid4, blank=True, editable=False)
+    phone           = models.CharField(max_length=20, blank=True, null=True)
     organization    = models.CharField(max_length=120, blank=True, null=True)
     photo           = models.ImageField("Photo", upload_to="uploads/profile/", null=True, blank=True)
     email_verified  = models.BooleanField("Email verified", default=False)
@@ -26,6 +27,8 @@ class Profile(models.Model):
     level           = models.CharField(max_length=30, choices=LEVEL_OPTIONS, null=True, blank=True, default="NATIONAL")
     region          = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="region")
     district        = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="district")
+    ward            = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="ward")
+    village         = models.ForeignKey(Location, blank=True, null=True, on_delete=models.SET_NULL, related_name="village")
 
 
 
