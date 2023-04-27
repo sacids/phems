@@ -267,9 +267,9 @@ class RumorList(AjaxDatatableView):
 
 
         """filtering"""   
-        if 'status' in request.REQUEST:
-            status = request.REQUEST.get('status')
-            queryset = queryset.filter(status=status) 
+        # if 'status' in request.REQUEST:
+        #     status = request.REQUEST.get('status')
+        #     queryset = queryset.filter(status=status) 
 
         return queryset
     
