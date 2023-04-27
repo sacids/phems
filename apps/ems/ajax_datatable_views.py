@@ -198,6 +198,12 @@ class EventList(AjaxDatatableView):
         elif self.request.user.profile.level == 'DISTRICT': 
             queryset = queryset.filter(district_id=self.request.user.profile.district_id).order_by('-pk')
 
+        elif self.request.user.profile.level == 'WARD': 
+            queryset = queryset.filter(ward_id=self.request.user.profile.ward_id).order_by('-pk')
+
+        elif self.request.user.profile.level == 'VILLAGE': 
+            queryset = queryset.filter(village_id=self.request.user.profile.village_id).order_by('-pk')
+
         return queryset
 
 
@@ -241,6 +247,21 @@ class RumorList(AjaxDatatableView):
         if 'status' in request.REQUEST:
             status = request.REQUEST.get('status')
             queryset = queryset.filter(status=status)
+
+        if self.request.user.profile.level == 'NATIONAL':
+            queryset = queryset.all().order_by('-pk')
+
+        elif self.request.user.profile.level == 'REGION': 
+            queryset = queryset.filter(region_id=self.request.user.profile.region_id)
+
+        elif self.request.user.profile.level == 'DISTRICT': 
+            queryset = queryset.filter(district_id=self.request.user.profile.district_id)
+
+        elif self.request.user.profile.level == 'WARD': 
+            queryset = queryset.filter(ward_id=self.request.user.profile.ward_id)
+
+        elif self.request.user.profile.level == 'VILLAGE': 
+            queryset = queryset.filter(village_id=self.request.user.profile.village_id)
 
         return queryset
     
