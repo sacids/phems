@@ -52,6 +52,12 @@
                             </div>
 
                             <div class="w-full md:w-1/2">
+                                {{ profile_form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-full">
                                 {{ profile_form.organization|as_crispy_field }}
                             </div>
                         </div>
@@ -67,7 +73,7 @@
                         </div>
 
                         <div class="flex flex-wrap mb-2">
-                            <div class="w-full md:w-1/2 pr-2">
+                            <div class="w-full md:w-1/4 pr-2">
                                 <div class="control-group">
                                     <label class="control-label">Region</label>
                                     <select name="region_id" id="region_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
@@ -81,11 +87,31 @@
                                 </div>
                             </div>
 
-                            <div class="w-full md:w-1/2">
+                            <div class="w-full md:w-1/4 pr-2">
                                 <div class="control-group">
                                     <label class="control-label">District</label>
                                     <select name="district_id" id="district_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
                                         <option value="{{ user.profile.district.id }}">{{ user.profile.district.title }}</option>
+                                        <option value="">Select</option>
+                                    </select>  
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/4 pr-2">
+                                <div class="control-group">
+                                    <label class="control-label">Ward</label>
+                                    <select name="ward_id" id="ward_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
+                                        <option value="{{ user.profile.ward.id }}">{{ user.profile.ward.title }}</option>
+                                        <option value="">Select</option>
+                                    </select>  
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/4">
+                                <div class="control-group">
+                                    <label class="control-label">Village</label>
+                                    <select name="village_id" id="village_id" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
+                                        <option value="{{ user.profile.village.id }}">{{ user.profile.village.title }}</option>
                                         <option value="">Select</option>
                                     </select>  
                                 </div>
@@ -149,6 +175,9 @@
 </main>
 {% endblock %}
 
+{% block extrajs %}
+    <script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}
 
 {% block get_contents %}
 <script src="{% static 'libs/popper/popper.min.js' %}"></script>
@@ -163,21 +192,5 @@
         $(".select2").select2();
         $(".input-mask").inputmask();
     };
-
-    //dropdown districts
-    $('#region_id').on('change', function (e) {
-            region_id = $(this).val();
-            baseURL = window.location.origin;
-
-            console.log(region_id)
-
-            $.ajax({
-                url: baseURL + '/ems/get_districts/' + region_id,
-                type: "get",
-                success: function (data) {
-                    $('#district_id').html(data);
-                }
-            });
-        });
 </script>
 {% endblock %}

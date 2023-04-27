@@ -71,6 +71,8 @@ class UserCreateView(PermissionRequiredMixin, generic.CreateView):
                         'level': request.POST.get("level"),
                         'region_id': request.POST.get("region_id"), 
                         'district_id': request.POST.get("district_id"), 
+                        'ward_id': request.POST.get("ward_id"), 
+                        'village_id': request.POST.get("village_id"), 
                         'organization': request.POST.get("organization")},)
 
             """insert roles"""
@@ -144,6 +146,8 @@ class UserUpdateView(PermissionRequiredMixin, generic.UpdateView):
             profile.user_id = user.id
             profile.region_id = request.POST.get("region_id")
             profile.district_id = request.POST.get("district_id")
+            profile.ward_id = request.POST.get("ward_id")
+            profile.village_id = request.POST.get("village_id")
             profile.save()
 
             """delete"""

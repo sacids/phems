@@ -20,6 +20,21 @@ import os
 
 
 # Create your models here.
+class Location(MP_Node):
+    title           = models.CharField(max_length = 200)
+    code            = models.CharField(max_length=10, blank=True, null=True)
+    p_id            = models.CharField(max_length = 25)
+    
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        db_table = 'ph_location'
+        managed = True
+        verbose_name = 'Location'
+        verbose_name_plural = 'Locations'
+
+
 class Signal(models.Model):
     CHANNEL = (
         ('SMS', 'SMS'),
@@ -43,6 +58,11 @@ class Signal(models.Model):
     relevance       = models.IntegerField(default=0)
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
     created_on      = models.DateTimeField(auto_now=True)
+    region          = models.ForeignKey(Location, related_name="sg_region", blank=True, null=True, on_delete=DO_NOTHING)
+    district        = models.ForeignKey(Location, related_name="sg_district", blank=True, null=True, on_delete=DO_NOTHING)
+    ward            = models.ForeignKey(Location, related_name="sg_ward", blank=True, null=True, on_delete=DO_NOTHING)
+    village         = models.ForeignKey(Location, related_name="sg_village",blank=True, null=True, on_delete=DO_NOTHING)
+ 
     
     class Meta:
         db_table    = 'ph_signal'
@@ -94,6 +114,7 @@ class Sector(models.Model):
         verbose_name = 'Sector'
         verbose_name_plural = 'Sectors'    
 
+
 class Contact(models.Model):
     CONTACT_SOURCE  = (
         ('ORIGINAL', 'Original'),
@@ -131,22 +152,6 @@ class Stage(models.Model):
     class Meta:
         db_table = 'ph_stage'
         verbose_name_plural = 'Stages'
-
-
-
-class Location(MP_Node):
-    title           = models.CharField(max_length = 200)
-    code            = models.CharField(max_length=10, blank=True, null=True)
-    p_id            = models.CharField(max_length = 25)
-    
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        db_table = 'ph_location'
-        managed = True
-        verbose_name = 'Location'
-        verbose_name_plural = 'Locations'
 
 
 class Event(models.Model):

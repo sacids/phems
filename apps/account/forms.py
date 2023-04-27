@@ -106,10 +106,11 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('sector', 'organization', 'level')
+        fields = ('sector', 'organization', 'level', 'phone')
 
         widgets = {
             'sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'sector' }),
+            'phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'phone', 'placeholder': 'Write phone...' }),
             'organization': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'organization', 'placeholder': 'Write organization...' }),
             'level': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'level', }),
         }
