@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
+from django.db.models import Sum, F, Q
 from apps.ems.models import *
 from apps.account.models import Profile
 from .serializers import AlertSerializer
@@ -248,7 +249,7 @@ class RumorList(APIView):
         district_id = self.request.GET.get("district_id")
         ward_id = self.request.GET.get("ward_id")
 
-        rumors = Signal.objects.filter(status="NEW").order_by('-created_on','-relevance')
+        rumors = Signal.objects.filter(Q(status="NEW") | Q(status="CONFIRMED")).order_by('-created_on','-relevance')
 
         """filtering per level"""
         if level == 'NATIONAL':
@@ -483,7 +484,7 @@ class RumorList(APIView):
 
 def confirm_rumor(request):
     """confirm rumors""" 
-    rumor_id = request.GET.get('rid', 0)
+    rumor_id = request.GET.get('sid', 0)
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
@@ -497,7 +498,7 @@ def confirm_rumor(request):
 
 def discard_rumor(request):
     """discard rumors""" 
-    rumor_id = request.GET.get('rid', 0)
+    rumor_id = request.GET.get('sid', 0)
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
