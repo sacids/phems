@@ -193,15 +193,25 @@ class AlertList(APIView):
    
         arr_data = []
         for alert in alerts:
+            """check region"""
+            region_name = ""
+            if alert.region is not None:
+                region_name = alert.region.title
+
+            """stage"""
+            stage_name = ""
+            if alert.stage is not None:
+                stage_name = alert.stage.title
+
             """create dict"""
             chart = {
                 'id': alert.id,
                 'title': alert.title,
                 'description': alert.description,
                 'status': alert.status,
-                'location': alert.region.title,
+                'location': region_name,
                 'created_on': date.strftime(alert.created_on, '%d/%m/%Y %H:%M'),
-                'stage': alert.stage.title,
+                'stage': stage_name,
                 'alert_type_label': alert.alert.label,
                 'alert_type_title': alert.alert.title,
                 'primary_sector': alert.pri_sector.title
@@ -266,10 +276,15 @@ class RumorList(APIView):
 
         arr_data = []
         for rumor in rumors:
+            """rumor content"""
+            title = ""
+            if 'text' in rumor.contents:
+                title = rumor.contents['text']
+
             """create dictionary"""
             chart = {
                 'id': rumor.id,
-                'title': rumor.contents['text'],
+                'title': title,
                 'channel': rumor.channel,
                 'status': rumor.status,
                 'created_on': date.strftime(rumor.created_on, '%d/%m/%Y %H:%M'),
