@@ -724,8 +724,6 @@ class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
             return HttpResponseRedirect(reverse_lazy('rumors'))
         return render(request, 'events/rumor.html', {'form': form})
 
-
-
 def listing_events(request):
     """list all alerts"""
     events = Event.objects.all().order_by('-pk')

@@ -44,7 +44,7 @@ class Signal(models.Model):
         ('TELEGRAM', 'Telegram'),
         ('TWITTER', 'Twitter'),
         ('WEB', 'Web'),
-        ('CALL CENTER', 'Call Center'),
+        ('CALL_CENTER', 'Call Center'),
         ('APP', 'App'),
     )
     
@@ -93,6 +93,8 @@ class Signal(models.Model):
             return 'text-blue-400 bx bxl-twitter text-info '
         elif self.channel == 'WEB':
             return 'bx bxl-html5 text-warning '
+        elif self.channel == 'CALL_CENTER':
+            return 'bx bx-phone-call text-warning '
         elif self.channel == 'APP':
             return 'bx bxl-android text-danger '
 
