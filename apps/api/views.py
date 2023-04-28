@@ -289,6 +289,22 @@ class RumorList(APIView):
             if 'date' in rumor.contents:
                 occurance_date = rumor.contents['date']  
 
+            region = ""
+            if rumor.region is not None:
+                region = rumor.region.title    
+
+            district = ""
+            if rumor.district is not None:
+                district = rumor.district.title  
+
+            ward = ""
+            if rumor.ward is not None:
+                ward = rumor.ward.title
+
+            village = ""
+            if rumor.village is not None:
+                village = rumor.village.title  
+
             """create dictionary"""
             chart = {
                 'id': rumor.id,
@@ -298,11 +314,11 @@ class RumorList(APIView):
                 'occurance_on': occurance_date,
                 'created_on': date.strftime(rumor.created_on, '%d/%m/%Y %H:%M'),
                 'contact': rumor.contact,
-                'region': rumor.region.title,
-                'district': rumor.district.title,
-                'ward': rumor.ward.title,
-                'village': rumor.village.title,
-                'popular_area': rumor.village.title,
+                'region': region,
+                'district': district,
+                'ward': ward,
+                'village': village,
+                'popular_area': village,
                 'status': rumor.status,
                 'confirmed_by': '',
                 'confirmed_on': ''   
