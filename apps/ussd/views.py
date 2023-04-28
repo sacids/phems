@@ -106,7 +106,7 @@ def ttcl(request):
         status      = response['status']
         resp_msg    = response['msg']
         
-        print(response)
+        #print(response)
         
         if status == 0 or status == 3: # success
             code = '1' # keep session open
