@@ -33,7 +33,7 @@ class UserList(AjaxDatatableView):
     title = 'Manage Users'
     show_column_filters = False
     initial_order = [["first_name", "desc"], ]
-    length_menu = [[12, 50, 100, -1], [12, 50, 100, 'all']]
+    length_menu = [[10, 50, 100, -1], [10, 50, 100, 'all']]
     search_values_separator = '+'
     full_row_select = False
 
@@ -42,8 +42,7 @@ class UserList(AjaxDatatableView):
         {'name': 'first_name', 'title': 'Fullname', 'visible': True, 'className': 'w-36 text-left border-r'},
         {'name': 'username', 'visible': 'Username', 'className': 'w-20 text-left border-r'},
         {'name': 'level','title': 'User Level' ,'foreign_field': 'profile__level', 'className': 'w-32 text-left border-r'},
-        {'name': 'region','title': 'Region' ,'foreign_field': 'profile__region__title', 'className': 'w-32 text-left border-r'},
-        {'name': 'roles', 'title': 'Roles','className': 'w-28 text-left border-r', 'searchable': False,},
+        {'name': 'roles', 'title': 'Roles','className': 'w-36 text-left border-r', 'searchable': False,},
         {'name': 'is_active', 'title': 'Status', 'visible': True, 'className': 'w-12 text-left border-r'},
         {'name': 'date_joined', 'title': 'Created On', 'visible': True,'className': 'w-[100px] text-left border-r'},
         {'name': 'last_login', 'title': 'Last Login', 'visible': True,'className': 'w-[100px] text-left border-r'},
@@ -85,7 +84,7 @@ class NotificationList(AjaxDatatableView):
     model = Notification
     title = 'Notifications'
     show_column_filters = False
-    # initial_order = [["created_on", "desc"], ]
+    initial_order = [["created_on", "desc"], ]
     length_menu = [[12, 50, 100, -1], [12, 50, 100, 'all']]
     search_values_separator = '+'
     full_row_select = False
