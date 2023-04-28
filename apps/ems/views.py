@@ -13,7 +13,7 @@ from django.contrib.humanize.templatetags.humanize import naturalday
 from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from .forms import EventForm
+from .forms import EventForm, RumorForm
 from apps.notification.classes import NotificationWrapper
 from apps.notification.tasks import send_email
 from django.forms.models import model_to_dict
@@ -577,6 +577,88 @@ class RumorListView(PermissionRequiredMixin, generic.TemplateView):
         context['t_doy'] = date.today().timetuple().tm_yday
         context['w_doy'] = date.today().timetuple().tm_yday - 7
         return context
+    
+
+class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
+    """Create new event"""
+    permission_required = 'ems.add_signal'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RumorCreateView, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        regions = Location.objects.filter(depth=2).order_by("title")
+
+        context = {'form': RumorForm(), 'regions': regions}
+        return render(request, 'rumors/create.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = RumorForm(request.POST)
+        if form.is_valid():
+            contents = {
+                'text': request.POST.get('description'),
+                'date': request.POST.get('occured_date')
+            }
+
+            """saving rumor data """
+            new_signal = Signal()
+            new_signal.channel     = request.POST.get('channel')
+            new_signal.contact     = request.POST.get('contact')
+            new_signal.contents    = contents
+            new_signal.region_id   = request.POST.get('region_id')
+            new_signal.district_id = request.POST.get('district_id')
+            new_signal.ward_id     = request.POST.get('ward_id')
+            new_signal.village_id  = request.POST.get('village_id')
+            new_signal.save()
+
+            """base url"""
+            fullURL = ''.join(['http://', get_current_site(self.request).domain, reverse('rumors')])
+
+            """wrapper"""
+            notify = NotificationWrapper()
+
+            """send notification to ward supervisors"""
+            profile = Profile.objects.filter(ward_id=request.POST.get('ward_id'), level='WARD')
+
+            """create message to EOC Manager"""
+            message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
+
+            if profile.count() > 0:
+                arr_users = []
+                for val in profile:
+                    """create notification"""
+                    response = notify.create_notification(
+                        user_id = val.user.id, 
+                        created_by = self.request.user.id,
+                        message=message_to_users,
+                        url = fullURL )
+
+                    """assign to array"""
+                    arr_users.append(val.user.email)
+
+                    """send sms"""
+                    arr_phone = []
+                    phone = notify.cast_phone_number(phone=val.phone)
+                    recipient = {"recipient_id": 1, "dest_addr": phone}
+                    arr_phone.append(recipient)
+
+                    """array data"""
+                    arr_data = {"source_addr": "TAARIFA", "schedule_time": "", "encoding": "0", "message": message_to_users, "recipients": arr_phone}
+
+                    result = notify.send_sms(arr_data)
+                    data = json.loads(result.content) 
+
+                """send email in background"""
+                response = send_email("OHP: New Rumor" , message_to_users, arr_users)   
+
+            """message"""
+            messages.success(request, 'New rumor created!')
+
+            """redirect"""
+            return HttpResponseRedirect(reverse_lazy('rumors'))
+        return render(request, 'events/rumor.html', {'form': form})
+
 
 
 def listing_events(request):
@@ -600,13 +682,36 @@ def listing_events(request):
 
 def delete_signal(request):
     """change rumor status to DISCARDED"""
-    sig_id = request.GET.get('sid', 0)
-    sig_obj = Signal.objects.get(pk=sig_id)
-    sig_obj.status = 'DISCARDED'
-    sig_obj.save()
+    rumor_id = request.GET.get('sid', 0)
+
+    """rumor"""
+    rumor = Signal.objects.get(pk=rumor_id)
+    rumor.status = 'DISCARDED'
+    rumor.confirmed_by_id = request.user.id
+    rumor.save()
+
+    """response"""
+    success_msg = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2 mt-2'>Rumor discarded.</div>"
 
     """return response"""
-    return JsonResponse({"error": False, "success_msg": "Rumor discarded"}, safe=False)
+    return JsonResponse({"error": False, "success_msg": success_msg} , safe=False)
+
+
+def confirm_signal(request):
+    """discard rumors""" 
+    rumor_id = request.GET.get('sid', 0)
+
+    """rumor"""
+    rumor = Signal.objects.get(pk=rumor_id)
+    rumor.status = 'CONFIRMED'
+    rumor.confirmed_by_id = request.user.id
+    rumor.save()
+
+    """response"""
+    success_msg = "<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2 mt-2'>Rumor confirmed.</div>"
+
+    """return response"""
+    return JsonResponse({"error": False, "success_msg": success_msg}, safe=False) 
 
 
 def delete_item(request):
@@ -683,7 +788,7 @@ def add_event(request):
         new_event.signal.add(signal.id)
 
         """change status of signal"""
-        signal.status = "CONFIRMED"
+        signal.status = "ADDED"
         signal.save()
 
         """wrapper"""
@@ -743,7 +848,7 @@ def attach_sig2event(request):
     event.signal.add(signal)
 
     """change status of rumor"""
-    signal.status = "CONFIRMED"
+    signal.status = "ADDED"
     signal.save()
 
     """response"""

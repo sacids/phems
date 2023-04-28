@@ -11,7 +11,7 @@
                     stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-                <p class="text-gray-700 font-medium"> Set as Alert</p>
+                <p class="text-gray-700 font-medium"> Create New Alert</p>
             </button>
 
             <button class="flex border rounded-sm px-1 py-1 bg-gray-200 hover:bg-gray-300"
@@ -36,27 +36,135 @@
 
 <div class="h-full overflow-y-auto px-5 text-sm">
     <template x-if="eModal=='showRumor'">
-        <div class="pr-5">
-            <p class="mt-4 text-gray-700 text-sm font-medium">Description</p>
-            <div class="">
+        <div id="showRumor_wrp" class="mt-4 px-2">
+            <p class="text-gray-700 text-sm font-medium">Description</p>
+            <div class="mb-2">
                 {% for k, v in signal.contents.items %}
-                <div class="flex">
-                    <p class="font-normal text-gray-600">: {{v}}</p>
-                </div>
+                    {% if k == 'text' %}
+                        <p class="font-normal text-gray-600 text-sm py-0">Description: 
+                            <span class="italic">
+                                {{ v }}
+                            </span>
+                        </p>
+                    {% endif%}
+
+                    {% if k == 'date' %}
+                        <p class="font-normal text-gray-600 text-sm py-0">Occurance date: 
+                            <span class="italic">
+                                {{ v }}
+                            </span>
+                        </p>
+                    {% endif%}
                 {% endfor %}
+
+                <p class="font-normal text-gray-600 text-sm py-0">Relevance:
+                    <span class="italic">
+                        {{signal.relevance}}
+                    </span>
+                </p>
+
+                <p class="font-normal text-gray-600 text-sm py-0">Channel:
+                    <span class="italic">
+                        {{signal.channel}}
+                    </span>
+                </p>
             </div>
 
-            <p class="mt-4 text-gray-700 text-sm font-medium">Received On</p>
-            <p class="font-normal text-gray-600">{{signal.created_on}}</p>
+            {% if signal.region %}
+                <p class="mt-4 font-normal text-gray-600 text-sm py-0">Region: 
+                    <span class="italic">
+                        {{ signal.region.title }}
+                    </span>
+                </p>
+            {% endif %}
 
-            <p class="mt-4 text-gray-700 text-sm font-medium">Contact </p>
-            <p class="font-normal text-gray-600">{{signal.contact}}</p>
+            {% if signal.district %}
+                <p class="font-normal text-gray-600 text-sm py-0">District: 
+                    <span class="italic">
+                        {{ signal.district.title }}
+                    </span>
+                </p>
+            {% endif %}
 
-            <p class="mt-4 text-gray-700 text-sm font-medium">Channel </p>
-            <p class="font-normal text-gray-600">{{signal.channel}}</p>
+            {% if signal.ward %}
+                <p class="font-normal text-gray-600 text-sm py-0">Ward: 
+                    <span class="italic">
+                        {{ signal.ward.title }}
+                    </span>
+                </p>
+            {% endif %}
 
-            <p class="mt-4 text-gray-700 text-sm font-medium">Relevance </p>
-            <p class="font-normal text-gray-600">{{signal.relevance}}</p>
+            {% if signal.village %}
+                <p class="font-normal text-gray-600 text-sm py-0">Village: 
+                    <span class="italic">
+                        {{ signal.village.title }}
+                    </span>
+                </p>
+            {% endif %}
+
+            <p class="mt-4 mb-2 font-normal text-gray-600 text-sm py-0">Received On:
+                <span class="italic">
+                    {{signal.created_on}}
+                </span>
+            </p>
+
+            <p class="mb-2 font-normal text-gray-600 text-sm py-0">Contact:
+                <span class="italic">
+                    {{signal.contact}}
+                </span>
+            </p>
+
+            {% if signal.status == 'CONFIRMED' %}
+                <p class="mb-2 font-normal text-gray-600 text-sm py-0">Status:
+                    <span class="italic">
+                        {{signal.status}}
+                    </span>
+                </p>
+
+                <p class="mb-2 font-normal text-gray-600 text-sm py-0">Confirmed By:
+                    <span class="italic">
+                        {{signal.confirmed_by.first_name}} {{signal.confirmed_by.last_name}}
+                    </span>
+                </p>
+
+                <p class="mb-2 font-normal text-gray-600 text-sm py-0">Confirmed On:
+                    <span class="italic">
+                        {{signal.confirmed_on}}
+                    </span>
+                </p>
+            {% endif %}
+
+            {% if signal.status == 'DISCARDED' %}
+                <p class="mb-2 font-normal text-gray-600 text-sm py-0">Status:
+                    <span class="italic">
+                        {{signal.status}}
+                    </span>
+                </p>
+
+                <p class="mb-2 font-normal text-gray-600 text-sm py-0">Discarded By:
+                    <span class="italic">
+                        {{signal.confirmed_by.first_name}} {{signal.confirmed_by.last_name}}
+                    </span>
+                </p>
+
+                <p class="mb-2 font-normal text-gray-600 text-sm py-0">Discarded On:
+                    <span class="italic">
+                        {{signal.confirmed_on}}
+                    </span>
+                </p>
+            {% endif %}
+
+
+            <div class="flex space-x-2 text-xs mt-4">
+                <button class="flex border-none rounded-sm px-3 py-2 bg-green-600 hover:bg-green-800" x-on:click="confirmRumor()">
+                    <p class="text-white font-medium"> Confirm Alert</p>
+                </button>
+
+                <button class="flex border-none rounded-sm px-3 py-2 bg-red-600 hover:bg-red-800" x-on:click="discardRumor()">
+                    <p class="text-white font-medium"> Discard Alert</p>
+                </button>
+
+            </div>
         </div>
     </template>
 

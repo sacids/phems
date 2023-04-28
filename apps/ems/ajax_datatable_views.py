@@ -67,9 +67,9 @@ class UserList(AjaxDatatableView):
         row['roles'] = arr_roles
 
         if obj.is_active == True:
-            row['is_active'] = '<span class="bg-green-600 text-white px-2 py-0.5 text-xs font-normal rounded-full ">Active</span>' 
+            row['is_active'] = '<span class="bg-green-600 text-white px-1 py-0.5 text-xs font-normal rounded-sm ">Active</span>' 
         elif obj.is_active == False:
-            row['is_active'] = '<span class="bg-red-600 text-white px-2 py-0.5 text-xs font-normal rounded-full ">Inactive</span>'
+            row['is_active'] = '<span class="bg-red-600 text-white px-1 py-0.5 text-xs font-normal rounded-sm ">Inactive</span>'
 
         row['actions'] = '<div class="flex">'\
                 '<a href="%s" class="btn btn-xss px-1">'\
@@ -105,13 +105,13 @@ class NotificationList(AjaxDatatableView):
         row['created_on'] = obj.created_on.strftime('%d/%m/%Y %H:%M')
 
         if obj.app_status == 'PENDING':
-            row['status'] = '<span class="bg-amber-500 text-white rounded-lg px-2 py-0.5 text-xs font-normal">Pending</span>'
+            row['status'] = '<span class="bg-amber-500 text-white rounded-sm px-1 py-0.5 text-xs font-normal">Pending</span>'
             
         elif obj.app_status == 'DELIVERED':
-            row['status'] = '<span class="bg-green-600 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Viewed</span>'  
+            row['status'] = '<span class="bg-green-600 text-white text-sm rounded-sm px-1 py-0.5 text-xs font-normal">Viewed</span>'  
 
         elif obj.app_status == 'REJECTED':
-            row['status'] = '<span class="bg-red-500 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Rejected</span>'
+            row['status'] = '<span class="bg-red-500 text-white text-sm rounded-sm px-1 py-0.5 text-xs font-normal">Rejected</span>'
 
     def get_initial_queryset(self, request=None):
         queryset = super().get_initial_queryset(request)
@@ -160,7 +160,7 @@ class EventList(AjaxDatatableView):
     def customize_row(self, row, obj):
         row['title']        = '<a class="hover:text-blue-600" href="%s">%s</a>' % (reverse('show-event', args=(obj.id,)), obj.title)
         row['created_on']   = naturalday(obj.created_on)
-        row['stage']        = '<span class="text-white rounded-full px-2 py-0.5 text-xs font-normal ' + obj.stage.css + '">' + obj.stage.title + '</span>'
+        row['stage']        = '<span class="text-white rounded-sm text-xs font-normal ' + obj.stage.css + '">' + obj.stage.title + '</span>'
         
         if obj.stage.title == 'New':
             row['actions'] = '<div class="flex">'\
@@ -240,17 +240,17 @@ class RumorList(AjaxDatatableView):
         row['created_on'] = naturalday(obj.created_on)
 
         if obj.status == 'NEW':
-            row['status'] = '<span class="bg-blue-400 text-white rounded-lg px-2 py-0.5 text-xs font-normal">New</span>'
+            row['status'] = '<span class="bg-blue-400 text-white rounded-sm px-2 py-0.5 text-xs font-normal">New</span>'
             
         elif obj.status == 'CONFIRMED':
-            row['status'] = '<span class="bg-green-600 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Confirmed</span>'  
+            row['status'] = '<span class="bg-green-600 text-white rounded-sm px-1 py-0.5 text-xs font-normal">Confirmed</span>'  
 
         elif obj.status == 'DISCARDED':
-            row['status'] = '<span class="bg-red-500 text-white text-sm rounded-lg px-2 py-0.5 text-xs font-normal">Discarded</span>'
+            row['status'] = '<span class="bg-red-500 text-white rounded-sm px-1 py-0.5 text-xs font-normal">Discarded</span>'
 
 
-        row['actions'] = '<a class="btn btn-xss" @click="discardSignal('+str(obj.id)+')">'\
-                '<i class="bx bx-trash text-red-600"></i>' \
+        row['actions'] = '<a class="btn btn-xss cursor-pointer" @click="sidebarOpen = true, manageRumor('+str(obj.id)+')">'\
+                '<i class="bx bxs-folder-open text-blue-600"></i>' \
                 '</a>'
 
     def get_initial_queryset(self, request=None):
@@ -277,9 +277,9 @@ class RumorList(AjaxDatatableView):
 
 
         """filtering"""   
-        # if 'status' in request.REQUEST:
-        #     status = request.REQUEST.get('status')
-        #     queryset = queryset.filter(status=status) 
+        if 'status' in request.REQUEST:
+            status = request.REQUEST.get('status')
+            queryset = queryset.exclude(status=status) 
 
         return queryset
     

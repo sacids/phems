@@ -1,9 +1,35 @@
 from django import forms
   
 # import GeeksModel from models.py
-from .models import Event
-  
+from .models import Event, Signal
+
 # create a ModelForm
+class RumorForm(forms.ModelForm):
+    """
+    A class to create Rumor form
+    """
+    def __init__(self, *args, **kwargs):
+        super(RumorForm, self).__init__(*args, **kwargs)
+        self.fields['status'].empty_label = ('Select')
+    
+
+    class Meta:
+        model   = Signal
+        fields  = ('status', 'contact', 'channel')
+
+        widgets = {
+            'contact': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'contact', 'placeholder': 'Write phone...' }),
+            'status': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'status', 'required': '' }),
+            'channel': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'channel', 'required': '' }),
+        }
+
+        labels = {
+            'contact': 'Phone',
+            'status': 'Status',
+            'channel': 'Channel',
+        }
+  
+
 class EventForm(forms.ModelForm):
     """
     A class to create Event form

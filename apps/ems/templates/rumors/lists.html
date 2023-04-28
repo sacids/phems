@@ -26,7 +26,7 @@
                 class="table border table-striped table-bordered dt-responsive compact nowrap text-sm">
             </table>
         </div>
-        
+
         <div class="bg-white border-l shadow-md py-3 flex-shrink-0 w-[570px] h-full flex flex-col overflow-hidden transition-all duration-500"
             :class="{ '-mr-[570px]': !sidebarOpen }">
             <div id="detail-div" class="w-full h-full overflow-hidden pb-8"></div>
@@ -48,7 +48,7 @@
                 dom: 'rtip'
             }, {
             // extra_data
-            // status: 'NEW',
+            status: 'ADDED',
         });
 
         $('#myInputTextField').keyup(function () {
@@ -86,11 +86,11 @@
             activeSignal: -1,
             showModal: false,
             eModal: "showRumor",
-            userLevel : "{{ user.profile.level }}",
-            userRegion : "{{ user.profile.region_id }}",
-            userDistrict : "{{ user.profile.district_id }}",
-            userWard : "{{ user.profile.ward_id }}",
-            userVillage : "{{ user.profile.village_id }}",
+            userLevel: "{{ user.profile.level }}",
+            userRegion: "{{ user.profile.region_id }}",
+            userDistrict: "{{ user.profile.district_id }}",
+            userWard: "{{ user.profile.ward_id }}",
+            userVillage: "{{ user.profile.village_id }}",
 
             cur_signal: {
                 id: "",
@@ -101,11 +101,11 @@
             alert_types: {},
 
             //form data
-            formData:{
-                title:"",
+            formData: {
+                title: "",
                 description: "",
                 alert_id: null,
-                pri_sector_id : null,
+                pri_sector_id: null,
                 region_id: null,
                 district_id: null,
                 ward_id: null,
@@ -115,7 +115,7 @@
             formMessage: "",
             formLoading: false,
             buttonText: "Submit",
-            
+
             //deals with location
             regions: {},
             districts: {},
@@ -159,7 +159,7 @@
             fetchEvents() {
                 paramsURL = '/api/alerts?level=' + this.userLevel + '&region_id=' + this.userRegion + '&district_id=' + this.userDistrict + '&ward_id=' + this.userWard + '&village_id=' + this.userVillage
 
-                fetch(paramsURL, {method: "GET", credentials: 'same-origin'})
+                fetch(paramsURL, { method: "GET", credentials: 'same-origin' })
                     .then(res => res.json())
                     .then(data => {
                         this.events = data;
@@ -180,8 +180,34 @@
                     })
             },
 
+            //discard signal
+            discardRumor(e) {
+                s_id = this.cur_signal.id
+                var url = window.location.origin + '/ems/utils/ds?sid=' + s_id;
+
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((json) => {
+                        console.log(json.success_msg)
+                        $('#showRumor_wrp').html(json.success_msg)
+                    });
+            },
+
+            //confirm signal
+            confirmRumor(e) {
+                s_id = this.cur_signal.id
+                var url = window.location.origin + '/ems/utils/cs?sid=' + s_id;
+
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((json) => {
+                        console.log(json.success_msg)
+                        $('#showRumor_wrp').html(json.success_msg)
+                    });
+            },
+
             //fetch alerts
-            fetchAlertTypes(){
+            fetchAlertTypes() {
                 fetch('/api/alert_types')
                     .then(res => res.json())
                     .then(data => {
@@ -190,7 +216,7 @@
             },
 
             //fetch primary sectors
-            fetchSectors(){
+            fetchSectors() {
                 fetch('/api/sectors')
                     .then(res => res.json())
                     .then(data => {
@@ -199,7 +225,7 @@
             },
 
             //fetch regions
-            fetchRegions(){
+            fetchRegions() {
                 fetch('/api/regions')
                     .then(res => res.json())
                     .then(data => {
@@ -217,7 +243,7 @@
                     .then(res => res.json())
                     .then(data => {
                         this.districts = data;
-                    }); 
+                    });
             },
 
             onDistrictChange(e) {
@@ -230,7 +256,7 @@
                     .then(res => res.json())
                     .then(data => {
                         this.wards = data;
-                    }); 
+                    });
             },
 
             onWardChange(e) {
@@ -243,7 +269,7 @@
                     .then(res => res.json())
                     .then(data => {
                         this.villages = data;
-                    }); 
+                    });
             },
 
             //submit form
@@ -257,7 +283,7 @@
 
                 //rumor id
                 this.formData.rumor_id = this.cur_signal.id
-                
+
                 fetch("/ems/utils/ae", {
                     method: "POST",
                     headers: {
@@ -274,7 +300,7 @@
                     this.formData.region_id = null;
                     this.formData.ward_id = null;
                     this.formData.village_id = null;
-                    
+
                     //set message
                     $('#setEvent_wrp').html("<div class='bg-green-200 text-green-900 text-sm rounded-sm p-2'>New alert created.</div>");
 
@@ -287,7 +313,7 @@
                     this.buttonText = "Submit";
                 });
             },
-   
+
         }
     }
 
