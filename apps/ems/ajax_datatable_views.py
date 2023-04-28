@@ -235,7 +235,7 @@ class RumorList(AjaxDatatableView):
 
     def customize_row(self, row, obj):
         row['contents'] = '<span class=" line-clamp-1" @click="sidebarOpen = true, manageRumor('+str(obj.id)+')" >' + str(obj.contents['text']) + '</span>'
-        row['css_icon'] = '<i class="'+obj.css_icon+'">'
+        row['css_icon'] = '<i class="' + obj.css_icon+'">'
         row['created_on'] = naturalday(obj.created_on)
 
         if obj.status == 'NEW':
