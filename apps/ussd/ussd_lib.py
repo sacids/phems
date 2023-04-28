@@ -79,7 +79,7 @@ class ussd_session:
         
         next_state  = 0
         for node in state.nodes.all():
-            if node.response == self.msg or self.msg == 'ANY':
+            if node.response == self.msg or node.response == 'ANY':
                 # matched response
                 ## update current state
                 
@@ -108,7 +108,7 @@ class ussd_session:
         if state.show_text:
             res = state.argument
             if self.session.error_count > 0:
-                res = 'Invalid input<br>'+res
+                res = 'Invalid input\n'+res
             return {"status":0,"msg":res}
         else:
             # call the function
