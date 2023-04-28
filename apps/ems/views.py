@@ -632,7 +632,8 @@ class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
                         user_id = val.user.id, 
                         created_by = self.request.user.id,
                         message=message_to_users,
-                        url = fullURL )
+                        url = fullURL
+                    )
 
                     """assign to array"""
                     arr_users.append(val.user.email)
@@ -651,7 +652,71 @@ class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
 
                 """send email in background"""
                 response = send_email("OHP: New Rumor" , message_to_users, arr_users)   
+            else:
+                """send notification to district supervisors"""
+                profile = Profile.objects.filter(district_id=request.POST.get('district_id'), level='DISTRICT')
 
+                if profile.count() > 0:
+                    arr_users = []
+                    for val in profile:
+                        """create notification"""
+                        response = notify.create_notification(
+                            user_id = val.user.id, 
+                            created_by = self.request.user.id,
+                            message=message_to_users,
+                            url = fullURL
+                        )
+
+                        """assign to array"""
+                        arr_users.append(val.user.email)
+
+                        """send sms"""
+                        arr_phone = []
+                        phone = notify.cast_phone_number(phone=val.phone)
+                        recipient = {"recipient_id": 1, "dest_addr": phone}
+                        arr_phone.append(recipient)
+
+                        """array data"""
+                        arr_data = {"source_addr": "TAARIFA", "schedule_time": "", "encoding": "0", "message": message_to_users, "recipients": arr_phone}
+
+                        result = notify.send_sms(arr_data)
+                        data = json.loads(result.content) 
+
+                    """send email in background"""
+                    response = send_email("OHP: New Rumor" , message_to_users, arr_users) 
+                else:
+                    """send notification to region supervisors"""
+                    profile = Profile.objects.filter(region_id=request.POST.get('region_id'), level='REGION')
+
+                    if profile.count() > 0:
+                        arr_users = []
+                        for val in profile:
+                            """create notification"""
+                            response = notify.create_notification(
+                                user_id = val.user.id, 
+                                created_by = self.request.user.id,
+                                message=message_to_users,
+                                url = fullURL
+                            )
+
+                            """assign to array"""
+                            arr_users.append(val.user.email)
+
+                            """send sms"""
+                            arr_phone = []
+                            phone = notify.cast_phone_number(phone=val.phone)
+                            recipient = {"recipient_id": 1, "dest_addr": phone}
+                            arr_phone.append(recipient)
+
+                            """array data"""
+                            arr_data = {"source_addr": "TAARIFA", "schedule_time": "", "encoding": "0", "message": message_to_users, "recipients": arr_phone}
+
+                            result = notify.send_sms(arr_data)
+                            data = json.loads(result.content) 
+
+                    """send email in background"""
+                    response = send_email("OHP: New Rumor" , message_to_users, arr_users) 
+            
             """message"""
             messages.success(request, 'New rumor created!')
 
