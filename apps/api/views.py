@@ -283,17 +283,45 @@ class RumorList(APIView):
             """rumor content"""
             title = ""
             if 'text' in rumor.contents:
-                title = rumor.contents['text']
+                title = rumor.contents['text']  
+
+            occurance_date = ""
+            if 'date' in rumor.contents:
+                occurance_date = rumor.contents['date']  
+
+            region = ""
+            if rumor.region is not None:
+                region = rumor.region.title    
+
+            district = ""
+            if rumor.district is not None:
+                district = rumor.district.title  
+
+            ward = ""
+            if rumor.ward is not None:
+                ward = rumor.ward.title
+
+            village = ""
+            if rumor.village is not None:
+                village = rumor.village.title  
 
             """create dictionary"""
             chart = {
                 'id': rumor.id,
+                'relevance': rumor.relevance,
                 'title': title,
                 'channel': rumor.channel,
-                'status': rumor.status,
+                'occurance_on': occurance_date,
                 'created_on': date.strftime(rumor.created_on, '%d/%m/%Y %H:%M'),
-                'relevance': rumor.relevance,
                 'contact': rumor.contact,
+                'region': region,
+                'district': district,
+                'ward': ward,
+                'village': village,
+                'popular_area': village,
+                'status': rumor.status,
+                'confirmed_by': '',
+                'confirmed_on': ''   
             } 
             """append to arr_data"""
             arr_data.append(chart)

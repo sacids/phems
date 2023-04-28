@@ -61,9 +61,7 @@ class UserForm(UserCreationForm):
 
         if self.instance.pk:
             self.fields['username'].required = False
-            self.fields['username'].widget.attrs['readonly'] = True
             self.fields['email'].required = False
-            self.fields['email'].widget.attrs['readonly'] = True
             self.fields['password1'].required = False
             self.fields['password2'].required = False
 
@@ -89,7 +87,6 @@ class UserUpdateForm(UserChangeForm):
 
         if self.instance.pk:
             self.fields['username'].required = False
-            self.fields['username'].widget.attrs['readonly'] = True
             self.fields['email'].required = True
 
     class Meta:
