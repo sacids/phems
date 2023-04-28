@@ -94,7 +94,7 @@ class Signal(models.Model):
         elif self.channel == 'WEB':
             return 'bx bxl-html5 text-warning '
         elif self.channel == 'CALL_CENTER':
-            return 'bx bxl-html5 text-warning '
+            return 'bx bx-phone-call text-warning '
         elif self.channel == 'APP':
             return 'bx bxl-android text-danger '
 
