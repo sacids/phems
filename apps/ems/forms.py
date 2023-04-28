@@ -11,6 +11,7 @@ class RumorForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RumorForm, self).__init__(*args, **kwargs)
         self.fields['status'].empty_label = ('Select')
+        self.fields['channel'].empty_label = ('Select')
     
 
     class Meta:
