@@ -1,0 +1,167 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load filters %}
+{% load crispy_forms_field %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create New Rumor{% endblock %}
+
+{% block contents %}
+
+<main class="bg-white h-full relative">
+    <div class="bg-gray-100 py-2 px-4 sm:px-4 lg:px-4 flex justify-between">
+        <div>
+            <h1 class="py-1 text-xl font-medium tracking-tight text-gray-600">Create New Rumor</h1>
+        </div>
+
+        <div></div>
+    </div>
+
+    <div class="bg-white h-[calc(100%-4rem)] flex overflow-hidden relative">
+        <div class="flex-1 h-full overflow-y-scroll">
+            <div class="mx-auto py-2 px-4 sm:px-4 lg:px-4">
+                <div class="w-2/3 mx-auto bg-gray-100 border border-gray-200 rounded-md px-4 py-4">
+                    <form method="post" enctype="multipart/form-data"
+                        class="w-full text-xs font-medium text-600 gray mb-2" autocomplete="off">
+                        {% csrf_token %}
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full">
+                                <h6 class="uppercase font-medium text-sm py-2">Rumor Information</h6>
+                                <hr />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-full">
+                                <div class="control-group">
+                                    <label class="control-label">Rumor description <span class="text-red-600">*</span></label>
+                                    <textarea id="description" name="description" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal" rows="3"
+                                        placeholder="Write description...." required></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-1/4 pr-2">
+                                {{ form.channel|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/4 pr-2">
+                                {{ form.status|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/4 pr-2">
+                                {{ form.contact|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/4">
+                                <div class="control-group">
+                                    <label class="control-label">Occured Date <span class="text-red-600">*</span></label>
+                                    <input type="date" name="occured_date" id="occured_date" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal" max="{% now 'Y-m-d' %}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-2">
+                            <div class="w-full md:w-full">
+                                <h6 class="uppercase font-medium text-sm py-2">Location Information</h6>
+                                <hr />
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/4 pr-2">
+                                <div class="control-group">
+                                    <label class="control-label">Region <span class="text-red-600">*</span></label>
+                                    <select name="region_id" id="region_id"
+                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal"
+                                        required>
+                                        <option value="">Select</option>
+                                        {% for region in regions %}
+                                        <option value="{{ region.id }}">{{ region.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/4 pr-2">
+                                <div class="control-group">
+                                    <label class="control-label">District <span class="text-red-600">*</span></label>
+                                    <select name="district_id" id="district_id"
+                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal"
+                                        required>
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/4 pr-2">
+                                <div class="control-group">
+                                    <label class="control-label">Ward</label>
+                                    <select name="ward_id" id="ward_id"
+                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-1/4">
+                                <div class="control-group">
+                                    <label class="control-label">Village</label>
+                                    <select name="village_id" id="village_id"
+                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
+                                        <option value="">Select</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-2">
+                            <a href="{% url 'rumors' %}"
+                                class="text-white text-sm font-normal bg-red-500 hover:bg-red-400 rounded-sm w-full sm:w-auto px-4 py-2 text-center">Cancel</a>
+                            <button type="submit"
+                                class="text-white text-sm font-normal bg-slate-700 hover:bg-slate-800 rounded-sm w-full sm:w-auto px-4 py-2 text-center">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'js/custom.js' %}"></script>
+{% endblock %}
+
+{% block get_contents %}
+<script src="{% static 'libs/popper/popper.min.js' %}"></script>
+<link href="{% static 'libs/select2/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+<script src="{% static 'libs/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'libs/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
+
+<script>
+    function getContents() {
+        return {}
+    }
+
+    function initjq() {
+        $(".select2").select2();
+        $(".input-mask").inputmask();
+
+        $('.get_location').select2({
+            minimumInputLength: 3,
+            ajax: {
+                url: window.location.origin + '/ems/utils/sl',
+                dataType: 'json',
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        });
+    };
+</script>
+
+{% endblock %}

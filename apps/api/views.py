@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime
+from django.db.models import Sum, F, Q
 from apps.ems.models import *
 from apps.account.models import Profile
 from .serializers import AlertSerializer
@@ -54,6 +55,7 @@ class LocationList(APIView):
 
         return Response(arr_data, status = status.HTTP_200_OK)
     
+
 class RegionsList(APIView):
     """API to fetch regions"""
     def get(self, request, format=None):
@@ -168,28 +170,52 @@ class SectorsList(APIView):
 class AlertList(APIView):
     """API to fetch alerts"""
     def get(self, request, format = None):
+        """get variables"""
+        level = self.request.GET.get("level")
+        region_id = self.request.GET.get("region_id")
+        district_id = self.request.GET.get("district_id")
+        ward_id = self.request.GET.get("ward_id")
+
         """alerts"""
         alerts = Event.objects   
 
-        if self.request.user.profile.level == 'NATIONAL':
+        """filtering per level"""
+        if level == 'NATIONAL':
             alerts = alerts.all().order_by('-pk')
 
-        elif self.request.user.profile.level == 'REGION': 
-            alerts = alerts.filter(region_id=self.request.user.profile.region_id).order_by('-pk')
+        elif level == 'REGION': 
+            alerts = alerts.filter(region_id=region_id).order_by('-pk')
 
-        elif self.request.user.profile.level == 'DISTRICT': 
-            alerts = alerts.filter(district_id=self.request.user.profile.district_id).order_by('-pk')
+        elif level == 'DISTRICT': 
+            alerts = alerts.filter(district_id=district_id).order_by('-pk')
+
+        elif level == 'WARD': 
+            alerts = alerts.filter(ward_id=ward_id).order_by('-pk')
+
+        else:
+            alerts = alerts.all().order_by('-pk')    
    
         arr_data = []
         for alert in alerts:
+            """check region"""
+            region_name = ""
+            if alert.region is not None:
+                region_name = alert.region.title
+
+            """stage"""
+            stage_name = ""
+            if alert.stage is not None:
+                stage_name = alert.stage.title
+
             """create dict"""
             chart = {
                 'id': alert.id,
                 'title': alert.title,
                 'description': alert.description,
                 'status': alert.status,
+                'location': region_name,
                 'created_on': date.strftime(alert.created_on, '%d/%m/%Y %H:%M'),
-                'stage': alert.stage.title,
+                'stage': stage_name,
                 'alert_type_label': alert.alert.label,
                 'alert_type_title': alert.alert.title,
                 'primary_sector': alert.pri_sector.title
@@ -231,14 +257,38 @@ class AlertList(APIView):
 class RumorList(APIView):
     """API to fetch rumors""" 
     def get(self, request, format=None):
-        rumors = Signal.objects.filter(status="NEW").order_by('-created_on','-relevance')
+        """get variables"""
+        level = self.request.GET.get("level")
+        region_id = self.request.GET.get("region_id")
+        district_id = self.request.GET.get("district_id")
+        ward_id = self.request.GET.get("ward_id")
+
+        rumors = Signal.objects.exclude(relevance=0).filter(Q(status="NEW") | Q(status="CONFIRMED") | Q(status="DISCARDED")).order_by('-created_on','-relevance')
+
+        """filtering per level"""
+        if level == 'NATIONAL':
+            rumors = rumors
+
+        elif level == 'REGION': 
+            rumors = rumors.filter(region_id=region_id)
+
+        elif level == 'DISTRICT': 
+            rumors = rumors.filter(district_id=district_id)
+
+        elif level == 'WARD': 
+            rumors = rumors.filter(ward_id=ward_id)
 
         arr_data = []
         for rumor in rumors:
+            """rumor content"""
+            title = ""
+            if 'text' in rumor.contents:
+                title = rumor.contents['text']
+
             """create dictionary"""
             chart = {
                 'id': rumor.id,
-                'title': rumor.contents['text'],
+                'title': title,
                 'channel': rumor.channel,
                 'status': rumor.status,
                 'created_on': date.strftime(rumor.created_on, '%d/%m/%Y %H:%M'),
@@ -290,7 +340,7 @@ class RumorList(APIView):
                     profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
 
                     """create message"""
-                    message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+                    message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
 
                     if profile.count() > 0:
                         arr_users = []
@@ -347,7 +397,7 @@ class RumorList(APIView):
                                 profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
 
                                 """create message"""
-                                message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+                                message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
 
                                 if profile.count() > 0:
                                     arr_users = []
@@ -403,7 +453,7 @@ class RumorList(APIView):
                             profile = Profile.objects.filter(ward_id=ward.id, level='WARD')
 
                             """create message"""
-                            message_to_users = f"Kuna taarifa mpya kutoka kwenye jamii. Tafadhali hakiki kama ni taarifa ya kweli. Taarifa: {contents}"
+                            message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
 
                             if profile.count() > 0:
                                 arr_users = []
@@ -453,13 +503,17 @@ class RumorList(APIView):
 
 def confirm_rumor(request):
     """confirm rumors""" 
-    rumor_id = request.GET.get('rid', 0)
+    rumor_id = request.GET.get('sid', 0)
+    confirmed_by  = request.GET.get('uid', 0)
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
     rumor.status = 'CONFIRMED'
+    rumor.confirmed_by_id = confirmed_by
     rumor.relevance = 100
     rumor.save()
+
+    logging.info(rumor)
 
     """return response"""
     return JsonResponse({"error": False, "success_msg": "Rumor confirmed"}, safe=False)  
@@ -467,7 +521,7 @@ def confirm_rumor(request):
 
 def discard_rumor(request):
     """discard rumors""" 
-    rumor_id = request.GET.get('rid', 0)
+    rumor_id = request.GET.get('sid', 0)
 
     """rumor"""
     rumor = Signal.objects.get(pk=rumor_id)
@@ -490,7 +544,7 @@ def attach_rumor2alert(request):
     alert.signal.add(signal)
     
     """change rumor status"""
-    signal.status = 'ADDED'
+    signal.status = "ADDED"
     signal.save()
     
     """return response"""

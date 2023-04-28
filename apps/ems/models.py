@@ -38,11 +38,13 @@ class Location(MP_Node):
 class Signal(models.Model):
     CHANNEL = (
         ('SMS', 'SMS'),
+        ('SMS', 'SMS'),
         ('USSD', 'USSD'),
         ('WHATSAPP', 'WhatsApp'),
         ('TELEGRAM', 'Telegram'),
         ('TWITTER', 'Twitter'),
         ('WEB', 'Web'),
+        ('CALL CENTER', 'Call Center'),
         ('APP', 'App'),
     )
     
@@ -53,7 +55,7 @@ class Signal(models.Model):
         ('CONFIRMED', 'Confirmed'),
     )
     
-    channel         = models.CharField(max_length=15,choices=CHANNEL,default='WEB')
+    channel         = models.CharField(max_length=15,choices=CHANNEL, blank=True, null=True)
     contact         = models.CharField(max_length=50,blank=True, null=True)
     contents        = models.JSONField(null=False)
     relevance       = models.IntegerField(default=0)
@@ -93,8 +95,7 @@ class Signal(models.Model):
             return 'bx bxl-html5 text-warning '
         elif self.channel == 'APP':
             return 'bx bxl-android text-danger '
-     
-     
+
     def save(self, *args, **kwargs):
         with open("assets/json/keywords.json", 'r') as file:
             key_map = json.loads(file.read().rstrip())

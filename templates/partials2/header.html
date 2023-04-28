@@ -96,11 +96,11 @@
 
                         {% endwith %}
 
-                        {% if perms.ems.add_event %}
+                        {% if perms.ems.add_signal %}
                             <div class="pt-3 pb-2 ">
-                                <a href="{% url 'create-event' %}"
+                                <a href="{% url 'create-rumor' %}"
                                     class="p-2 rounded-sm text-white bg-green-700 hover:bg-green-900 text-xs font-medium">
-                                    <i class='bx bx-plus'></i> Create Alert
+                                    <i class='bx bx-plus'></i> Create Rumor
                                 </a>
                             </div>
                         {% endif %}

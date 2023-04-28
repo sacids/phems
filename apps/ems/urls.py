@@ -45,6 +45,7 @@ urlpatterns = [
 
     #rumors
     path('rumors', RumorListView.as_view(), name='rumors'),
+    path('rumors/create', RumorCreateView.as_view(), name='create-rumor'),
 
     path('overview', SignalListView.as_view(), name='overview'),
     # path('dashboard', SignalListView.as_view(), name='dashboard'),
@@ -59,6 +60,7 @@ urlpatterns = [
     
     path('utils/ps', promote_signal, name='promote_signal'),
     path('utils/ds', delete_signal, name='delete_signal'),
+    path('utils/cs', confirm_signal, name='confirm_signal'),
     path('utils/di', delete_item, name='delete_item'),
     path('utils/as', attach_sig2event, name='attach_sig2event'),
     path('utils/me', manage_event, name='manage_event'),
