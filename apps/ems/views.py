@@ -651,7 +651,7 @@ class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
                     data = json.loads(result.content) 
 
                 """send email in background"""
-                response = send_email("OHP: New Rumor" , message_to_users, arr_users)   
+                #response = send_email("OHP: New Rumor" , message_to_users, arr_users)   
             else:
                 """send notification to district supervisors"""
                 profile = Profile.objects.filter(district_id=request.POST.get('district_id'), level='DISTRICT')
@@ -683,7 +683,7 @@ class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
                         data = json.loads(result.content) 
 
                     """send email in background"""
-                    response = send_email("OHP: New Rumor" , message_to_users, arr_users) 
+                    #response = send_email("OHP: New Rumor" , message_to_users, arr_users) 
                 else:
                     """send notification to region supervisors"""
                     profile = Profile.objects.filter(region_id=request.POST.get('region_id'), level='REGION')
@@ -715,7 +715,7 @@ class RumorCreateView(PermissionRequiredMixin, generic.CreateView):
                             data = json.loads(result.content) 
 
                     """send email in background"""
-                    response = send_email("OHP: New Rumor" , message_to_users, arr_users) 
+                    #response = send_email("OHP: New Rumor" , message_to_users, arr_users) 
             
             """message"""
             messages.success(request, 'New rumor created!')

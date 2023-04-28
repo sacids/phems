@@ -437,7 +437,7 @@ class RumorList(APIView):
                         data = json.loads(result.content) 
 
                     """send email in background"""
-                    response = send_email("OHP: New Rumor" , message_to_users, arr_users)
+                    # response = send_email("OHP: New Rumor" , message_to_users, arr_users)
                 else:  
                     """send notification to district supervisors"""
                     profile = Profile.objects.filter(district_id=district_id, level='DISTRICT')
@@ -469,7 +469,7 @@ class RumorList(APIView):
                             data = json.loads(result.content) 
 
                         """send email in background"""
-                        response = send_email("OHP: New Rumor" , message_to_users, arr_users)  
+                        # response = send_email("OHP: New Rumor" , message_to_users, arr_users)  
                     else:
                         """send notification to region supervisors"""
                         profile = Profile.objects.filter(region_id=region_id, level='REGION')
@@ -501,7 +501,7 @@ class RumorList(APIView):
                                 data = json.loads(result.content) 
 
                             """send email in background"""
-                            response = send_email("OHP: New Rumor" , message_to_users, arr_users)            
+                            # response = send_email("OHP: New Rumor" , message_to_users, arr_users)            
             else:
                 """saving rumor data """
                 new_signal = Signal()
