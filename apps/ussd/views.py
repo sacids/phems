@@ -97,7 +97,7 @@ def ttcl(request):
         root        = soup.find('ussd_request')
         
         msisdn          = root.msisdn.contents[0]
-        msg             = root.text.contents[0]
+        msg             = soup.find('text').contents[0]  
         session_id      = root.session_id.contents[0]
 
         ussd_trx        = ussd_session(session_id,msisdn,msg)
