@@ -86,7 +86,7 @@ def tigo(request):
 
 
 
-# Create your views here.
+@csrf_exempt
 def ttcl(request):
     
     if request.method == 'POST':
