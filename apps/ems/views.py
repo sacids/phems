@@ -80,9 +80,9 @@ class EventListView(PermissionRequiredMixin, generic.TemplateView):
         context = super(EventListView, self).get_context_data(**kwargs)
 
         context['title'] = "Manage Events"
-        context['alert_types'] = Alert.objects.all()
-        context['sectors'] = Sector.objects.all()
-        context['stages'] = Stage.objects.all()
+        context['alert_types'] = Alert.objects.order_by('id')
+        context['sectors'] = Sector.objects.order_by('id')
+        context['stages'] = Stage.objects.order_by('id')
         context['regions'] = Location.objects.filter(depth=2).order_by("title")
 
         return context

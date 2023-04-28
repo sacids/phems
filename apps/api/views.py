@@ -55,6 +55,7 @@ class LocationList(APIView):
 
         return Response(arr_data, status = status.HTTP_200_OK)
     
+
 class RegionsList(APIView):
     """API to fetch regions"""
     def get(self, request, format=None):
@@ -262,7 +263,7 @@ class RumorList(APIView):
         district_id = self.request.GET.get("district_id")
         ward_id = self.request.GET.get("ward_id")
 
-        rumors = Signal.objects.filter(Q(status="NEW") | Q(status="CONFIRMED")).order_by('-created_on','-relevance')
+        rumors = Signal.objects.exclude(relevance=0).filter(Q(status="NEW") | Q(status="CONFIRMED") | Q(status="DISCARDED")).order_by('-created_on','-relevance')
 
         """filtering per level"""
         if level == 'NATIONAL':
