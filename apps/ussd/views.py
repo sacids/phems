@@ -5,6 +5,7 @@ from .ussd_lib import ussd_session
 from .models import *
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+import logging
 
 
 
@@ -106,9 +107,13 @@ def ttcl(request):
         status      = response['status']
         resp_msg    = response['msg']
         
+        #print(response)
+        
+        logging.info(response)
+        
         if status == 0 or status == 3: # success
             code = '1' # keep session open
-        if status == 4:
+        elif status == 4:
             code = '3'
         else:
             code = '2' # unspecified failure release session
