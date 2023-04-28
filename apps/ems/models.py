@@ -82,21 +82,21 @@ class Signal(models.Model):
     @property
     def css_icon(self):
         if self.channel == 'USSD':
-            return 'bx bx-message-dots text-primary'
+            return 'bx bx-chat text-blue-600 '
         elif self.channel == 'SMS':
-            return 'bx bx-message-alt-dots text-primary'
+            return 'bx bx-message-alt-dots text-blue-800 '
         elif self.channel == 'WHATSAPP':
-            return 'text-green-800 bx bxl-whatsapp text-success '
+            return 'text-green-800 bx bxl-whatsapp'
         elif self.channel == 'TELEGRAM':
-            return 'bx bxl-telegram text-info '
+            return 'bx bxl-telegram text-blue-300 '
         elif self.channel == 'TWITTER':
-            return 'text-blue-400 bx bxl-twitter text-info '
+            return 'text-blue-400 bx bxl-twitter '
         elif self.channel == 'WEB':
-            return 'bx bxl-html5 text-warning '
+            return 'bx bxl-html5 text-amber-800 '
         elif self.channel == 'CALL_CENTER':
-            return 'bx bx-phone-call text-warning '
+            return 'bx bx-phone-call text-red-600 '
         elif self.channel == 'APP':
-            return 'bx bxl-android text-danger '
+            return 'bx bxl-android text-green-800 '
 
     def save(self, *args, **kwargs):
         with open("assets/json/keywords.json", 'r') as file:
