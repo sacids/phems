@@ -32,7 +32,7 @@ class UserList(AjaxDatatableView):
     model = User
     title = 'Manage Users'
     show_column_filters = False
-    initial_order = [["first_name", "desc"], ]
+    initial_order = [["first_name", "asc"], ]
     length_menu = [[10, 50, 100, -1], [10, 50, 100, 'all']]
     search_values_separator = '+'
     full_row_select = False
