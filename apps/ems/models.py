@@ -147,7 +147,7 @@ class Contact(models.Model):
 class Stage(models.Model):
     title           = models.CharField(max_length=255)
     css             = models.CharField(max_length=255, default="bg-blue-500")
-    form            = models.ForeignKey('Form', on_delete=models.CASCADE,blank=True, null=True)
+    #form            = models.ForeignKey('Form', on_delete=models.CASCADE,blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -330,10 +330,10 @@ class note(models.Model):
 class workflow_config(models.Model):
     label           = models.CharField(max_length=100,blank=True, null=True)
     wf_group        = models.ForeignKey(Group, related_name='wf_group', on_delete=models.CASCADE)
+    form            = models.ForeignKey('Form', related_name='cur_form', on_delete=models.CASCADE,blank=True, null=True)
     cur_stage       = models.ForeignKey('Stage', related_name='cur_stage', on_delete=models.CASCADE)
     next_stage      = models.ForeignKey('Stage', related_name='next_stage', on_delete=models.CASCADE)
     
-
     def __str__(self):
         return self.cur_stage.title+' - '+self.next_stage.title
 

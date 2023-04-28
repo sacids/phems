@@ -60,14 +60,15 @@ admin.site.register(Event, EventAdmin)
 
 
 class WorkflowConfigAdmin(admin.ModelAdmin):
-    list_display    = ['label','wf_group','cur_stage','next_stage']
-    list_filter     = ['wf_group']
+    list_display    = ['label','wf_group','cur_stage','next_stage','form',]
+    #list_editable   = ['wf_group','cur_stage','next_stage','form',]
+    list_filter     = ['wf_group','cur_stage']
     
     
 
 class StageAdmin(admin.ModelAdmin):
-    list_display    = ['id','title','css','form']
-    list_editable   = ['title','css','form']
+    list_display    = ['id','title','css']
+    list_editable   = ['title','css']
     
 
 class NoteAdmin(admin.ModelAdmin):
