@@ -311,7 +311,7 @@ class RumorList(APIView):
 
             confirmed_on = ""
             if rumor.confirmed_on is not None:
-                confirmed_on = date.strftime(rumor.rumor.confirmed_on, '%d/%m/%Y %H:%M') 
+                confirmed_on = date.strftime(rumor.confirmed_on, '%d/%m/%Y %H:%M') 
 
             """create dictionary"""
             chart = {
