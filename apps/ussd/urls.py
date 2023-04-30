@@ -10,4 +10,5 @@ urlpatterns = [
     
     
     path('some/url/', test_final_func, name="test_final_func"),
+    path('return/param/', return_param, name="return_param"),
 ]

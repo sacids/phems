@@ -77,12 +77,15 @@ def tigo(request):
     resp_msg    = response['msg']
     
     if status == 0 or status == 3: # success
-        code = '2' # keep session open
+        code = 'FC' # keep session open
     else:
-        code = '3' # release session
+        code = 'FB' # release session
         
-    http_response   = HttpResponse(xml)
-    return HttpResponse(xml, content_type='application/xml')
+    http_response               = HttpResponse(resp_msg)
+    http_response['Freeflow']   = code
+    
+    
+    return http_response
     
 
 
@@ -106,6 +109,8 @@ def ttcl(request):
         response    = ussd_trx.get_response()
         status      = response['status']
         resp_msg    = response['msg']
+        
+        
         
         #print(response)
         
@@ -140,6 +145,7 @@ def ttcl_response(code,session_id,msg):
     return xml
 
 
+@csrf_exempt
 def test_final_func(request):
     current_url = request.build_absolute_uri()
     print(current_url)
@@ -147,6 +153,10 @@ def test_final_func(request):
     #return JsonResponse({'status':1,'msg':'Fail message'}, safe=False)
     
 
+@csrf_exempt
+def return_param(request):
+    param   = request.GET.get('param')
+    return JsonResponse('2.1', safe=False)
 
 @csrf_exempt
 def halotel(request):

@@ -4,6 +4,9 @@ import requests
 from .models import *
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
+from json import dumps
+from urllib.parse import parse_qs
+
 
 class ussd_session:
     
@@ -33,7 +36,8 @@ class ussd_session:
                 self.cancel_session(self.session_id)
                 
                 ## call final function
-                ret     = requests.get(self.session.output_url+'?'+self.session.data)
+                data    = dumps(parse_qs(self.session.data))
+                ret     = requests.post(self.session.output_url,data=data)
                 res     = ret.json()
                 response['msg'] = res['msg']
                 ## if fails send corresponding error back
@@ -68,18 +72,47 @@ class ussd_session:
                 return {"status":4,"msg":"Session has expired"}
             else: 
                 self.session    = session[0]
-                
+                ns              = True
+                msg             = self.msg
+                while ns:
+                    next_step   = self.match_response(msg)
+                    if next_step == 2:
+                        ns      = False
+                        return {"status":1,"msg":"Too many input errors"}
+                    
+                    r1  = self.next_response()
+                    if r1['status'] == 100:
+                        ns      = True
+                        msg     = r1['msg']
+                    else:
+                        ns      = False
+                        
+                return r1
+                    
         
-        # call tree function
-        state   = self.session.current_tree
-        # validate msg
+
+    def next_response(self):
         
-        # match msg to possible values
-        ## get possible values
+        state   = self.session.current_tree 
+        if state.show_text:
+            res = state.argument
+            if self.session.error_count > 0:
+                res = state.error_msg+res
+            return {"status":0,"msg":res}
+        else:
+            # call the function
+            # print(state.argument+'?'+state.var_name+'='+self.msg+'&'+self.session.data)
+            ret     = requests.get(state.argument+'?'+state.var_name+'='+self.msg+'&'+self.session.data)
+            msg     = ret.json()
+            return {"status":100,"msg":msg}
+          
+    def match_response(self, user_response):
+         
+        state       = self.session.current_tree
+        next_state  = 0 # remain at current state
         
-        next_state  = 0
         for node in state.nodes.all():
-            if node.response == self.msg or node.response == 'ANY':
+            if node.response == user_response or node.response == 'ANY':
                 # matched response
                 ## update current state
                 
@@ -93,37 +126,17 @@ class ussd_session:
                 ### transverse tree
                 self.session.current_tree   = node.next_id
                 self.session.save()
-                next_state  = 1
+                next_state  = 1 # next state engaged
                 
         if next_state == 0:
             # did not find valid option 
             ## update error counter and repeat previous msg
             self.session.error_count += 1
             self.session.save()
-            if self.session.error_count > 4:
-                return {"status":1,"msg":"Too many input errors"}
-            
-        # get current state
-        state   = self.session.current_tree 
-        if state.show_text:
-            res = state.argument
-            if self.session.error_count > 0:
-                res = 'Invalid input\n'+res
-            return {"status":0,"msg":res}
-        else:
-            # call the function
-            ret     = requests.get(state.argument+'?'+self.session.data)
-            print(state.argument+'?'+self.session.data)
-            
-            res     = ret.json()
-            code    = 0
-            if res['status'] == 1:
-                code = 3
-                
-            return {"status":code,"msg":res['msg']}
-            #return {"status":0,"msg":'Success message after func call'}
-        
-
+            if self.session.error_count > 3:
+                next_state  = 2 # too many errors
+       
+        return next_state
             
     def has_nodes(self):
         return Node.objects.filter(tree=self.session.current_tree).count()

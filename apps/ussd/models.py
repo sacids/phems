@@ -31,6 +31,7 @@ class Tree(models.Model):
     show_text       = models.BooleanField(default=False)
     argument        = models.TextField()
     var_name        = models.CharField(max_length=50)
+    error_msg       = models.CharField(max_length=50,default='Invalid input\n')
     validation      = models.CharField(max_length=150, blank=True, null=True)
     
     def __str__(self):
@@ -49,7 +50,7 @@ class Node(models.Model):
     next_id         = models.ForeignKey('Tree',related_name='next_id', on_delete=CASCADE) 
 
     def __str__(self):
-        return str(self.pk)+' - '+self.tree.title
+        return str(self.pk)+' - '+self.next_id.title
 
     class Meta:
         db_table = 'ussd_node'
