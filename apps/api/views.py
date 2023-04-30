@@ -177,7 +177,7 @@ class AlertList(APIView):
         ward_id = self.request.GET.get("ward_id")
 
         """alerts"""
-        alerts = Event.objects   
+        alerts = Event.objects
 
         """filtering per level"""
         if level == 'NATIONAL':
@@ -303,7 +303,15 @@ class RumorList(APIView):
 
             village = ""
             if rumor.village is not None:
-                village = rumor.village.title  
+                village = rumor.village.title 
+
+            confirmed_by = ""
+            if rumor.confirmed_by is not None:
+                confirmed_by = rumor.confirmed_by.first_name + " " + rumor.confirmed_by.last_name  
+
+            confirmed_on = ""
+            if rumor.confirmed_on is not None:
+                confirmed_on = date.strftime(rumor.confirmed_on, '%d/%m/%Y %H:%M') 
 
             """create dictionary"""
             chart = {
@@ -320,8 +328,8 @@ class RumorList(APIView):
                 'village': village,
                 'popular_area': village,
                 'status': rumor.status,
-                'confirmed_by': '',
-                'confirmed_on': ''   
+                'confirmed_by': confirmed_by,
+                'confirmed_on': confirmed_on   
             } 
             """append to arr_data"""
             arr_data.append(chart)
