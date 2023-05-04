@@ -19,7 +19,7 @@ from .tasks import send_response
 # Create your views here.
 def vodacom(request):
     
-    session_id      = request.GET['session_id']
+    session_id      = request.GET['sessionid']
     msisdn          = request.GET['msisdn']
     msg             = request.GET['msg']
     msg_type        = request.GET['type']
