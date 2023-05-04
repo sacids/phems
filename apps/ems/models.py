@@ -82,9 +82,9 @@ class Signal(models.Model):
     @property
     def css_icon(self):
         if self.channel == 'USSD':
-            return 'bx bxl-chat bx-xs text-blue-600 '
+            return 'bx bx-chat bx-xs text-blue-600 '
         elif self.channel == 'SMS':
-            return 'bx bxl-message-alt-dots bx-xs text-blue-800 '
+            return 'bx bx-message-alt-dots bx-xs text-blue-800 '
         elif self.channel == 'WHATSAPP':
             return 'bx bxl-whatsapp bx-xs text-green-800 '
         elif self.channel == 'TELEGRAM':
@@ -94,7 +94,7 @@ class Signal(models.Model):
         elif self.channel == 'WEB':
             return 'bx bxl-html5 bx-xs text-amber-800 '
         elif self.channel == 'CALL_CENTER':
-            return 'bx bxl-phone-call bx-xs text-red-600 '
+            return 'bx bx-phone-call bx-xs text-red-600 '
         elif self.channel == 'APP':
             return 'bx bx-android bx-xs text-green-800 '
 
