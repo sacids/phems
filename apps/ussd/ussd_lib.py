@@ -39,10 +39,14 @@ class ussd_session:
                 payload =   {
                     'channel':  'USSD',
                     'contact':  self.msisdn,
-                    'contents': dict(urlparse.parse_qsl(self.session.data))
+                    'contents': json.dumps(dict(urlparse.parse_qsl(self.session.data)))
                 }
+                
+                print(payload)
 
-                if (requests.request("POST", url, data=payload)).ok:
+                res = requests.request("POST", url, data=payload)
+                print(res.text)
+                if res.ok:
                     response['msg'] = 'Asante'
                 else:
                     response['msg'] = 'Service is not available right now'
