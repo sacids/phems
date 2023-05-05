@@ -5,7 +5,7 @@ from .models import *
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from json import dumps
-from urllib.parse import parse_qs
+import urllib.parse as urlparse
 
 
 class ussd_session:
@@ -23,7 +23,6 @@ class ussd_session:
         response    = self.transverse()
         status      = response['status']
         
-        print(response)
         # status 0 = success
         # status 2 = not valid shortcode
         # status 1 = system error
@@ -36,10 +35,18 @@ class ussd_session:
                 self.cancel_session(self.session_id)
                 
                 ## call final function
-                data    = dumps(parse_qs(self.session.data))
-                ret     = requests.post(self.session.output_url,data=data)
-                res     = ret.json()
-                response['msg'] = res['msg']
+                url     = self.session.output_url
+                payload =   {
+                    'channel':  'USSD',
+                    'contact':  self.msisdn,
+                    'contents': dict(urlparse.parse_qsl(self.session.data))
+                }
+
+                if (requests.request("POST", url, data=payload)).ok:
+                    response['msg'] = 'Asante'
+                else:
+                    response['msg'] = 'Service is not available right now'
+                
                 ## if fails send corresponding error back
                 
         elif status == 2:
