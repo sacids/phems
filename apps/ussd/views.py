@@ -35,7 +35,7 @@ def vodacom(request):
     status      = response['status']
     resp_msg    = response['msg']
     
-    if status == 0 or status == 3: # success
+    if status == 0: # success
         code = '2' # keep session open
     else:
         code = '3' # release session
