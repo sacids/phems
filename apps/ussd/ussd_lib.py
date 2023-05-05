@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
 from json import dumps
 import urllib.parse as urlparse
+import logging
 
 
 class ussd_session:
@@ -42,10 +43,11 @@ class ussd_session:
                     'contents': json.dumps(dict(urlparse.parse_qsl(self.session.data)))
                 }
                 
-                print(payload)
+                
+                logging.info(payload)
 
                 res = requests.request("POST", url, data=payload)
-                print(res.text)
+                logging.info(res.text)
                 if res.ok:
                     response['msg'] = 'Asante'
                 else:

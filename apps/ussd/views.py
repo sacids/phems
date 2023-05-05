@@ -24,7 +24,7 @@ def vodacom(request):
     msg             = request.GET['msg']
     msg_type        = request.GET['type']
     
-    ussd_trx = ussd_session(session_id,msisdn,msg)
+    ussd_trx        = ussd_session(session_id,msisdn,msg)
     
     
     if msg_type == '3' or msg_type == '4' or msg_type == '10':
