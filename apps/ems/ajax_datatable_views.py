@@ -216,14 +216,15 @@ class RumorList(AjaxDatatableView):
     title = 'Rumors'
     show_column_filters = False
     initial_order = [["created_on", "desc"], ]
-    length_menu = [[12, 50, 100, -1], [12, 50, 100, 'all']]
+    length_menu = [[11, 50, 100, -1], [11, 50, 100, 'all']]
     search_values_separator = '+'
     full_row_select = False
 
     column_defs = [
-        {'name': 'id', 'visible': False, },
-        {'name': 'contents', 'title': 'Rumor', 'visible': True, 'className': 'text-left flex-1 cursor-pointer'},
-        {'name': 'css_icon', 'title': '', 'visible': True, 'className': 'w-6 text-left border-r', 'searchable': False, },
+        {'name': 'id', 'visible': False, }, 
+        {'name': 'css_icon', 'title': '', 'visible': True, 'className': 'w-5 text-left border-r', 'searchable': False, },
+        {'name': 'contents', 'title': 'Rumor', 'visible': True, 'className': 'text-left flex-1 cursor-pointer border-r'},
+        {'name': 'channel', 'title': 'Channel', 'visible': True, 'className': 'w-12 text-left border-r', 'searchable': False, },
         {'name': 'relevance', 'title': '#', 'visible': True, 'className': 'w-6 text-left border-r'},
         {'name': 'status', 'title': 'Status', 'visible': True, 'className': 'w-[90px] text-left border-r'},
         {'name': 'created_on', 'title': 'Received On', 'visible': True, 'className': 'w-[120px] text-left border-r'},
