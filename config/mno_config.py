@@ -32,7 +32,7 @@ kannel      = {
 }
 
 ems         = {
-    'signal_post_url'   : "http://127.0.0.1:8000/ems/api/signal/",
+    'signal_post_url'   : "http://127.0.0.1/ems/api/signal/",
     'send_sms_user'     : 'pmo',
     'send_sms_passwd'   : '21@PM0!',
 }
