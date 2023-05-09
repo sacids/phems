@@ -38,7 +38,6 @@ class Location(MP_Node):
 class Signal(models.Model):
     CHANNEL = (
         ('SMS', 'SMS'),
-        ('SMS', 'SMS'),
         ('USSD', 'USSD'),
         ('WHATSAPP', 'WhatsApp'),
         ('TELEGRAM', 'Telegram'),
