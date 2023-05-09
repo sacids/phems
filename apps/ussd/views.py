@@ -164,6 +164,7 @@ def halotel(request):
         # extract the SOAP XML from the POST data
         soap_xml = request.body.decode('utf-8')
         
+        logging.info(soap_xml)
         # parse the SOAP XML using ElementTree
         # root = ET.fromstring(soap_xml)
         soup    = BeautifulSoup(soap_xml, 'xml')
