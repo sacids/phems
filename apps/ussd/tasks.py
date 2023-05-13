@@ -31,5 +31,5 @@ def send_response(msg, session_id, req_type):
     logging.info('send req in cellery '+xml)
     
     ret         = requests.post(cfg.halotel['send_ussd_url'])
-    logging.info('response from post in cellery '+ret)
+    logging.info('response from post in cellery '+ret.text)
     return ret
