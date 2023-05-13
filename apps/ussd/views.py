@@ -163,29 +163,34 @@ def halotel(request):
     if request.method == 'POST':
         # extract the SOAP XML from the POST data
         soap_xml = request.body.decode('utf-8')
-        
         logging.info(soap_xml)
         # parse the SOAP XML using ElementTree
         # root = ET.fromstring(soap_xml)
         soup    = BeautifulSoup(soap_xml, 'xml')
         root    = soup.find('InsertMO')
         
-        passwd          = soup.find('pass').contents[0]  
-        user            = root.user.contents[0]
-        msisdn          = root.msisdn.contents[0]
-        msg             = root.msg.contents[0]
-        session_id      = root.transactionid.contents[0]
+        
         requestType     = root.requestType.contents[0]
-        ussdgw_id       = root.ussdgw_id.contents[0]
+        if requestType  == '104':
+            # cancel trx
+            status      = 1
+        else:
         
-        
-        code    = 0 # assume success
-        # check if username and password is the same if not code = 1
-        
-        ussd_trx    = ussd_session(session_id,msisdn,msg)
-        response    = ussd_trx.get_response()
-        status      = response['status']
-        resp_msg    = response['msg']
+            passwd          = soup.find('pass').contents[0]  
+            user            = root.user.contents[0]
+            msisdn          = root.msisdn.contents[0]
+            msg             = root.msg.contents[0]
+            session_id      = root.transactionid.contents[0]
+            ussdgw_id       = root.ussdgw_id.contents[0]
+            
+            
+            code    = 0 # assume success
+            # check if username and password is the same if not code = 1
+            
+            ussd_trx    = ussd_session(session_id,msisdn,msg)
+            response    = ussd_trx.get_response()
+            status      = response['status']
+            resp_msg    = response['msg']
         
         
         # status 0 = success
@@ -203,7 +208,7 @@ def halotel(request):
             else:
                 req_type = '203'
             
-            print('sending req to cellery')
+            #print('sending req to cellery')
             send_response(resp_msg, session_id, req_type)
         
         elif status == 1: # system error
@@ -211,7 +216,6 @@ def halotel(request):
             
         elif status == 4: # expired session
             code = 2
-        
         
         resp   = soap_response(code)
         return HttpResponse(resp, content_type='text/xml')
