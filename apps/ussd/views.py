@@ -209,6 +209,7 @@ def halotel(request):
                 req_type = '203'
             
             #print('sending req to cellery')
+            logging.info('send req to cellery '+resp_msg)
             send_response(resp_msg, session_id, req_type)
         
         elif status == 1: # system error

@@ -3,6 +3,7 @@ from django.http import JsonResponse, HttpResponse
 import requests
 
 import config.mno_config as cfg
+import logging
 
 
 @shared_task
@@ -27,6 +28,8 @@ def send_response(msg, session_id, req_type):
     
     print(xml)
     ### post xml
+    logging.info('send req in cellery '+xml)
     
     ret         = requests.post(cfg.halotel['send_ussd_url'])
+    logging.info('response from post in cellery '+ret)
     return ret
