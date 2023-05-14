@@ -26,9 +26,9 @@ def send_response(msg, session_id, req_type):
     </soap:Envelope>
     '''
     
-    print(xml)
     ### post xml
     logging.info('send req in cellery '+xml)
     
-    ret         = requests.post(cfg.halotel['send_ussd_url'])
+    ret         = requests.post(cfg.halotel['send_ussd_url'],data=xml)
+    logging.info(ret.text)
     return ret
