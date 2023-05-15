@@ -28,7 +28,7 @@ def vodacom(request):
     
     
     if msg_type == '3' or msg_type == '4' or msg_type == '10':
-        ussd_trx.cancel_session()
+        ussd_trx.cancel_session(session_id)
         return
     
     response    = ussd_trx.get_response()
