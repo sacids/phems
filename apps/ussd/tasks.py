@@ -17,7 +17,7 @@ def send_response(msg, msisdn, session_id, req_type):
                 <pass>'''+cfg.halotel['hal_ussd_pass']+'''</pass>
                 <msisdn>'''+msisdn+'''</msisdn>
                 <msg>'''+msg+'''</msg>
-                <sessionid>null</sessionid> 
+                <sessionid>190</sessionid> 
                 <transactionid>'''+session_id+'''</transactionid> 
                 <requestType>'''+req_type+'''</requestType> 
                 <ussdgw_id>1</ussdgw_id>
