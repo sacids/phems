@@ -7,7 +7,7 @@ import logging
 
 
 @shared_task
-def send_response(msg, session_id, req_type):
+def send_response(msg, msisdn, session_id, req_type):
     xml   = '''
     <?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
@@ -15,7 +15,7 @@ def send_response(msg, session_id, req_type):
             <InsertMO xmlns="http://tempuri.org/">
                 <user>'''+cfg.halotel['hal_ussd_user']+'''</user>
                 <pass>'''+cfg.halotel['hal_ussd_pass']+'''</pass>
-                <msisdn>null</msisdn>
+                <msisdn>'''+msisdn+'''</msisdn>
                 <msg>'''+msg+'''</msg>
                 <sessionid>null</sessionid> 
                 <transactionid>'''+session_id+'''</transactionid> 

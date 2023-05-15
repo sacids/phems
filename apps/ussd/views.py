@@ -210,7 +210,7 @@ def halotel(request):
             
             #print('sending req to cellery')
             logging.info('send req to cellery '+resp_msg)
-            send_response(resp_msg, session_id, req_type)
+            send_response(resp_msg, msisdn, session_id, req_type)
         
         elif status == 1: # system error
             code = -1
