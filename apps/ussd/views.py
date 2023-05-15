@@ -172,17 +172,21 @@ def halotel(request):
         
         requestType     = root.requestType.contents[0]
         if requestType  == '104':
-            # cancel trx
             status      = 1
         else:
         
             passwd          = soup.find('pass').contents[0]  
             user            = root.user.contents[0]
-            msisdn          = root.msisdn.contents[0]
             msg             = root.msg.contents[0]
             session_id      = root.transactionid.contents[0]
-            ussdgw_id       = root.ussdgw_id.contents[0]
             
+            if requestType  == '100':
+                # first request 
+                msisdn      = root.msisdn.contents[0]
+            else:
+                msisdn      = get_session(session_id)
+                
+            ussdgw_id       = root.ussdgw_id.contents[0]
             
             code    = 0 # assume success
             # check if username and password is the same if not code = 1
@@ -224,6 +228,11 @@ def halotel(request):
         resp   = soap_response(1)
         return HttpResponse(resp, content_type='text/xml')
      
+
+
+def get_session(session_id):
+    session         = list(Session.objects.filter(session_id=session_id).values())[0]
+    return session['msisdn']
 
 def soap_response(code):
     

@@ -9,6 +9,6 @@ urlpatterns = [
     path('ttcl/', ttcl, name='ttcl'),
     
     
-    path('some/url/', test_final_func, name="test_final_func"),
+    path('some/url/', get_session, name="test_final_func"),
     path('return/param/', return_param, name="return_param"),
 ]
