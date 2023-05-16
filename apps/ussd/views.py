@@ -64,7 +64,7 @@ def tigo(request):
     session_id      = request.GET['sessionid']
     msisdn          = request.GET['msisdn']
     msg             = request.GET['input']
-    msg_type        = request.GET['NEW_REQUEST']
+    msg_type        = request.GET['newrequest']
     #password        = request.GET['PASSWORD']
     #login           = request.GET['LOGIN']
     
