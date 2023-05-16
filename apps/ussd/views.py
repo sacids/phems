@@ -17,6 +17,8 @@ from .tasks import send_response
 
 
 # Create your views here.
+
+@csrf_exempt
 def vodacom(request):
     
     session_id      = request.GET['sessionid']
@@ -56,14 +58,15 @@ def vodacom(request):
 
 
 # Create your views here.
+@csrf_exempt
 def tigo(request):
     
-    session_id      = request.GET['FSESSION']
-    msisdn          = request.GET['MSISDN']
-    msg             = request.GET['INPUT']
+    session_id      = request.GET['sessionid']
+    msisdn          = request.GET['msisdn']
+    msg             = request.GET['input']
     msg_type        = request.GET['NEW_REQUEST']
-    password        = request.GET['PASSWORD']
-    login           = request.GET['LOGIN']
+    #password        = request.GET['PASSWORD']
+    #login           = request.GET['LOGIN']
     
     ussd_trx        = ussd_session(session_id,msisdn,msg)
     
