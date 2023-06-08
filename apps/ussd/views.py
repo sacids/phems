@@ -91,6 +91,41 @@ def tigo(request):
     return http_response
     
 
+# Create your views here.
+@csrf_exempt
+def airtel(request):
+    
+    session_id      = request.GET['sessionid']
+    msisdn          = request.GET['msisdn']
+    msg             = request.GET['input']
+    msg_type        = request.GET['newrequest']
+    #password        = request.GET['PASSWORD']
+    #login           = request.GET['LOGIN']
+    
+    ussd_trx        = ussd_session(session_id,msisdn,msg)
+    
+    
+    if msg_type == '3' or msg_type == '4' or msg_type == '10':
+        ussd_trx.cancel_session()
+        return
+    
+    response    = ussd_trx.get_response()
+    status      = response['status']
+    resp_msg    = response['msg']
+    
+    if status == 0 or status == 3: # success
+        code = 'FC' # keep session open
+    else:
+        code = 'FB' # release session
+        
+    http_response               = HttpResponse(resp_msg)
+    http_response['Freeflow']   = code
+    http_response['charge']     = 'N'
+    http_response['amount']     = '0'
+    
+    
+    return http_response
+    
 
 
 @csrf_exempt

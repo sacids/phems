@@ -7,6 +7,7 @@ urlpatterns = [
     path('halotel/', halotel, name='halotel'),
     path('zantel/', vodacom, name='zantel'),
     path('ttcl/', ttcl, name='ttcl'),
+    path('airtel/', airtel, name='airtel'),
     
     
     path('some/url/', get_session, name="test_final_func"),
