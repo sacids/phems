@@ -95,10 +95,10 @@ def tigo(request):
 @csrf_exempt
 def airtel(request):
     
-    session_id      = request.GET['sessionid']
-    msisdn          = request.GET['msisdn']
-    msg             = request.GET['input']
-    msg_type        = request.GET['newrequest']
+    session_id      = request.GET['SESSIONID']
+    msisdn          = request.GET['MSISDN']
+    msg             = request.GET['INPUT']
+    #msg_type        = request.GET['newrequest']
     #password        = request.GET['PASSWORD']
     #login           = request.GET['LOGIN']
     
