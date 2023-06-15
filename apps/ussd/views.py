@@ -104,11 +104,6 @@ def airtel(request):
     
     ussd_trx        = ussd_session(session_id,msisdn,msg)
     
-    
-    if msg_type == '3' or msg_type == '4' or msg_type == '10':
-        ussd_trx.cancel_session()
-        return
-    
     response    = ussd_trx.get_response()
     status      = response['status']
     resp_msg    = response['msg']
