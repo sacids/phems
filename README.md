@@ -1,12 +1,12 @@
 # Disaster Management Information System (DMIS)
 
-# Description
+## Description
 The digital platform that will be used to support timely collection of disaster-related information from the grassroots while allowing validation and verification of this information at different levels and different sectors. 
 
 If properly coordinated, verification of information on disaster rumor or event will trigger timely response by responsible actors. 
 
 
-# Prerequisites
+## Prerequisites
 [Python3](https://www.python.org/)
 
 [Django Framework](https://www.djangoproject.com/)
@@ -14,7 +14,7 @@ If properly coordinated, verification of information on disaster rumor or event 
 [PostgreSQL](https://www.postgresql.org/)
 
 
-# Installation
+## Installation
 Clone Repository
 
 ```bash
@@ -68,11 +68,11 @@ python manage.py collectstatic
 ```
 
 
-# License
+## License
 The Disaster Management Information System is open-sourced software licensed under the 
 [MIT license](https://opensource.org/license/mit/).
 
 
-# Contact
+## Contact
 For any issue please contact afyadata@sacids.org
 
