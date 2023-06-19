@@ -17,6 +17,8 @@ from .tasks import send_response
 
 
 # Create your views here.
+
+@csrf_exempt
 def vodacom(request):
     
     session_id      = request.GET['sessionid']
@@ -28,7 +30,7 @@ def vodacom(request):
     
     
     if msg_type == '3' or msg_type == '4' or msg_type == '10':
-        ussd_trx.cancel_session()
+        ussd_trx.cancel_session(session_id)
         return
     
     response    = ussd_trx.get_response()
@@ -56,14 +58,15 @@ def vodacom(request):
 
 
 # Create your views here.
+@csrf_exempt
 def tigo(request):
     
-    session_id      = request.GET['FSESSION']
-    msisdn          = request.GET['MSISDN']
-    msg             = request.GET['INPUT']
-    msg_type        = request.GET['NEW_REQUEST']
-    password        = request.GET['PASSWORD']
-    login           = request.GET['LOGIN']
+    session_id      = request.GET['sessionid']
+    msisdn          = request.GET['msisdn']
+    msg             = request.GET['input']
+    msg_type        = request.GET['newrequest']
+    #password        = request.GET['PASSWORD']
+    #login           = request.GET['LOGIN']
     
     ussd_trx        = ussd_session(session_id,msisdn,msg)
     
@@ -88,6 +91,36 @@ def tigo(request):
     return http_response
     
 
+# Create your views here.
+@csrf_exempt
+def airtel(request):
+    
+    session_id      = request.GET['SESSIONID']
+    msisdn          = request.GET['MSISDN']
+    msg             = request.GET['INPUT']
+    #msg_type        = request.GET['newrequest']
+    #password        = request.GET['PASSWORD']
+    #login           = request.GET['LOGIN']
+    
+    ussd_trx        = ussd_session(session_id,msisdn,msg)
+    
+    response    = ussd_trx.get_response()
+    status      = response['status']
+    resp_msg    = response['msg']
+    
+    if status == 0 or status == 3: # success
+        code = 'FC' # keep session open
+    else:
+        code = 'FB' # release session
+        
+    http_response               = HttpResponse(resp_msg)
+    http_response['Freeflow']   = code
+    http_response['charge']     = 'N'
+    http_response['amount']     = '0'
+    
+    
+    return http_response
+    
 
 
 @csrf_exempt
@@ -163,29 +196,38 @@ def halotel(request):
     if request.method == 'POST':
         # extract the SOAP XML from the POST data
         soap_xml = request.body.decode('utf-8')
-        
         logging.info(soap_xml)
         # parse the SOAP XML using ElementTree
         # root = ET.fromstring(soap_xml)
         soup    = BeautifulSoup(soap_xml, 'xml')
         root    = soup.find('InsertMO')
         
-        passwd          = soup.find('pass').contents[0]  
-        user            = root.user.contents[0]
-        msisdn          = root.msisdn.contents[0]
-        msg             = root.msg.contents[0]
-        session_id      = root.transactionid.contents[0]
+        
         requestType     = root.requestType.contents[0]
-        ussdgw_id       = root.ussdgw_id.contents[0]
+        if requestType  == '104':
+            status      = 1
+        else:
         
-        
-        code    = 0 # assume success
-        # check if username and password is the same if not code = 1
-        
-        ussd_trx    = ussd_session(session_id,msisdn,msg)
-        response    = ussd_trx.get_response()
-        status      = response['status']
-        resp_msg    = response['msg']
+            passwd          = soup.find('pass').contents[0]  
+            user            = root.user.contents[0]
+            msg             = root.msg.contents[0]
+            session_id      = root.transactionid.contents[0]
+            
+            if requestType  == '100':
+                # first request 
+                msisdn      = root.msisdn.contents[0]
+            else:
+                msisdn      = get_session(session_id)
+                
+            ussdgw_id       = root.ussdgw_id.contents[0]
+            
+            code    = 0 # assume success
+            # check if username and password is the same if not code = 1
+            
+            ussd_trx    = ussd_session(session_id,msisdn,msg)
+            response    = ussd_trx.get_response()
+            status      = response['status']
+            resp_msg    = response['msg']
         
         
         # status 0 = success
@@ -203,8 +245,9 @@ def halotel(request):
             else:
                 req_type = '203'
             
-            print('sending req to cellery')
-            send_response(resp_msg, session_id, req_type)
+            #print('sending req to cellery')
+            logging.info('send req to cellery '+resp_msg)
+            send_response(resp_msg, msisdn, session_id, req_type)
         
         elif status == 1: # system error
             code = -1
@@ -212,13 +255,17 @@ def halotel(request):
         elif status == 4: # expired session
             code = 2
         
-        
         resp   = soap_response(code)
         return HttpResponse(resp, content_type='text/xml')
     else:
         resp   = soap_response(1)
         return HttpResponse(resp, content_type='text/xml')
      
+
+
+def get_session(session_id):
+    session         = list(Session.objects.filter(session_id=session_id).values())[0]
+    return session['msisdn']
 
 def soap_response(code):
     

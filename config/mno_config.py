@@ -6,7 +6,7 @@ halotel     = {
     'hal_username'      : 'mps190',
     'hal_password'      : 'CHOtj9UQynmS',
     'send_sms_wsdl'     : 'http://10.225.198.54:9201/smsws?wsdl',
-    'send_ussd_url'     : '10.225.198.34:8890',
+    'send_ussd_url'     : 'http://10.225.198.34:8890',
 }
 
 tigo        = {

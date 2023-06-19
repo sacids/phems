@@ -18,6 +18,10 @@ class ussd_session:
         self.msisdn     = msisdn
         self.msg        = msg
     
+    def get_session(self, session_id):
+        session         = list(Session.objects.filter(session_id=session_id).values())[0]
+        return session
+        
     
     def get_response(self):
         
