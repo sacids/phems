@@ -74,5 +74,5 @@ The Disaster Management Information System is open-sourced software licensed und
 
 
 # Contact
-For any issue please contact [afyadata@sacids.org]
+For any issue please contact afyadata@sacids.org
 
