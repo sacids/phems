@@ -8,7 +8,9 @@ If properly coordinated, verification of information on disaster rumor or event 
 
 # Prerequisites
 [Python3](https://www.python.org/)
+
 [Django Framework](https://www.djangoproject.com/)
+
 [PostgreSQL](https://www.postgresql.org/)
 
 
