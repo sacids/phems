@@ -423,37 +423,19 @@ class RumorList(APIView):
         contact = request.data['contact']
         channel = request.data['channel']
 
-        """base url"""
-        fullURL = ''.join(
-            ['http://', get_current_site(self.request).domain, reverse('rumors')])
-
-        """notification wrapper"""
-        notify = NotificationWrapper()
-
         """Find exact location of rumor"""
         if 'village' in contents:
             village_name = contents['village']
 
-            """query for village"""
-            village = Location.objects.filter(
-                depth=5, title__icontains=village_name, path__startswith='0001000O')
+            village = Location.objects.filter(code=soundex(village_name), depth=5)
 
             if village.count() > 0:
-                """declare location data"""
-                ward_id = None
-                district_id = None
-                region_id = None
-
+                #if only one village available
                 if village.count() == 1:
                     village = village.first()  # village
                     ward = village.get_parent()  # ward
                     district = ward.get_parent()  # district
                     region = district.get_parent()  # region
-
-                    """assign variable"""
-                    ward_id = ward.id
-                    district_id = district.id
-                    region_id = region.id
 
                     """saving rumor data """
                     new_signal = Signal()
@@ -471,19 +453,13 @@ class RumorList(APIView):
                         ward_name = contents['ward']
 
                         """query for ward"""
-                        ward = Location.objects.filter(
-                            depth=4, title__icontains=ward_name, path__startswith='0001000O')
+                        ward = Location.objects.filter(depth=4, code=soundex(ward_name))
 
                         if ward.count() > 0:
                             if ward.count() == 1:
                                 ward = ward.first()  # ward
                                 district = ward.get_parent()  # district
                                 region = district.get_parent()  # region
-
-                                """assign variable"""
-                                ward_id = ward.id
-                                district_id = district.id
-                                region_id = region.id
 
                                 """saving rumor data """
                                 new_signal = Signal()
@@ -494,129 +470,8 @@ class RumorList(APIView):
                                 new_signal.district_id = district.id
                                 new_signal.ward_id = ward.id
                                 new_signal.save()
-
-                """create message"""
-                message_to_users = f"Taarifa Mpya. Tafadhali ingia kwenye mfumo kuifanyia kazi. Taarifa: {contents}"
-
-                """send notification to ward supervisor"""
-                profile = Profile.objects.filter(ward_id=ward_id, level='WARD')
-
-                if profile.count() > 0:
-                    arr_users = []
-                    for val in profile:
-                        """create notification"""
-                        response = notify.create_notification(
-                            user_id=val.user.id,
-                            created_by=1,
-                            message=message_to_users,
-                            url=fullURL
-                        )
-
-                        """assign to array"""
-                        arr_users.append(val.user.email)
-
-                        """send sms"""
-                        arr_phone = []
-                        phone = notify.cast_phone_number(phone=val.phone)
-                        recipient = {"recipient_id": 1, "dest_addr": phone}
-                        arr_phone.append(recipient)
-
-                        """array data"""
-                        arr_data = {"source_addr": "TAARIFA", "schedule_time": "",
-                                    "encoding": "0", "message": message_to_users, "recipients": arr_phone}
-
-                        result = notify.send_sms(arr_data)
-                        data = json.loads(result.content)
-
-                    """send email in background"""
-                    # response = send_email("OHP: New Rumor" , message_to_users, arr_users)
-                else:
-                    """send notification to district supervisors"""
-                    profile = Profile.objects.filter(
-                        district_id=district_id, level='DISTRICT')
-
-                    if profile.count() > 0:
-                        arr_users = []
-                        for val in profile:
-                            """create notification"""
-                            response = notify.create_notification(
-                                user_id=val.user.id,
-                                created_by=1,
-                                message=message_to_users,
-                                url=fullURL
-                            )
-
-                            """assign to array"""
-                            arr_users.append(val.user.email)
-
-                            """send sms"""
-                            arr_phone = []
-                            phone = notify.cast_phone_number(phone=val.phone)
-                            recipient = {"recipient_id": 1, "dest_addr": phone}
-                            arr_phone.append(recipient)
-
-                            """array data"""
-                            arr_data = {"source_addr": "TAARIFA", "schedule_time": "",
-                                        "encoding": "0", "message": message_to_users, "recipients": arr_phone}
-
-                            result = notify.send_sms(arr_data)
-                            data = json.loads(result.content)
-
-                        """send email in background"""
-                        # response = send_email("OHP: New Rumor" , message_to_users, arr_users)
-                    else:
-                        """send notification to region supervisors"""
-                        profile = Profile.objects.filter(
-                            region_id=region_id, level='REGION')
-
-                        if profile.count() > 0:
-                            arr_users = []
-                            for val in profile:
-                                """create notification"""
-                                response = notify.create_notification(
-                                    user_id=val.user.id,
-                                    created_by=1,
-                                    message=message_to_users,
-                                    url=fullURL
-                                )
-
-                                """assign to array"""
-                                arr_users.append(val.user.email)
-
-                                """send sms"""
-                                arr_phone = []
-                                phone = notify.cast_phone_number(
-                                    phone=val.phone)
-                                recipient = {"recipient_id": 1,
-                                             "dest_addr": phone}
-                                arr_phone.append(recipient)
-
-                                """array data"""
-                                arr_data = {"source_addr": "TAARIFA", "schedule_time": "",
-                                            "encoding": "0", "message": message_to_users, "recipients": arr_phone}
-
-                                result = notify.send_sms(arr_data)
-                                data = json.loads(result.content)
-
-                            """send email in background"""
-                            # response = send_email("OHP: New Rumor" , message_to_users, arr_users)
-            else:
-                """saving rumor data """
-                new_signal = Signal()
-                new_signal.channel = channel
-                new_signal.contact = contact
-                new_signal.contents = contents
-                new_signal.save()
-        else:
-            """saving rumor data """
-            new_signal = Signal()
-            new_signal.channel = channel
-            new_signal.contact = contact
-            new_signal.contents = contents
-            new_signal.save()
-
         """response"""
-        return Response({'error': False, 'success_msg': 'Rumor created'}, status=status.HTTP_200_OK)
+        return Response({'error': False, 'success_msg': 'Rumor created', }, status=status.HTTP_200_OK)
 
 
 def confirm_rumor(request):
