@@ -15,6 +15,7 @@ urlpatterns = [
     path('districts/<str:region_id>', views.DistrictsList.as_view()),
     path('wards/<str:district_id>', views.WardsList.as_view()),
     path('villages/<str:ward_id>', views.VillagesList.as_view()),
+    path('validate-village', views.ValidateVillage.as_view(), name='validate-village'),
 
     path('sectors', views.SectorsList.as_view()),
     path('alert_types', views.AlertTypesList.as_view()),
