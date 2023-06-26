@@ -49,8 +49,10 @@ class Signal(models.Model):
     
     STATUS  = (
         ('NEW', 'New'),
+        ('PENDING', 'Pending'),
         ('ADDED', 'Added'),
         ('DISCARDED', 'Discarded'),
+        ('VALIDATED', 'Validated'),
         ('CONFIRMED', 'Confirmed'),
     )
     
@@ -59,17 +61,19 @@ class Signal(models.Model):
     contents        = models.JSONField(null=False)
     relevance       = models.IntegerField(default=0)
     status          = models.CharField(max_length=14,choices=STATUS,default='NEW')
-    created_on      = models.DateTimeField(auto_now=True)
+    created_on      = models.DateTimeField(auto_now_add=True)
     region          = models.ForeignKey(Location, related_name="sg_region", blank=True, null=True, on_delete=DO_NOTHING)
     district        = models.ForeignKey(Location, related_name="sg_district", blank=True, null=True, on_delete=DO_NOTHING)
     ward            = models.ForeignKey(Location, related_name="sg_ward", blank=True, null=True, on_delete=DO_NOTHING)
     village         = models.ForeignKey(Location, related_name="sg_village",blank=True, null=True, on_delete=DO_NOTHING)
-    confirmed_on    = models.DateTimeField(auto_now=True)
+    confirmed_on    = models.DateTimeField(null=True, blank=True)
     confirmed_by    = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    remarks         = models.TextField(null=True, blank=True)
  
     
     class Meta:
         db_table    = 'ph_signal'
+        ordering = ['-created_on', '-relevance']
         
     def __str__(self):
         return self.channel if self.channel else self.pk
@@ -104,6 +108,25 @@ class Signal(models.Model):
         super(Signal, self).save(*args, **kwargs)
 
 
+class SignalValidity(models.Model):
+        VALIDITY  = (
+            ('No', 'No'),
+            ('Yes', 'Yes'),
+        )
+        
+        signal      = models.ForeignKey(Signal, related_name="activities", on_delete=CASCADE)
+        validity    = models.CharField(max_length=14,choices=VALIDITY,default='No')
+        created_by  = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+        created_on  = models.DateTimeField(auto_now_add=True)
+        updated_on  = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+       
+
+        class Meta:
+            db_table    = 'ph_signal_validities'
+        
+        def __str__(self):
+            return self.pk
+    
 
 class Sector(models.Model):
     title           = models.CharField(max_length=50)

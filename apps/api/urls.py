@@ -6,9 +6,11 @@ urlpatterns = [
     path('reports/', views.ReportsList.as_view()),
 
     path('rumors/', views.RumorList.as_view()),
+    path('rumors/validate', views.validateRumor.as_view(), name='validate-rumor'),
+    path('rumors/confirm', views.confirmRumor.as_view(), name='confirm-rumor'),
+    path('rumors/validity-notes/', views.RumorValidityNotes.as_view(), name='rumor-validity-notes'),
     path('rumors/attach2alert', views.attach_rumor2alert, name='attach2alert'),
-    path('rumors/discard', views.discard_rumor, name='discard-rumor'),
-    path('rumors/confirm', views.confirm_rumor, name='confirm-rumor'),
+    
 
     path('location', views.LocationList.as_view()),
     path('regions', views.RegionsList.as_view()),

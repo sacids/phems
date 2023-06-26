@@ -164,10 +164,11 @@ class VillagesList(APIView):
 
 class ValidateVillage(APIView):
     """validate village"""
+
     def get(self, request):
         village = self.request.GET['village']
 
-        #soundex title
+        # soundex title
         village_name = soundex(village)
         print("search key => " + village)
 
@@ -195,10 +196,11 @@ class ValidateVillage(APIView):
 
 class ValidateWard(APIView):
     """validate ward"""
+
     def get(self, request):
         title = self.request.GET['title']
 
-        #soundex title
+        # soundex title
         term = soundex(title)
         print("search key => " + term)
 
@@ -222,7 +224,6 @@ class ValidateWard(APIView):
                 return Response({"error": False, "no_of_village": count_location, }, status=status.HTTP_200_OK)
         else:
             return Response({"error": True, "no_of_village": 0, "error_msg": "Location does not exist"}, status=status.HTTP_200_OK)
-
 
 
 class SectorsList(APIView):
@@ -342,10 +343,11 @@ class RumorList(APIView):
         district_id = self.request.GET.get("district_id")
         ward_id = self.request.GET.get("ward_id")
 
-        rumors = Signal.objects.exclude(relevance=0).filter(Q(status="NEW") | Q(
-            status="CONFIRMED") | Q(status="DISCARDED")).order_by('-created_on', '-relevance')
+        # Query for rumors
+        rumors = Signal.objects.exclude(relevance=0).filter(
+            Q(status="NEW") | Q(status="VALIDATED"))
 
-        """filtering per level"""
+        # filtering per level
         if level == 'NATIONAL':
             rumors = rumors
 
@@ -360,7 +362,7 @@ class RumorList(APIView):
 
         arr_data = []
         for rumor in rumors:
-            """rumor content"""
+            # rumor content
             title = ""
             if 'text' in rumor.contents:
                 title = rumor.contents['text']
@@ -387,7 +389,7 @@ class RumorList(APIView):
 
             confirmed_by = ""
             if rumor.confirmed_by is not None:
-                confirmed_by = rumor.confirmed_by.first_name + " " + rumor.confirmed_by.last_name
+                confirmed_by = f"{rumor.confirmed_by.first_name} {rumor.confirmed_by.last_name}"
 
             confirmed_on = ""
             if rumor.confirmed_on is not None:
@@ -427,10 +429,11 @@ class RumorList(APIView):
         if 'village' in contents:
             village_name = contents['village']
 
-            village = Location.objects.filter(code=soundex(village_name), depth=5)
+            village = Location.objects.filter(
+                code=soundex(village_name), depth=5)
 
             if village.count() > 0:
-                #if only one village available
+                # if only one village available
                 if village.count() == 1:
                     village = village.first()  # village
                     ward = village.get_parent()  # ward
@@ -453,7 +456,8 @@ class RumorList(APIView):
                         ward_name = contents['ward']
 
                         """query for ward"""
-                        ward = Location.objects.filter(depth=4, code=soundex(ward_name))
+                        ward = Location.objects.filter(
+                            depth=4, code=soundex(ward_name))
 
                         if ward.count() > 0:
                             if ward.count() == 1:
@@ -474,35 +478,89 @@ class RumorList(APIView):
         return Response({'error': False, 'success_msg': 'Rumor created', }, status=status.HTTP_200_OK)
 
 
-def confirm_rumor(request):
-    """confirm rumors"""
-    rumor_id = request.GET.get('sid', 0)
-    confirmed_by = request.GET.get('uid', 0)
+class validateRumor(APIView):
+    """Confirmation of rumor from  members"""
 
-    """rumor"""
-    rumor = Signal.objects.get(pk=rumor_id)
-    rumor.status = 'CONFIRMED'
-    rumor.confirmed_by_id = confirmed_by
-    rumor.relevance = 100
-    rumor.save()
+    def post(self, request, format=None):
+        rumor_id = request.POST.get('rumor_id')
 
-    logging.info(rumor)
+        # rumor
+        try:
+            rumor = Signal.objects.get(pk=rumor_id)
+            rumor.status = "VALIDATED"
+            rumor.save()
 
-    """return response"""
-    return JsonResponse({"error": False, "success_msg": "Rumor confirmed"}, safe=False)
+            # create/update rumor validity
+            validity, created = SignalValidity.objects.update_or_create(signal_id=rumor.pk, created_by_id=request.POST.get('user_id'),
+                                                                        defaults={'validity':  request.POST.get('validity')})
+            # response
+            return Response({"error": False, "success_msg": "Thank you for the information, Rumor validated!"}, status=status.HTTP_200_OK)
+        except:
+            # response
+            return Response({"error": True, "error_msg": "Rumor does not available"}, status=status.HTTP_404_NOT_FOUND)
 
 
-def discard_rumor(request):
-    """discard rumors"""
-    rumor_id = request.GET.get('sid', 0)
+class confirmRumor(APIView):
+    """validate rumor"""
 
-    """rumor"""
-    rumor = Signal.objects.get(pk=rumor_id)
-    rumor.status = 'DISCARDED'
-    rumor.save()
+    def post(self, request, format=None):
+        rumor_id = request.POST.get('rumor_id')
+        validity = request.POST.get('validity')
 
-    """return response"""
-    return JsonResponse({"error": False, "success_msg": "Rumor discarded"}, safe=False)
+        # rumor
+        try:
+            rumor = Signal.objects.get(pk=rumor_id)
+
+            print(validity)
+
+            success_msg = ""
+            if validity == "VALID":
+                success_msg = "Rumor confirmed"
+                rumor.status = "CONFIRMED"
+                rumor.relevance = 100
+            elif validity == "INVALID":
+                success_msg = "Rumor discarded"
+                rumor.status = "DISCARDED"
+
+            rumor.confirmed_by_id = request.POST.get('user_id')
+            rumor.remarks = request.POST.get('remarks')
+            rumor.save()
+
+            # response
+            return Response({"error": False, "status": rumor.status, "success_msg": success_msg}, status=status.HTTP_200_OK)
+        except:
+            # response
+            return Response({"error": True, "error_msg": "Rumor does not available"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class RumorValidityNotes(APIView):
+    """API to fetch rumor validity notes"""
+
+    def get(self, request, format=None):
+        rumor_id = request.GET.get('rumor_id', 0)
+
+        #rumor 
+        rumor = Signal.objects.get(pk=rumor_id)
+
+        #rumor validities
+        validities = SignalValidity.objects.filter(signal_id=rumor.pk)
+
+        arr_data = []
+
+        if validities.count() > 0:
+            for val in validities:
+                chart = {
+                    'id': val.pk,
+                    'title': '',
+                    'created_on': date.strftime(rumor.created_on, '%d/%m/%Y %H:%M'),
+                    'created_by': f"{val.created_by.first_name} {val.created_by.last_name}",
+                    'validity': val.validity
+                }
+                arr_data.append(chart)
+
+            return Response(arr_data, status=status.HTTP_200_OK)    
+        else:
+            return Response({"error": True, "error_msg": "No any data"}, status=status.HTTP_404_NOT_FOUND)
 
 
 def attach_rumor2alert(request):
