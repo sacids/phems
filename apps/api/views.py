@@ -421,9 +421,9 @@ class RumorList(APIView):
 
     def post(self, request, format=None):
         """data contents"""
-        contents = request.data['contents']
-        contact = request.data['contact']
-        channel = request.data['channel']
+        contents = request.POST['contents']
+        contact = request.POST['contact']
+        channel = request.POST['channel']
 
         """Find exact location of rumor"""
         if 'village' in contents:
@@ -474,6 +474,22 @@ class RumorList(APIView):
                                 new_signal.district_id = district.id
                                 new_signal.ward_id = ward.id
                                 new_signal.save()
+            else:
+                """saving rumor data """
+                new_signal = Signal()
+                new_signal.channel     = channel
+                new_signal.contact     = contact
+                new_signal.contents    = contents
+                new_signal.save()
+
+        else:
+            """saving rumor data """
+            new_signal = Signal()
+            new_signal.channel = channel
+            new_signal.contact = contact
+            new_signal.contents = contents
+            new_signal.save()
+
         """response"""
         return Response({'error': False, 'success_msg': 'Rumor created', }, status=status.HTTP_200_OK)
 
@@ -539,10 +555,10 @@ class RumorValidityNotes(APIView):
     def get(self, request, format=None):
         rumor_id = request.GET.get('rumor_id', 0)
 
-        #rumor 
+        # rumor
         rumor = Signal.objects.get(pk=rumor_id)
 
-        #rumor validities
+        # rumor validities
         validities = SignalValidity.objects.filter(signal_id=rumor.pk)
 
         arr_data = []
@@ -558,7 +574,7 @@ class RumorValidityNotes(APIView):
                 }
                 arr_data.append(chart)
 
-            return Response(arr_data, status=status.HTTP_200_OK)    
+            return Response(arr_data, status=status.HTTP_200_OK)
         else:
             return Response({"error": True, "error_msg": "No any data"}, status=status.HTTP_404_NOT_FOUND)
 
