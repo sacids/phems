@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'apps.api.apps.ApiConfig',
     'apps.ussd.apps.UssdConfig',
     'apps.sms.apps.SmsConfig',
-    'apps.sms.apps.ReportsConfig'
+    'apps.reports.apps.ReportsConfig'
 ]
 
 MIDDLEWARE = [

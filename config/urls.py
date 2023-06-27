@@ -41,4 +41,5 @@ urlpatterns = [
     path('api/', include('apps.api.urls')), 
     path('ussd/', include('apps.ussd.urls')), 
     path('sms/', include('apps.sms.urls')), 
+    path('reports/', include('apps.reports.urls')), 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
