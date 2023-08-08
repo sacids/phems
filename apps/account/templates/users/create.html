@@ -35,21 +35,19 @@
                         </div>
 
                         <div class="flex flex-wrap mb-1">
-                            <div class="w-full md:w-1/2 pr-2">
+                            <div class="w-full md:w-1/4 pr-2">
                                 {{ form.first_name|as_crispy_field }}
                             </div>
 
-                            <div class="w-full md:w-1/2">
+                            <div class="w-full md:w-1/4 pr-2">
                                 {{ form.last_name|as_crispy_field }}
                             </div>
-                        </div>
-
-                        <div class="flex flex-wrap mb-1">
-                            <div class="w-full md:w-1/2 pr-2">
+                        
+                            <div class="w-full md:w-1/4 pr-2">
                                 {{ form.email|as_crispy_field }}
                             </div>
 
-                            <div class="w-full md:w-1/2">
+                            <div class="w-full md:w-1/4">
                                 {{ profile_form.phone|as_crispy_field }}
                             </div>
                         </div>
@@ -57,6 +55,16 @@
                         <div class="flex flex-wrap mb-1">
                             <div class="w-full md:w-full">
                                 {{ profile_form.organization|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
+                                {{ profile_form.title|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/2 pr-2">
+                                {{ profile_form.postal_address|as_crispy_field }}
                             </div>
                         </div>
 

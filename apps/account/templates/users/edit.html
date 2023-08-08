@@ -64,6 +64,16 @@
 
                         <div class="flex flex-wrap mb-1">
                             <div class="w-full md:w-1/2 pr-2">
+                                {{ profile_form.title|as_crispy_field }}
+                            </div>
+
+                            <div class="w-full md:w-1/2 pr-2">
+                                {{ profile_form.postal_address|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap mb-1">
+                            <div class="w-full md:w-1/2 pr-2">
                                 {{ profile_form.sector|as_crispy_field }}
                             </div>
 

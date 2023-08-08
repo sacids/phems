@@ -120,7 +120,9 @@ class ProfileView(View):
             'last_name': user.last_name,
             'username': user.username,
             'email': user.email,
-            'organization': user.profile.organization
+            'organization': user.profile.organization,
+            'title': user.profile.title,
+            'postal_address': user.profile.postal_address,
             })
 
         """sectors"""
@@ -139,7 +141,10 @@ class ProfileView(View):
 
         """create or update profile"""
         profile, created = Profile.objects.update_or_create(user_id=user.id,  
-            defaults={'organization': request.POST.get("organization")},)
+            defaults={
+                'organization': request.POST.get("organization"), 
+                'title': request.POST.get("title"), 
+                'postal_address': request.POST.get("postal_address"),},)
 
         """save user"""
         user.save()

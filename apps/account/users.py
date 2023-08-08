@@ -73,7 +73,10 @@ class UserCreateView(PermissionRequiredMixin, generic.CreateView):
                         'district_id': request.POST.get("district_id"), 
                         'ward_id': request.POST.get("ward_id"), 
                         'village_id': request.POST.get("village_id"), 
-                        'organization': request.POST.get("organization")},)
+                        'organization': request.POST.get("organization"),
+                        'title': request.POST.get("title"),
+                        'postal_address': request.POST.get("postal_address"),
+                        },)
 
             """insert roles"""
             role_ids = request.POST.getlist('role_ids')
@@ -137,6 +140,8 @@ class UserUpdateView(PermissionRequiredMixin, generic.UpdateView):
             user = user_form.save(commit=False)
             user.is_active  = request.POST.get("status_id")
             user.organization = request.POST.get("organization")
+            user.title = request.POST.get("title")
+            user.postal_address = request.POST.get("postal_address")
             user.sector_id = request.POST.get("sector")
             user.level = request.POST.get("level")
             user.save()

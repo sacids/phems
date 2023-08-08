@@ -70,6 +70,16 @@
                     </div>
                 </div>
 
+                <div class="flex flex-wrap mb-1">
+                    <div class="w-full md:w-1/2 pr-2">
+                        {{ form.title|as_crispy_field }}
+                    </div>
+
+                    <div class="w-full md:w-1/2 pr-2">
+                        {{ form.postal_address|as_crispy_field }}
+                    </div>
+                </div>
+
                 <div class="flex items-start pr-2 mb-6">
                     <a href="{% url 'change-password' %}"
                         class="text-white text-sm font-normal bg-red-500 hover:bg-red-400 rounded-sm w-full sm:w-auto px-4 py-2 text-center mr-2">Cancel</a>

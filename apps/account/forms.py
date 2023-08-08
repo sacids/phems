@@ -25,9 +25,11 @@ class ProfileForm(forms.Form):
     username = forms.CharField(max_length=30, required=True, label="Username ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write username...'}))
     email = forms.EmailField(max_length=50, required=True, label="Email ", widget=forms.EmailInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write email...'}))
     organization = forms.CharField(max_length=200, required=False, label="Organization ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write organization...'}))
+    title = forms.CharField(max_length=200, required=False, label="Title ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write title...'}))
+    postal_address = forms.CharField(max_length=200, required=False, label="Postal address ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write postal address...'}))
 
     class Meta:
-        fields = ('first_name', 'last_name', 'email', 'username', 'organization' )
+        fields = ('first_name', 'last_name', 'email', 'username', 'organization', 'title', 'postal_address' )
 
 
 class ChangePasswordForm(PasswordChangeForm):
@@ -103,12 +105,14 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('sector', 'organization', 'level', 'phone')
+        fields = ('sector', 'organization', 'level', 'phone', 'title', 'postal_address')
 
         widgets = {
             'sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'sector' }),
             'phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'phone', 'placeholder': 'Write phone...' }),
             'organization': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'organization', 'placeholder': 'Write organization...' }),
+            'title': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'title', 'placeholder': 'Write title...' }),
+            'postal_address': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'postal_address', 'placeholder': 'Write postal address...' }),
             'level': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'level', }),
         }
 
@@ -116,4 +120,6 @@ class UserProfileForm(forms.ModelForm):
             'sector': 'Primary Sector ',
             'organization': 'Organization ',
             'level': 'User Level ',
+            'title': 'Title ',
+            'postal_address': 'Postal address ',
         }
