@@ -38,7 +38,7 @@
                             <div class="w-full md:w-full">
                                 <div class="control-group">
                                     <label class="control-label">Rumor description <span class="text-red-600">*</span></label>
-                                    <textarea id="description" name="description" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal" rows="3"
+                                    <textarea id="description" name="description" class="w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal" rows="3"
                                         placeholder="Write description...." required></textarea>
                                 </div>
 
@@ -61,7 +61,7 @@
                             <div class="w-full md:w-1/4">
                                 <div class="control-group">
                                     <label class="control-label">Occured Date <span class="text-red-600">*</span></label>
-                                    <input type="date" name="occured_date" id="occured_date" class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal" max="{% now 'Y-m-d' %}" />
+                                    <input type="date" name="occured_date" id="occured_date" class="w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal" max="{% now 'Y-m-d' %}" />
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                 <div class="control-group">
                                     <label class="control-label">Region <span class="text-red-600">*</span></label>
                                     <select name="region_id" id="region_id"
-                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal"
+                                        class="w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal"
                                         required>
                                         <option value="">Select</option>
                                         {% for region in regions %}
@@ -92,7 +92,7 @@
                                 <div class="control-group">
                                     <label class="control-label">District <span class="text-red-600">*</span></label>
                                     <select name="district_id" id="district_id"
-                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal"
+                                        class="w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal"
                                         required>
                                         <option value="">Select</option>
                                     </select>
@@ -103,7 +103,7 @@
                                 <div class="control-group">
                                     <label class="control-label">Ward</label>
                                     <select name="ward_id" id="ward_id"
-                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
+                                        class="w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal">
                                         <option value="">Select</option>
                                     </select>
                                 </div>
@@ -113,7 +113,7 @@
                                 <div class="control-group">
                                     <label class="control-label">Village</label>
                                     <select name="village_id" id="village_id"
-                                        class="w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal">
+                                        class="w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal">
                                         <option value="">Select</option>
                                     </select>
                                 </div>

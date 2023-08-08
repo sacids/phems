@@ -14,8 +14,16 @@
         </div>
 
         <div>
-            <input
-                class="h-9 w-80 bg-white text-gray-600 border border-gray-300 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
+            {% if perms.auth.create_user %}
+                <a href="{% url 'create-user' %}" class="text-white bg-slate-800 hover:bg-gray-600 hover:text-white font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
+                    <i class="bx bx-user-plus"></i> Register
+                </a>&nbsp;
+            {% endif %}
+
+            <a href="#" class="text-white bg-green-600 hover:bg-green-800 font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
+                <i class="fas fa-file-excel"></i> Export
+            </a>&nbsp;
+            <input class="h-9 w-80 bg-white text-gray-600 border border-gray-300 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-600 text-sm font-normal"
                 type="text" id="myInputTextField" placeholder="Search here...">
         </div>
     </div>
@@ -32,22 +40,6 @@
                 </div>
             {% endfor %}
         {% endif %}
-    </div>
-
-    <div class="mb-2 py-1 px-4 sm:px-4 lg:px-4 flex justify-between">
-        <div></div>
-
-        <div>
-            {% if perms.auth.create_user %}
-                <a href="{% url 'create-user' %}" class="text-white bg-slate-800 hover:bg-gray-600 hover:text-white font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
-                    <i class="bx bx-user-plus"></i> Register
-                </a>&nbsp;
-            {% endif %}
-
-            <a href="#" class="text-white bg-green-600 hover:bg-green-800 font-normal text-xs rounded-sm w-full sm:w-auto px-2 py-2 text-center">
-                <i class="fas fa-file-excel"></i> Export
-            </a>
-        </div>
     </div>
 
     <div class="table-responsive px-4 sm:px-4 lg:px-4 pb-3 h-full overflow-hidden">

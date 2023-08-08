@@ -19,9 +19,9 @@ class RumorForm(forms.ModelForm):
         fields  = ('status', 'contact', 'channel')
 
         widgets = {
-            'contact': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'contact', 'placeholder': 'Write phone...' }),
-            'status': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'status', 'required': '' }),
-            'channel': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'channel', 'required': '' }),
+            'contact': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'contact', 'placeholder': 'Write phone...' }),
+            'status': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'status', 'required': '' }),
+            'channel': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'channel', 'required': '' }),
         }
 
         labels = {
@@ -51,12 +51,12 @@ class EventForm(forms.ModelForm):
         fields  = ('title', 'description', 'contact_name','contact_phone', 'pri_sector', 'alert')
 
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'title', 'placeholder': 'Write title...', 'required': '' } ),
-            'description': forms.Textarea(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'title', 'placeholder': 'Write description...', 'rows': 3, 'required': '' }),
-            'contact_name': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'contact_name', 'placeholder': 'Write full name...' }),
-            'contact_phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'contact_phone', 'placeholder': 'Write phone...' }),
-            'pri_sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'pri_sector', 'required': '' }),
-            'alert': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'alert', 'required': '' }),
+            'title': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'title', 'placeholder': 'Write title...', 'required': '' } ),
+            'description': forms.Textarea(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'title', 'placeholder': 'Write description...', 'rows': 3, 'required': '' }),
+            'contact_name': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white focus:border-gray-600 text-sm font-normal', 'id': 'contact_name', 'placeholder': 'Write full name...' }),
+            'contact_phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'contact_phone', 'placeholder': 'Write phone...' }),
+            'pri_sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'pri_sector', 'required': '' }),
+            'alert': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'alert', 'required': '' }),
         }
 
         labels = {

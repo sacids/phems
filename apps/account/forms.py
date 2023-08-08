@@ -44,12 +44,12 @@ class ChangePasswordForm(PasswordChangeForm):
 
 class UserForm(UserCreationForm):
     """User Form"""
-    first_name = forms.CharField(max_length=50, label="First Name ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write first name...'}))
-    last_name = forms.CharField(max_length=50, label="Last Name ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write surname...'}))
-    username = forms.CharField(max_length=100, label="Username ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write username...'}))
-    email = forms.EmailField(max_length=100, label="Email ", widget=forms.EmailInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write email...'}))
-    password1 = forms.CharField(max_length=20, label="Password ", widget=forms.PasswordInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Password...'}))
-    password2 = forms.CharField(max_length=20, label="Confirm Password ", widget=forms.PasswordInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Confirm password...'}))
+    first_name = forms.CharField(max_length=50, label="First Name ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write first name...'}))
+    last_name = forms.CharField(max_length=50, label="Last Name ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write surname...'}))
+    username = forms.CharField(max_length=100, label="Username ", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write username...'}))
+    email = forms.EmailField(max_length=100, label="Email ", widget=forms.EmailInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write email...'}))
+    password1 = forms.CharField(max_length=20, label="Password ", widget=forms.PasswordInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Password...'}))
+    password2 = forms.CharField(max_length=20, label="Confirm Password ", widget=forms.PasswordInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Confirm password...'}))
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
@@ -74,10 +74,10 @@ class UserForm(UserCreationForm):
 
 class UserUpdateForm(UserChangeForm):
     """User Form"""
-    first_name = forms.CharField(max_length=50, label="First Name", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write first name...'}))
-    last_name = forms.CharField(max_length=50, label="Last Name", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write surname...'}))
-    username = forms.CharField(max_length=100, label="Username", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write username...'}))
-    email = forms.EmailField(max_length=100, label="Email", widget=forms.EmailInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'placeholder': 'Write email...'}))
+    first_name = forms.CharField(max_length=50, label="First Name", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write first name...'}))
+    last_name = forms.CharField(max_length=50, label="Last Name", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write surname...'}))
+    username = forms.CharField(max_length=100, label="Username", widget=forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'placeholder': 'Write username...'}))
+    email = forms.EmailField(max_length=100, label="Email", widget=forms.EmailInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900  focus:bg-white text-sm font-normal', 'placeholder': 'Write email...'}))
 
     def __init__(self, *args, **kwargs):
         super(UserUpdateForm, self).__init__(*args, **kwargs)
@@ -108,12 +108,12 @@ class UserProfileForm(forms.ModelForm):
         fields = ('sector', 'organization', 'level', 'phone', 'title', 'postal_address')
 
         widgets = {
-            'sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'sector' }),
-            'phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'phone', 'placeholder': 'Write phone...' }),
-            'organization': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'organization', 'placeholder': 'Write organization...' }),
-            'title': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'title', 'placeholder': 'Write title...' }),
-            'postal_address': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'postal_address', 'placeholder': 'Write postal address...' }),
-            'level': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-300 rounded py-2.5 px-4 mb-3 my-1 focus:outline-none focus:border-none focus:bg-white text-sm font-normal', 'id': 'level', }),
+            'sector': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'sector' }),
+            'phone': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'phone', 'placeholder': 'Write phone...' }),
+            'organization': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'organization', 'placeholder': 'Write organization...' }),
+            'title': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'title', 'placeholder': 'Write title...' }),
+            'postal_address': forms.TextInput(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'postal_address', 'placeholder': 'Write postal address...' }),
+            'level': forms.Select(attrs={'class': 'w-full bg-white text-gray-600 border border-gray-200 rounded p-2.5 mb-3 my-1 focus:outline-none focus:border-blue-900 focus:bg-white text-sm font-normal', 'id': 'level', }),
         }
 
         labels = {
