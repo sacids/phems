@@ -160,7 +160,7 @@ class EventCreateView(PermissionRequiredMixin, generic.CreateView):
                         user_id = user.id, 
                         created_by = self.request.user.id,
                         message=message_to_eoc,
-                        url = fullURL )
+                        url = fullURL)
 
                     """assign to array"""
                     arr_managers.append(user.email)

@@ -21,6 +21,8 @@ class Profile(models.Model):
     slug            = models.UUIDField(default=uuid.uuid4, blank=True, editable=False)
     phone           = models.CharField(max_length=20, blank=True, null=True)
     organization    = models.CharField(max_length=120, blank=True, null=True)
+    title           = models.CharField(max_length=150, blank=True, null=True)
+    postal_address  = models.CharField(max_length=200, blank=True, null=True)
     photo           = models.ImageField("Photo", upload_to="uploads/profile/", null=True, blank=True)
     email_verified  = models.BooleanField("Email verified", default=False)
     sector          = models.ForeignKey(Sector, blank=True, null=True, on_delete=models.SET_NULL)

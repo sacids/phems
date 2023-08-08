@@ -36,6 +36,8 @@ class LoginView(APIView):
         user = serializer.validated_data['user']
         login(request, user)
 
+        print(user.groups)
+
         """response"""
         response = {
             'data': {
